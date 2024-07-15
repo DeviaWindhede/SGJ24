@@ -72,6 +72,34 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "GooberControls",
+            "id": "d65ed607-c60b-424a-b647-94c723490dd8",
+            "actions": [
+                {
+                    "name": "UseTool",
+                    "type": "Button",
+                    "id": "03135cba-dc58-47a2-9c2e-194c4c1165e8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "da2e2df6-c23b-4237-8628-9bd111e226f1",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseTool",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

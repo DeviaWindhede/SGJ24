@@ -94,6 +94,34 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""GooberControls"",
+            ""id"": ""d65ed607-c60b-424a-b647-94c723490dd8"",
+            ""actions"": [
+                {
+                    ""name"": ""UseTool"",
+                    ""type"": ""Button"",
+                    ""id"": ""03135cba-dc58-47a2-9c2e-194c4c1165e8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""da2e2df6-c23b-4237-8628-9bd111e226f1"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseTool"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -101,6 +129,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // ShopControls
         m_ShopControls = asset.FindActionMap("ShopControls", throwIfNotFound: true);
         m_ShopControls_Move = m_ShopControls.FindAction("Move", throwIfNotFound: true);
+        // GooberControls
+        m_GooberControls = asset.FindActionMap("GooberControls", throwIfNotFound: true);
+        m_GooberControls_UseTool = m_GooberControls.FindAction("UseTool", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,8 +235,58 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public ShopControlsActions @ShopControls => new ShopControlsActions(this);
+
+    // GooberControls
+    private readonly InputActionMap m_GooberControls;
+    private List<IGooberControlsActions> m_GooberControlsActionsCallbackInterfaces = new List<IGooberControlsActions>();
+    private readonly InputAction m_GooberControls_UseTool;
+    public struct GooberControlsActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public GooberControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @UseTool => m_Wrapper.m_GooberControls_UseTool;
+        public InputActionMap Get() { return m_Wrapper.m_GooberControls; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GooberControlsActions set) { return set.Get(); }
+        public void AddCallbacks(IGooberControlsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Add(instance);
+            @UseTool.started += instance.OnUseTool;
+            @UseTool.performed += instance.OnUseTool;
+            @UseTool.canceled += instance.OnUseTool;
+        }
+
+        private void UnregisterCallbacks(IGooberControlsActions instance)
+        {
+            @UseTool.started -= instance.OnUseTool;
+            @UseTool.performed -= instance.OnUseTool;
+            @UseTool.canceled -= instance.OnUseTool;
+        }
+
+        public void RemoveCallbacks(IGooberControlsActions instance)
+        {
+            if (m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IGooberControlsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_GooberControlsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public GooberControlsActions @GooberControls => new GooberControlsActions(this);
     public interface IShopControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
+    }
+    public interface IGooberControlsActions
+    {
+        void OnUseTool(InputAction.CallbackContext context);
     }
 }
