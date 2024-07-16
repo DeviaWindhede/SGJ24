@@ -91,6 +91,7 @@ public class GooberCareBehaviour : MonoBehaviour
 
     private void SetPetAsTool()
     {
+        _washToolList[(int)GooberType.SoapSponge].transform.GetChild(0).GetComponent<ParticleSystem>().enableEmission = false;
         SetUpdateTool(GooberType.PetTool);
     }
 
@@ -102,6 +103,7 @@ public class GooberCareBehaviour : MonoBehaviour
 
         _washToolList.Add(Instantiate(_petToolPrefab));
         _washToolList.Add(Instantiate(_washToolPrefab));
+        _washToolList[(int)GooberType.SoapSponge].transform.GetChild(0).GetComponent<ParticleSystem>().enableEmission = false;
 
         foreach (var item in _washToolList)
         {
@@ -233,7 +235,11 @@ public class GooberCareBehaviour : MonoBehaviour
         UpdateVisualToolLocation(_washToolList[(int)_currentTool], hit);
 
         if (!result) { return; }
-        if (!_isMouseDown) { return; }
+        if (!_isMouseDown)
+        {
+            _washToolList[(int)GooberType.SoapSponge].transform.GetChild(0).GetComponent<ParticleSystem>().enableEmission = false;
+            return;
+        }
         if (_mouseDelta.magnitude < 0.1f) { return; }
 
         Vector3 cell = Camera.main.WorldToViewportPoint(hit.point);
@@ -245,6 +251,8 @@ public class GooberCareBehaviour : MonoBehaviour
 
         c.dirtiness += _cleaningSpeed * Time.deltaTime;
         if (c.dirtiness > 1.0f) { c.dirtiness = 1.0f; }
+
+        _washToolList[(int)GooberType.SoapSponge].transform.GetChild(0).GetComponent<ParticleSystem>().enableEmission = true;
 
         CalculateCleanliness();
     }
