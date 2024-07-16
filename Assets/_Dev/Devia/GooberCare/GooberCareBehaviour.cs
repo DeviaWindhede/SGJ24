@@ -26,8 +26,11 @@ public enum GooberType
     Nothing
 }
 
-public class GooberGrid : MonoBehaviour
+public class GooberCareBehaviour : MonoBehaviour
 {
+    public delegate void OnFinishedSession();
+    public event OnFinishedSession FinishedSession;
+
     [SerializeField] private ProgressBar _progressBar;
     [SerializeField] private float _cleanlinessThreshold = 0.9f;
     [SerializeField] private Button _washButton;
@@ -45,6 +48,7 @@ public class GooberGrid : MonoBehaviour
     private List<GooberState> activeStates = new();
     private List<List<GooberState>> grid = new();
 
+    private bool _hasCalledFinishedSession = false;
     private Vector2 _mouseDelta;
     private bool _isMouseDown;
     private GooberType _currentTool;
@@ -192,6 +196,13 @@ public class GooberGrid : MonoBehaviour
             default:
                 break;
         }
+
+        if (FinishedSession != null && !_hasCalledFinishedSession && HappinessPercentage >= 1.0f)
+        {
+            FinishedSession();
+            _hasCalledFinishedSession = true;
+        }
+
         _progressBar.SetTargetFillPercentage(HappinessPercentage);
     }
 
