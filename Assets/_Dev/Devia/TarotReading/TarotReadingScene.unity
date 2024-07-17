@@ -149,6 +149,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.3447537, y: 3.844075, z: 3.8999999}
   m_Center: {x: 3.572377, y: 1.9220375, z: 1.85}
+--- !u!4 &492411982 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1237457339427418143, guid: 7ea9d66bfbe226e4fb97b7a2edc24b07,
+    type: 3}
+  m_PrefabInstance: {fileID: 4773700609372529493}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1020730181
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,6 +404,195 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 114539705}
   m_SourcePrefab: {fileID: 100100000, guid: 286f26d7295e7564abd5ef13c60b3d46, type: 3}
+--- !u!1 &1585626596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1585626598}
+  - component: {fileID: 1585626597}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1585626597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585626596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93b6cee8ece18a40878324e141acd60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _deckAudioSource: {fileID: 1759665681}
+  _cardDrawAudioClips:
+  - {fileID: 8300000, guid: be260e0002f4b194989c0094bcd63e3e, type: 3}
+  - {fileID: 8300000, guid: aa5ca74413615134a81bda0f37c0a361, type: 3}
+  - {fileID: 8300000, guid: 294205ad5a6fca8438f34a600c4b733c, type: 3}
+  - {fileID: 8300000, guid: b8144a3260636a74084a561261a1a6b9, type: 3}
+  - {fileID: 8300000, guid: 069f8b2a8af0618428bcc546fb9686ab, type: 3}
+  _cardShuffleInAudioClips:
+  - {fileID: 8300000, guid: 8d8713ae7f74397478e01c21aaf78897, type: 3}
+  _cardShuffleOutAudioClips:
+  - {fileID: 8300000, guid: a785cf36adebb5d489411092a5736ac2, type: 3}
+  _bellAudioSource: {fileID: 0}
+  _shopBellAudioClips:
+  - {fileID: 8300000, guid: 8ad96f35a7557bb4db64d1fc446773d8, type: 3}
+  - {fileID: 8300000, guid: 00e60c6f1120b2d42be238d68ae9fbb4, type: 3}
+  - {fileID: 8300000, guid: 6c5e852e92a6f4f44a003ba838c2fba5, type: 3}
+  - {fileID: 8300000, guid: 315f6a4a8957c8843a1a36215d9f0f02, type: 3}
+--- !u!4 &1585626598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585626596}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1759665680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1759665682}
+  - component: {fileID: 1759665681}
+  m_Layer: 0
+  m_Name: DeckPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1759665681
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759665680}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: a6eb76a3883070c458b259649e2cc3b7, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1759665682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759665680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 492411982}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2018718373
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,9 +861,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6947866097127309331, guid: 7ea9d66bfbe226e4fb97b7a2edc24b07,
+        type: 3}
+      propertyPath: _tarotCardMoveDelayOnSpawn
+      value: 0.15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1237457339427418143, guid: 7ea9d66bfbe226e4fb97b7a2edc24b07,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1759665682}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ea9d66bfbe226e4fb97b7a2edc24b07, type: 3}
 --- !u!1660057539 &9223372036854775807
@@ -681,3 +885,4 @@ SceneRoots:
   - {fileID: 4773700609372529493}
   - {fileID: 2090461852}
   - {fileID: 1020730182}
+  - {fileID: 1585626598}
