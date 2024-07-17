@@ -53,6 +53,51 @@ Shader "Unlit/UpscaleShader"
 				return quantizedColor;
             }
 
+            float Sobel(float2 coord, bool horizontal)
+            {
+                float3x3 sobelMatrix = horizontal ? float3x3(
+					+1, 0, -1,
+					+2, 0, -2,
+					+1, 0, -1
+				) : float3x3(
+					 1,  2,  1,
+					 0,  0,  0,
+					-1, -2, -1
+				);
+
+              
+                float3 sum = 0;
+				for (int y = -1; y <= 1; y++)
+				{
+					for (int x = -1; x <= 1; x++)
+					{
+						float2 offset = float2(x, y);
+						float3 sample = tex2D(_MainTex, coord + offset * _MainTex_TexelSize.xy).rgb;
+						sum += sample * sobelMatrix[x + 1][y + 1];
+					}
+				}
+
+				return sum.r;
+            }
+
+            float GetSobelNeighbours(float2 coord)
+			{
+				float2 sobelX = float2(Sobel(coord, true), 0);
+				float2 sobelY = float2(0, Sobel(coord, false));
+				float sobel = length(sobelX + sobelY);
+				return sobel;
+			}
+
+            float GetSobelResultHV(float2 coord)
+            {
+                float sobelH = Sobel(coord, true);
+                float sobelV = Sobel(coord, false);
+
+                float sobelMax = max(sobelH, sobelV);
+                sobelMax = max(sobelMax, GetSobelNeighbours(coord));
+                return sobelMax;
+            }
+
             fixed4 frag (v2f i) : SV_Target
             {
                 const float4x4 bayer4 = float4x4(
@@ -65,7 +110,8 @@ Shader "Unlit/UpscaleShader"
                 
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-
+                float sobelMax = GetSobelResultHV(i.uv);
+                //col.rgb -= abs(sobelMax);
 
                 float2 screenPos = i.uv * _MainTex_TexelSize.zw;
                 int x = int(screenPos.x);
