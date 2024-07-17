@@ -4,6 +4,7 @@ using UnityEngine;
 public class CharacterCustomItem : ScriptableObject
 {
     public string itemName;
+    public int index;
     public Sprite itemSprite;
     public CategoryType type;
 }

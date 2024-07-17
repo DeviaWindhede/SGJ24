@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e595ff3d989d904191253d6457ade2c, type: 3}
-  m_Name: TestName
+  m_Name: body_Base
   m_EditorClassIdentifier: 
-  itemName: CooltItem2
-  itemSprite: {fileID: 21300000, guid: 2e75839ecf831734295d0954e8f581de, type: 3}
-  type: 2
+  itemName: Base
+  index: 2
+  itemSprite: {fileID: 21300000, guid: 3d651e6e305978145ad26079f59228e2, type: 3}
+  type: 0
