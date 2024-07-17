@@ -21,6 +21,9 @@ public class PixelRenderFeature : ScriptableRendererFeature
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         scriptablePass.ConfigureInput(ScriptableRenderPassInput.Depth | ScriptableRenderPassInput.Normal);
-        renderer.EnqueuePass(scriptablePass);
+        if (renderingData.cameraData.cameraType == CameraType.Game || renderingData.cameraData.cameraType == CameraType.SceneView)
+        {
+            renderer.EnqueuePass(scriptablePass);
+        }
     }
 }
