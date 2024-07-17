@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/_Dev/Devia/Shop/ShopScene.unity
+    guid: a6a62628ecd28b44fa97f5bda3c74099
+  - enabled: 1
+    path: Assets/_Dev/Devia/CharacterCustomization/CharacterCustomizationScene.unity
+    guid: 921c00ddd2606624ab18fb270bce7a49
+  - enabled: 1
+    path: Assets/_Dev/Devia/TarotReading/TarotReadingScene.unity
+    guid: 9dbd711de9ee48b49b4470173bc5d38b
+  - enabled: 1
+    path: Assets/_Dev/Devia/GooberCare/GooberCareScene.unity
+    guid: a971f30ea85013d499e3b347776b72f0
   m_configObjects: {}
