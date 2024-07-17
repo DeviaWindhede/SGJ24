@@ -18,6 +18,15 @@ public class ShopQueue
         return _shopperQueue.Count - 1;
     }
 
+    public void AddShopper(ShopperBehaviour aShopper, int aIndex)
+    {
+        _shopperQueue.Insert(aIndex, aShopper);
+        for (int i = 0; i < _shopperQueue.Count; i++)
+        {
+            _shopperQueue[i].OnQueueUpdate(i);
+        }
+    }
+
     public void Leave()
     {
         _shopperQueue.RemoveAt(0);

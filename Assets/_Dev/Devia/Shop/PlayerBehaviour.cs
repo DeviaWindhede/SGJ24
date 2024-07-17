@@ -28,6 +28,13 @@ public class PlayerBehaviour : MonoBehaviour
         _inputActions.ShopControls.Move.canceled += ctx => _moveInput = Vector2.zero;
 
         _inputActions.ShopControls.Interact.performed += _ => OnInteract();
+
+        gameObject.SetActive(false);
+        transform.SetPositionAndRotation(
+            PersistentShopData.Instance.playerTransform.position,
+            PersistentShopData.Instance.playerTransform.rotation
+        );
+        gameObject.SetActive(true);
     }
 
     private void OnDestroy()
@@ -38,6 +45,13 @@ public class PlayerBehaviour : MonoBehaviour
         _inputActions.ShopControls.Interact.performed -= _ => OnInteract();
      
         _inputActions.Disable();
+
+
+        PersistentShopData.Instance.playerTransform = new TransformData
+        {
+            position = transform.position,
+            rotation = _model.rotation
+        };
     }
 
     private void OnInteract()
