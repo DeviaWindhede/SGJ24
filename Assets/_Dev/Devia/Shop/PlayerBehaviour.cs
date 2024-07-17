@@ -13,6 +13,7 @@ public class PlayerBehaviour : MonoBehaviour
     private PlayerInputActions _inputActions;
     private Vector2 _moveInput;
 
+    private PlayerInteractable _currentInteractable;
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +25,23 @@ public class PlayerBehaviour : MonoBehaviour
 
         _inputActions.ShopControls.Move.performed += ctx => _moveInput = ctx.ReadValue<Vector2>();
         _inputActions.ShopControls.Move.canceled += ctx => _moveInput = Vector2.zero;
+
+        _inputActions.ShopControls.Interact.performed += _ => OnInteract();
     }
 
     private void OnDestroy()
     {
         _inputActions.ShopControls.Move.performed -= ctx => _moveInput = ctx.ReadValue<Vector2>();
         _inputActions.ShopControls.Move.canceled -= ctx => _moveInput = Vector2.zero;
+
+        _inputActions.ShopControls.Interact.performed -= _ => OnInteract();
      
         _inputActions.Disable();
+    }
+
+    private void OnInteract()
+    {
+        _currentInteractable?.OnInteract();
     }
 
     Vector2 GetMoveDir()
@@ -47,6 +57,8 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _currentInteractable = null;
+
         Vector2 velocity = _speed * Time.deltaTime * GetMoveDir();
 
         _rigidBody.velocity = new Vector3(velocity.x, 0, velocity.y);
@@ -54,5 +66,13 @@ public class PlayerBehaviour : MonoBehaviour
         if (velocity.magnitude == 0) { return; }
 
         _model.forward = new Vector3(velocity.x, 0, velocity.y);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (!collision.gameObject.CompareTag("PlayerInteractable")) { return; }
+
+        PlayerInteractable interactable = collision.gameObject.GetComponent<PlayerInteractable>();
+        _currentInteractable = interactable;
     }
 }

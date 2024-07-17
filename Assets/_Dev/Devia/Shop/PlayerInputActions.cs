@@ -35,6 +35,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""11eed89e-a52e-4b44-8610-8b86c9bbd1ba"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +101,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa0c77b3-7c50-4fc2-a112-1a85f6157a13"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -107,6 +127,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""10f93885-16ca-4dba-b1cf-57f55a719cd4"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -120,6 +149,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""UseTool"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d13fc0db-3081-4d9d-b83b-d9808d31975e"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -129,9 +169,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // ShopControls
         m_ShopControls = asset.FindActionMap("ShopControls", throwIfNotFound: true);
         m_ShopControls_Move = m_ShopControls.FindAction("Move", throwIfNotFound: true);
+        m_ShopControls_Interact = m_ShopControls.FindAction("Interact", throwIfNotFound: true);
         // GooberControls
         m_GooberControls = asset.FindActionMap("GooberControls", throwIfNotFound: true);
         m_GooberControls_UseTool = m_GooberControls.FindAction("UseTool", throwIfNotFound: true);
+        m_GooberControls_MouseMove = m_GooberControls.FindAction("MouseMove", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -194,11 +236,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_ShopControls;
     private List<IShopControlsActions> m_ShopControlsActionsCallbackInterfaces = new List<IShopControlsActions>();
     private readonly InputAction m_ShopControls_Move;
+    private readonly InputAction m_ShopControls_Interact;
     public struct ShopControlsActions
     {
         private @PlayerInputActions m_Wrapper;
         public ShopControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_ShopControls_Move;
+        public InputAction @Interact => m_Wrapper.m_ShopControls_Interact;
         public InputActionMap Get() { return m_Wrapper.m_ShopControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -211,6 +255,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IShopControlsActions instance)
@@ -218,6 +265,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IShopControlsActions instance)
@@ -240,11 +290,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_GooberControls;
     private List<IGooberControlsActions> m_GooberControlsActionsCallbackInterfaces = new List<IGooberControlsActions>();
     private readonly InputAction m_GooberControls_UseTool;
+    private readonly InputAction m_GooberControls_MouseMove;
     public struct GooberControlsActions
     {
         private @PlayerInputActions m_Wrapper;
         public GooberControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @UseTool => m_Wrapper.m_GooberControls_UseTool;
+        public InputAction @MouseMove => m_Wrapper.m_GooberControls_MouseMove;
         public InputActionMap Get() { return m_Wrapper.m_GooberControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -257,6 +309,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @UseTool.started += instance.OnUseTool;
             @UseTool.performed += instance.OnUseTool;
             @UseTool.canceled += instance.OnUseTool;
+            @MouseMove.started += instance.OnMouseMove;
+            @MouseMove.performed += instance.OnMouseMove;
+            @MouseMove.canceled += instance.OnMouseMove;
         }
 
         private void UnregisterCallbacks(IGooberControlsActions instance)
@@ -264,6 +319,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @UseTool.started -= instance.OnUseTool;
             @UseTool.performed -= instance.OnUseTool;
             @UseTool.canceled -= instance.OnUseTool;
+            @MouseMove.started -= instance.OnMouseMove;
+            @MouseMove.performed -= instance.OnMouseMove;
+            @MouseMove.canceled -= instance.OnMouseMove;
         }
 
         public void RemoveCallbacks(IGooberControlsActions instance)
@@ -284,9 +342,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     public interface IShopControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
     public interface IGooberControlsActions
     {
         void OnUseTool(InputAction.CallbackContext context);
+        void OnMouseMove(InputAction.CallbackContext context);
     }
 }
