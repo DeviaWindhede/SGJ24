@@ -64,9 +64,6 @@ public class CharacterCustomizationWindow : MonoBehaviour
 
         _playerMeshController.UpdateCharacter(_selectedItems);
     }
-
-
-
     Transform GetGrid(CategoryType aType)
     {
         return _grindMask.transform.GetChild((int)aType);
@@ -132,6 +129,8 @@ public class CharacterCustomizationWindow : MonoBehaviour
             var item = go.GetComponent<CustomizationCategoryItem>();
             item.Init(items[i], this);
         }
+
+        _selectedItems = _playerMeshController.CurrentlySelectedItems;
     }
 
     private void OnConfirmButtonPressed()

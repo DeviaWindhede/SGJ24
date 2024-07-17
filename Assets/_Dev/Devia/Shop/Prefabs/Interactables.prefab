@@ -491,6 +491,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4030723167798133399}
   - component: {fileID: 2956020828388347702}
+  - component: {fileID: 9184991593206169688}
   m_Layer: 0
   m_Name: EnchantingPlayerInteractionCollision
   m_TagString: PlayerInteractable
@@ -536,6 +537,19 @@ CapsuleCollider:
   m_Height: 1.95
   m_Direction: 1
   m_Center: {x: 0, y: 0.55, z: 0}
+--- !u!114 &9184991593206169688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4252459161945113923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f2890ca09d81e4e9376d2194a96c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInteractionType: 5
 --- !u!1 &4665850552380512580
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,6 +591,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5539301840575849971}
   - component: {fileID: 1652247488565789235}
+  - component: {fileID: 3387850508407573206}
   m_Layer: 0
   m_Name: RegisterPlayerInteractionCollision
   m_TagString: PlayerInteractable
@@ -622,6 +637,19 @@ CapsuleCollider:
   m_Height: 2.92
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3387850508407573206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4771390533593774007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f2890ca09d81e4e9376d2194a96c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInteractionType: 0
 --- !u!1 &4875961544712044142
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,6 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8125556516174523892}
   - component: {fileID: 2334726352730960531}
+  - component: {fileID: 1054519015330013838}
   m_Layer: 0
   m_Name: GooberCarePlayerInteractionCollision
   m_TagString: PlayerInteractable
@@ -677,6 +706,19 @@ CapsuleCollider:
   m_Height: 2.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.55, z: 0}
+--- !u!114 &1054519015330013838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4875961544712044142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f2890ca09d81e4e9376d2194a96c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInteractionType: 4
 --- !u!1 &5159813804232555793
 GameObject:
   m_ObjectHideFlags: 0
@@ -904,6 +946,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2309649776642434059}
   - component: {fileID: 3246997289119827341}
+  - component: {fileID: 3334823116834276897}
   m_Layer: 0
   m_Name: PotionPlayerInteractionCollision
   m_TagString: PlayerInteractable
@@ -949,6 +992,19 @@ CapsuleCollider:
   m_Height: 1.95
   m_Direction: 1
   m_Center: {x: 0, y: 0.55, z: 0}
+--- !u!114 &3334823116834276897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7312317746138633292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f2890ca09d81e4e9376d2194a96c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInteractionType: 2
 --- !u!1 &7545540518962866228
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,6 +1015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8972922986495385620}
   - component: {fileID: 4012968993657595971}
+  - component: {fileID: 123678845112514351}
   m_Layer: 0
   m_Name: TarotPlayerInteractionCollision
   m_TagString: PlayerInteractable
@@ -1004,6 +1061,19 @@ CapsuleCollider:
   m_Height: 3.21
   m_Direction: 1
   m_Center: {x: 0, y: 0.55, z: 0}
+--- !u!114 &123678845112514351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7545540518962866228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f2890ca09d81e4e9376d2194a96c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInteractionType: 3
 --- !u!1 &7733777543589945804
 GameObject:
   m_ObjectHideFlags: 0

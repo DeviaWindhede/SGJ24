@@ -44,7 +44,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -68,6 +68,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 343c9bee786ad6c4fb7078c18f41feb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentQueueType: 0
+  currentShopDestination: 0
 --- !u!1001 &6390274307211404069
 PrefabInstance:
   m_ObjectHideFlags: 0

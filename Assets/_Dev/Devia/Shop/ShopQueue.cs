@@ -8,6 +8,7 @@ public class ShopQueue
     public Transform QueueTransform;
     [SerializeField] private float _queueSpacing = 1.0f;
     [SerializeField] private Vector3 _queueDirection = Vector3.forward;
+    public Vector3 QueueDirection => _queueDirection;
 
     private List<ShopperBehaviour> _shopperQueue = new();
 

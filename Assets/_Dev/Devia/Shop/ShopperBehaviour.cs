@@ -132,13 +132,16 @@ class DecisionState : IState<ShopperBehaviour>
     {
         if (!aShopper.HasReachedDestination) { return; }
 
-        if (UnityEngine.Random.Range(_decideTimer, 1.0f) < DECISION_ODDS)
+        _decideTimer += Time.deltaTime;
+        if (_decideTimer < _decideInterval) { return; }
+
+        if (UnityEngine.Random.Range(0, 1.0f) < DECISION_ODDS)
         {
             aShopper.ChangeState(typeof(QueueState));
             return;
         }
 
-        if (UnityEngine.Random.Range(_decideTimer, 1.0f) < SATISFIED_ODDS)
+        if (UnityEngine.Random.Range(0, 1.0f) < SATISFIED_ODDS)
         {
             aShopper.ChangeState(typeof(LeavingState));
             return;

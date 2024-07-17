@@ -27,6 +27,7 @@ public class TarotDeckBehaviour : MonoBehaviour
             _tarotSpawnPosition.rotation
         );
 
+        AudioManager.Instance.PlaySound(ShopSoundByte.CardDraw);
         yield return new WaitForSeconds(_tarotCardMoveDelayOnSpawn);
 
         Vector3 startPosition = _tarotSpawnPosition.position;

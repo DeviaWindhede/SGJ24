@@ -91,12 +91,14 @@ public class ShopManager : MonoBehaviour
         var shopper = Instantiate(
             _shopperPrefab,
             _shopLocations.Entrance.transform.position,
-            Quaternion.identity
+            Quaternion.LookRotation(-_queue.QueueDirection)
         );
         var shopperBehaviour = shopper.GetComponent<ShopperBehaviour>();
         shopperBehaviour.Init(this);
         shopperBehaviour.SetDestination(GetRandomType());
         _activeShoppers.Add(shopper);
+
+        AudioManager.Instance.PlaySound(ShopSoundByte.ShopBell);
     }
 
     public void DestroyShopper(GameObject aShopper)

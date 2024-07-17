@@ -31,10 +31,12 @@ public class PlayerMeshController : MonoBehaviour
         {
             _characterParts.GetChild(i).gameObject.SetActive(false);
         }
+        _characterParts.GetChild(2).gameObject.SetActive(true);
 
         _currentlySelectedItems = aSelectedItems;
 
-        _characterParts.GetChild(_currentlySelectedItems.bodyIndex).gameObject.SetActive(true);
+        if (_currentlySelectedItems.bodyIndex >= 0)
+            _characterParts.GetChild(_currentlySelectedItems.bodyIndex).gameObject.SetActive(true);
 
         if (_currentlySelectedItems.hairIndex >= 0)
             _characterParts.GetChild(_currentlySelectedItems.hairIndex).gameObject.SetActive(true);

@@ -37,5 +37,6 @@ public class TarotCardBehaviour : MonoBehaviour
         _isFlipped = true;
         _isHovered = false;
         _animator.SetTrigger("Select");
+        AudioManager.Instance.PlaySound(ShopSoundByte.CardDraw);
     }
 }
