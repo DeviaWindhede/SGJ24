@@ -35,6 +35,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""11eed89e-a52e-4b44-8610-8b86c9bbd1ba"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +101,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa0c77b3-7c50-4fc2-a112-1a85f6157a13"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -149,6 +169,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // ShopControls
         m_ShopControls = asset.FindActionMap("ShopControls", throwIfNotFound: true);
         m_ShopControls_Move = m_ShopControls.FindAction("Move", throwIfNotFound: true);
+        m_ShopControls_Interact = m_ShopControls.FindAction("Interact", throwIfNotFound: true);
         // GooberControls
         m_GooberControls = asset.FindActionMap("GooberControls", throwIfNotFound: true);
         m_GooberControls_UseTool = m_GooberControls.FindAction("UseTool", throwIfNotFound: true);
@@ -215,11 +236,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_ShopControls;
     private List<IShopControlsActions> m_ShopControlsActionsCallbackInterfaces = new List<IShopControlsActions>();
     private readonly InputAction m_ShopControls_Move;
+    private readonly InputAction m_ShopControls_Interact;
     public struct ShopControlsActions
     {
         private @PlayerInputActions m_Wrapper;
         public ShopControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_ShopControls_Move;
+        public InputAction @Interact => m_Wrapper.m_ShopControls_Interact;
         public InputActionMap Get() { return m_Wrapper.m_ShopControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IShopControlsActions instance)
@@ -239,6 +265,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IShopControlsActions instance)
@@ -313,6 +342,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     public interface IShopControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
     public interface IGooberControlsActions
     {
