@@ -19,6 +19,14 @@ struct CategoryUI
     public Cinemachine.CinemachineVirtualCamera camera;
 }
 
+[System.Serializable]
+public struct SelectedItems
+{
+    public int bodyIndex;
+    public int hairIndex;
+    public int accessoriesIndex;
+}
+
 public class CharacterCustomizationWindow : MonoBehaviour
 {
     [SerializeField] private Cinemachine.CinemachineVirtualCamera _fullBodyCamera;
@@ -30,10 +38,34 @@ public class CharacterCustomizationWindow : MonoBehaviour
     [SerializeField] private GameObject _categoryTypePrefab;
     [SerializeField] private GameObject _categoryItemPrefab;
     [SerializeField] private UnityEngine.UI.Button _confirmButton;
+    [SerializeField] private SelectedItems _selectedItems;
 
 
+    private PlayerMeshController _playerMeshController;
     private UnityEngine.UI.ScrollRect _scrollRect;
     private CategoryType _currentCategory = 0;
+
+    public void SetItem(CategoryType aType, int aIndex)
+    {
+        switch (aType)
+        {
+            case CategoryType.Body:
+                _selectedItems.bodyIndex = aIndex;
+                break;
+            case CategoryType.Hair:
+                _selectedItems.hairIndex = aIndex;
+                break;
+            case CategoryType.Accessories:
+                _selectedItems.accessoriesIndex = aIndex;
+                break;
+            default:
+                break;
+        }
+
+        _playerMeshController.UpdateCharacter(_selectedItems);
+    }
+
+
 
     Transform GetGrid(CategoryType aType)
     {
@@ -53,13 +85,12 @@ public class CharacterCustomizationWindow : MonoBehaviour
         _scrollRect.normalizedPosition = new(0, _scrollRect.normalizedPosition.y);
 
         _categoryTitle.text = aType.ToString();
-        //var brain = Camera.main.GetComponent<Cinemachine.CinemachineBrain>();
-        //_cameras
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        _playerMeshController = FindObjectOfType<PlayerMeshController>();
         _fullBodyCamera.gameObject.SetActive(false);
         for (int i = 0; i < _categories.Count; i++)
         {
@@ -99,14 +130,13 @@ public class CharacterCustomizationWindow : MonoBehaviour
         {
             var go = Instantiate(_categoryItemPrefab, GetGrid(items[i].type));
             var item = go.GetComponent<CustomizationCategoryItem>();
-            item.Init();
-            item.SetItem(items[i]);
+            item.Init(items[i], this);
         }
     }
 
     private void OnConfirmButtonPressed()
     {
-        print("Confirm button pressed");
+        _playerMeshController.SaveCharacter();
     }
 
     private void OnDestroy()
