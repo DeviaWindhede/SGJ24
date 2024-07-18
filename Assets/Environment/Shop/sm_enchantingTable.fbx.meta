@@ -3,7 +3,12 @@ guid: 38adb63a5a37eeb4fbc31040d581e67d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: m_enchantmentTable
+    second: {fileID: 2100000, guid: 473e6491d1bbd1d4fb605e5c350970c0, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

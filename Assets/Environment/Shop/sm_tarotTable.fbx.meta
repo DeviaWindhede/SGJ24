@@ -3,7 +3,12 @@ guid: 703fa568b9b1cb5499a88582a763e008
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: m_tarotCorner
+    second: {fileID: 2100000, guid: 717f4bfefab25114181ec7eecca288bc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

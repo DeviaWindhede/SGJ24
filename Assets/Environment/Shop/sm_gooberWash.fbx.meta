@@ -3,7 +3,12 @@ guid: 9f64577d68a25b649abab60079fd7032
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: m_gooberWash
+    second: {fileID: 2100000, guid: a86b805bb6489d545b54638f81fd52bd, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

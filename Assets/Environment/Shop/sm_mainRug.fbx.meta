@@ -3,7 +3,12 @@ guid: 82a9922279d2eb54fa4cbbf329eb89c1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: m_rugs
+    second: {fileID: 2100000, guid: 8ee786ba2a2d2334db9003cec9faadae, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
