@@ -181,7 +181,8 @@ public class ShopManager : MonoBehaviour
                 var firstShopper = _queue.GetFirstShopper();
                 if (firstShopper == null) { return; }
 
-                if (firstShopper.state.currentShopDestination == ShopLocationType.TarotReading)
+                if (firstShopper.state.currentShopDestination == ShopLocationType.TarotReading &&
+                    firstShopper.state.currentQueueType == ShopperQueueType.Action)
                 {
                     if (!_state.isTarotActive)
                     {
