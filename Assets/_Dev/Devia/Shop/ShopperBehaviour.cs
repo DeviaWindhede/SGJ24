@@ -199,10 +199,14 @@ public class ShopperBehaviour : MonoBehaviour
 {
     public static readonly int DEFAULT_AVOIDANCE_PRIORITY = 10;
 
+    [SerializeField] private Animator _animator;
+    [SerializeField] private float _stoppingTime = 0.5f;
+
     private StateMachine<ShopperBehaviour> _stateMachine;
     private NavMeshAgent _agent;
     private ShopManager _shopManager;
     public ShopperState state = new();
+    private float _agentSpeed;
 
     public ShopManager ShopManager => _shopManager;
     public System.Type CurrentStateType => _stateMachine.CurrentState.GetType();
@@ -275,6 +279,7 @@ public class ShopperBehaviour : MonoBehaviour
     public void Init(ShopManager aShopManager, ShopperState aState)
     {
         _agent = GetComponent<NavMeshAgent>();
+        _agentSpeed = _agent.speed;
         _shopManager = aShopManager;
         SetAvoidancePriority(DEFAULT_AVOIDANCE_PRIORITY);
         state = aState;
@@ -300,6 +305,7 @@ public class ShopperBehaviour : MonoBehaviour
 
         state.hasReachedDestination = false;
         state.currentShopDestination = aType;
+        _agent.speed = _agentSpeed;
 
         SetCurrentDestination(destination);
     }
@@ -316,6 +322,14 @@ public class ShopperBehaviour : MonoBehaviour
 
         var delta = state.currentDestination - transform.position;
         state.hasReachedDestination = delta.magnitude < 0.75f;
+        if (state.hasReachedDestination)
+        {
+            float maxDelta = Time.deltaTime / _stoppingTime;
+            _agent.velocity = Vector3.MoveTowards(_agent.velocity, Vector3.zero, maxDelta);
+        }
+
+        _animator.SetFloat("Speed", _agent.velocity.magnitude);
+        print(_agent.velocity.magnitude);
     }
 
     private void OnDestroy()

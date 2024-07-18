@@ -8,11 +8,13 @@ public class PlayerBehaviour : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _model;
+    [SerializeField] private Animator _animator;
     [SerializeField] private float _speed = 5f;
 
     private Rigidbody _rigidBody;
     private PlayerInputActions _inputActions;
     private Vector2 _moveInput;
+    private Vector3 _previousPosition;
 
     private PlayerInteractable _currentInteractable;
 
@@ -35,6 +37,8 @@ public class PlayerBehaviour : MonoBehaviour
             PersistentShopData.Instance.playerTransform.rotation
         );
         gameObject.SetActive(true);
+
+        _previousPosition = transform.position;
     }
 
     private void OnDestroy()
@@ -69,11 +73,18 @@ public class PlayerBehaviour : MonoBehaviour
         return new Vector2(result.x, result.z);
     }
 
+    //_animator.SetBool("IsTalking", true);
+
+
     // Update is called once per frame
     void Update()
     {
-        Vector2 velocity = _speed * Time.deltaTime * GetMoveDir();
+        float speed = (transform.position - _previousPosition).magnitude;
+        _animator.SetFloat("Speed", speed);
+        _previousPosition = transform.position;
+        //print(speed);
 
+        Vector2 velocity = _speed * Time.deltaTime * GetMoveDir();
         _rigidBody.velocity = new Vector3(velocity.x, 0, velocity.y);
 
         if (velocity.magnitude == 0) { return; }
