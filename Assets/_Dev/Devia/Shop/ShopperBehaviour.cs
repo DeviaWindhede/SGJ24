@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,14 +10,15 @@ class QueueState : IState<ShopperBehaviour>
     private void LeaveAndPay(ShopperBehaviour aShopper, int aAmount)
     {
         aShopper.Pay(aAmount);
+        aShopper.LeaveQueue();
         aShopper.ChangeState(typeof(LeavingState));
     }
 
     void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper)
     {
         // fixes percistent state bug
-        if (aShopper.PreviousStateType != null) 
-        { 
+        if (aShopper.PreviousStateType != null)
+        {
             aShopper.EnterQueue();
         }
 
@@ -43,11 +45,12 @@ class QueueState : IState<ShopperBehaviour>
             default:
                 break;
         }
+        aShopper.SetAvoidancePriority(0);
     }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper)
     {
-        aShopper.LeaveQueue();
+        aShopper.SetAvoidancePriority(ShopperBehaviour.DEFAULT_AVOIDANCE_PRIORITY);
     }
 
     void IState<ShopperBehaviour>.Update(ShopperBehaviour aShopper)
@@ -58,10 +61,12 @@ class QueueState : IState<ShopperBehaviour>
         switch (aShopper.state.currentQueueType)
         {
             case ShopperQueueType.Action:
+                aShopper.LeaveQueue();
                 aShopper.ChangeState(typeof(ActionState));
                 return;
             case ShopperQueueType.Purchase:
                 // TODO: REMOVE RESOURCES
+                aShopper.LeaveQueue();
                 break;
             case ShopperQueueType.PostActionPay:
             default:
@@ -76,18 +81,32 @@ class ActionState : IState<ShopperBehaviour>
     void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper)
     {
         aShopper.SetDestination(aShopper.state.currentShopDestination, true);
+        aShopper.SetAvoidancePriority(99);
     }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper)
     {
         aShopper.state.currentQueueType = ShopperQueueType.PostActionPay;
+        
+        var interactLocation = aShopper.ShopManager.GetShopPosition(aShopper.state.currentShopDestination).NavAgentInteractLocation;
+        aShopper.transform.position = interactLocation.position;
+        aShopper.SetAvoidancePriority(ShopperBehaviour.DEFAULT_AVOIDANCE_PRIORITY);
     }
 
     void IState<ShopperBehaviour>.Update(ShopperBehaviour aShopper)
     {
         if (!aShopper.state.hasReachedDestination) { return; }
-        if (!aShopper.state.hasPerformedAction) { return; }
+        if (!aShopper.state.hasPerformedAction)
+        { 
+            if (aShopper.state.currentShopDestination == ShopLocationType.TarotReading)
+            {
+                aShopper.transform.position = aShopper.ShopManager.ShopLocations.TarotShopperSeat.position;
+                aShopper.SetCurrentDestination(aShopper.transform.position);
+            }
+            return;
+        }
 
+        aShopper.state.hasPerformedAction = false;
         aShopper.ChangeState(typeof(QueueState));
     }
 }
@@ -112,22 +131,19 @@ class DecisionState : IState<ShopperBehaviour>
 {
     private static readonly float MIN_DECISION_INTERVAL = 1.0f;
     private static readonly float MAX_DECISION_INTERVAL = 5.0f;
-    private static readonly float DECISION_ODDS = 0.35f;
+    private static readonly float DECISION_ODDS = 0.5f;
     private static readonly float SATISFIED_ODDS = 0.25f;
 
     private void RandomizeDecision(ShopperBehaviour aShopper)
     {
         aShopper.state.decideTimer = 0.0f;
         aShopper.state.decideInterval = UnityEngine.Random.Range(MIN_DECISION_INTERVAL, MAX_DECISION_INTERVAL);
-        aShopper.state.currentShopDestination = ShopManager.GetRandomType(); // its fine if we randomize to the same destination, since we'll just decide again later
+        aShopper.state.hasReachedDestination = false;
+        aShopper.SetDestination(ShopManager.GetRandomType(), false); // its fine if we randomize to the same destination, since we'll just decide again later
     }
 
-    void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper)
-    {
-        // fixes percistent state bug
-        if (aShopper.PreviousStateType == null) { return; }
-        RandomizeDecision(aShopper);
-    }
+    // we dont set destination here, it is done in the SpawnShopper function within the manager
+    void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper) { }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper) { }
 
@@ -171,8 +187,8 @@ public class ShopperState
     public bool hasPerformedAction;
     public ShopperQueueType currentQueueType;
     public ShopLocationType currentShopDestination;
-    public System.Type currentStateType;
-    public int queueIndex;
+    public System.Type currentStateType = typeof(DecisionState);
+    public int queueIndex = -1;
 
     public float decideTimer = 0.0f;
     public float decideInterval = 5.0f;
@@ -181,6 +197,8 @@ public class ShopperState
 [RequireComponent(typeof(NavMeshAgent))]
 public class ShopperBehaviour : MonoBehaviour
 {
+    public static readonly int DEFAULT_AVOIDANCE_PRIORITY = 10;
+
     private StateMachine<ShopperBehaviour> _stateMachine;
     private NavMeshAgent _agent;
     private ShopManager _shopManager;
@@ -188,6 +206,11 @@ public class ShopperBehaviour : MonoBehaviour
 
     public ShopManager ShopManager => _shopManager;
     public System.Type CurrentStateType => _stateMachine.CurrentState.GetType();
+
+    public void SetAvoidancePriority(int aPriority)
+    {
+        _agent.avoidancePriority = aPriority;
+    }
 
     public void DestroySelf()
     {
@@ -201,7 +224,10 @@ public class ShopperBehaviour : MonoBehaviour
 
     public void Interact()
     {
-        state.hasInteractedWithPlayer = true;
+        if (CurrentStateType == typeof(ActionState))
+            state.hasPerformedAction = true;
+        else
+            state.hasInteractedWithPlayer = true;
     }
 
     public System.Type PreviousStateType => _stateMachine.PreviousStateType;
@@ -246,12 +272,12 @@ public class ShopperBehaviour : MonoBehaviour
         _agent.SetDestination(state.currentDestination);
     }
 
-    public void Init(ShopManager aShopManager, System.Type aInitialState)
+    public void Init(ShopManager aShopManager, ShopperState aState)
     {
         _agent = GetComponent<NavMeshAgent>();
         _shopManager = aShopManager;
-        _agent.avoidancePriority = 0;
-        state.queueIndex = -1;
+        SetAvoidancePriority(DEFAULT_AVOIDANCE_PRIORITY);
+        state = aState;
 
         _stateMachine = new StateMachine<ShopperBehaviour>(this);
         {
@@ -260,9 +286,10 @@ public class ShopperBehaviour : MonoBehaviour
             _stateMachine.AddState(typeof(ActionState), new ActionState());
             _stateMachine.AddState(typeof(LeavingState), new LeavingState());
         }
-        _stateMachine.ChangeState(aInitialState);
+        ChangeState(state.currentStateType);
     }
 
+    // TODO: OM NÅGON VÄNTAR PÅ TAROT CARD OCH MAN ÖPPNAR ETT MINIGAME SÅ CRASHAR DET PÅ VÄGEN TBX
     public void SetDestination(ShopLocationType aType, bool aUseInteractLocation = false)
     {
         Vector3 destination = aUseInteractLocation ? 
@@ -288,6 +315,11 @@ public class ShopperBehaviour : MonoBehaviour
         _stateMachine.Update();
 
         var delta = state.currentDestination - transform.position;
-        state.hasReachedDestination = delta.magnitude < 1.0f;
+        state.hasReachedDestination = delta.magnitude < 0.75f;
+    }
+
+    private void OnDestroy()
+    {
+        _stateMachine.OnDestroy();
     }
 }

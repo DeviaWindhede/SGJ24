@@ -18,12 +18,22 @@ public class ShopQueue
         return _shopperQueue.Count - 1;
     }
 
-    public void AddShopper(ShopperBehaviour aShopper, int aIndex)
+    public void InitializeShopper(ShopperBehaviour aShopper, int aIndex)
     {
-        _shopperQueue.Insert(aIndex, aShopper);
+        if (aIndex >= _shopperQueue.Count)
+        {
+            int delta = aIndex - _shopperQueue.Count + 1;
+            for (int i = 0; i < delta; i++)
+            {
+                _shopperQueue.Add(null);
+            }
+        }
+
+        _shopperQueue[aIndex] = aShopper;
+
         for (int i = 0; i < _shopperQueue.Count; i++)
         {
-            _shopperQueue[i].OnQueueUpdate(i);
+            _shopperQueue[i]?.OnQueueUpdate(i);
         }
     }
 

@@ -19,6 +19,8 @@ public struct ShopLocations
     public ShopInteractable TarotReading;
     public ShopInteractable GooberAdoption;
     public ShopInteractable Enchanting;
+
+    public Transform TarotShopperSeat;
 }
 
 [System.Serializable]
@@ -72,6 +74,7 @@ public class ShopManager : MonoBehaviour
     private string _sceneToLoad = "";
 
     public ShopQueue Queue => _queue;
+    public ShopLocations ShopLocations => _shopLocations;
 
     // Start is called before the first frame update
     void Start()
@@ -82,7 +85,7 @@ public class ShopManager : MonoBehaviour
 
         foreach (var t in PersistentShopData.Instance.shopperData)
         {
-            SpawnShopper(t.state.currentStateType, false);
+            InstantiateShopper(t.state.currentStateType);
 
             var shopper = _activeShoppers[^1];
             shopper.transform.SetPositionAndRotation(
@@ -91,12 +94,12 @@ public class ShopManager : MonoBehaviour
             );
 
             var shopperBehaviour = shopper.GetComponent<ShopperBehaviour>();
-            shopperBehaviour.state = t.state;
+            shopperBehaviour.Init(this, t.state);
             shopperBehaviour.SetCurrentDestination(t.state.currentDestination);
 
             if (shopperBehaviour.state.queueIndex >= 0)
             {
-                _queue.AddShopper(shopperBehaviour, shopperBehaviour.state.queueIndex);
+                _queue.InitializeShopper(shopperBehaviour, shopperBehaviour.state.queueIndex);
             }
         }
     }
@@ -130,19 +133,25 @@ public class ShopManager : MonoBehaviour
 
     private void SpawnShopper(System.Type aType, bool aShouldPlaySound = true)
     {
+        ShopperBehaviour shopperBehaviour = InstantiateShopper(aType);
+        shopperBehaviour.Init(this, new ShopperState());
+        shopperBehaviour.SetDestination(GetRandomType());
+        if (!aShouldPlaySound) { return; }
+
+        AudioManager.Instance.PlaySound(ShopSoundByte.ShopBell);
+    }
+
+    private ShopperBehaviour InstantiateShopper(System.Type aType)
+    {
         var shopper = Instantiate(
             _shopperPrefab,
             _shopLocations.Entrance.transform.position,
             Quaternion.LookRotation(-_queue.QueueDirection)
         );
         var shopperBehaviour = shopper.GetComponent<ShopperBehaviour>();
-        shopperBehaviour.Init(this, aType);
-        shopperBehaviour.SetDestination(GetRandomType());
         _activeShoppers.Add(shopperBehaviour);
 
-        if (!aShouldPlaySound) { return; }
-
-        AudioManager.Instance.PlaySound(ShopSoundByte.ShopBell);
+        return shopperBehaviour;
     }
 
     public void DestroyShopper(GameObject aShopper)
@@ -169,12 +178,20 @@ public class ShopManager : MonoBehaviour
             case PlayerInteractionType.Entrance:
                 break;
             case PlayerInteractionType.Register:
-                if (_state.isTarotActive) { break; }
-
                 var firstShopper = _queue.GetFirstShopper();
                 if (firstShopper == null) { return; }
+
+                if (firstShopper.state.currentShopDestination == ShopLocationType.TarotReading)
+                {
+                    if (!_state.isTarotActive)
+                    {
+                        _state.isTarotActive = true;
+                        firstShopper.Interact();
+                    }
+                    break;
+                }
+
                 firstShopper.Interact();
-                _state.isTarotActive = firstShopper.state.currentShopDestination == ShopLocationType.TarotReading;
                 break;
             case PlayerInteractionType.Potions:
                 ChangeScene(aType);
@@ -183,6 +200,7 @@ public class ShopManager : MonoBehaviour
                 if (!_state.isTarotActive) { break; }
 
                 _state.isTarotActive = false;
+                _activeShoppers.Find(x => x.state.currentShopDestination == ShopLocationType.TarotReading).Interact();
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.GooberCare:
