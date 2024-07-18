@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0ef9d10b312ab82469588199c8209acd
+guid: 5c7c8ace246b42b4796c4ebe28fe4f8e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: A_idle
-      takeName: A_idle
-      internalID: -7929313128027734867
-      firstFrame: 1
-      lastFrame: 24
+      name: A_wolfIdle
+      takeName: A_wolfIdle
+      internalID: -3619698707704154335
+      firstFrame: 0
+      lastFrame: 75
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -60,7 +60,7 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 1
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -128,7 +128,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
