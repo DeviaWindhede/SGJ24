@@ -32,6 +32,6 @@ public class CustomizationCategoryItem : MonoBehaviour
 
     public void OnClick()
     {
-        _window.SetItem(_item.type, _item.index);
+        _window.SetItem(_item.type, _item.skeletonPartName);
     }
 }

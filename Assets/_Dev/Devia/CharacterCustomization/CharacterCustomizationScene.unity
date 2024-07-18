@@ -358,12 +358,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!4 &827176747 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5602839978116279871, guid: 860de6a7b6e11c043aba6bd17d49614b,
-    type: 3}
-  m_PrefabInstance: {fileID: 8345090629483182766}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1106895529
 GameObject:
   m_ObjectHideFlags: 0
@@ -822,7 +816,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _characterParts
       value: 
-      objectReference: {fileID: 827176747}
+      objectReference: {fileID: 0}
     - target: {fileID: 2061164957274329124, guid: 2aaca735785ae6748acff8136eb0666b,
         type: 3}
       propertyPath: _fullBodyCamera
@@ -961,6 +955,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 539199774431210411, guid: 860de6a7b6e11c043aba6bd17d49614b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1192332743046392384, guid: 860de6a7b6e11c043aba6bd17d49614b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300928959686282093, guid: 860de6a7b6e11c043aba6bd17d49614b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927659573071917221, guid: 860de6a7b6e11c043aba6bd17d49614b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3589774141345469325, guid: 860de6a7b6e11c043aba6bd17d49614b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3817909974948028575, guid: 860de6a7b6e11c043aba6bd17d49614b,
         type: 3}
       propertyPath: m_LocalPosition.x

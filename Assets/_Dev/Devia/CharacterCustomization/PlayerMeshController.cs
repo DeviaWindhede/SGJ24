@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMeshController : MonoBehaviour
 {
+    [SerializeField] private string _characterPartBaseName = "character:c_";
+    [SerializeField] private Transform _defaultBody;
     [SerializeField] private Transform _characterParts;
     
     private SelectedItems _currentlySelectedItems;
@@ -11,9 +13,9 @@ public class PlayerMeshController : MonoBehaviour
 
     public void LoadCharacter()
     {
-        _currentlySelectedItems.bodyIndex = PlayerPrefs.GetInt("BodyIndex", 2);
-        _currentlySelectedItems.hairIndex = PlayerPrefs.GetInt("HairIndex", -1);
-        _currentlySelectedItems.accessoriesIndex = PlayerPrefs.GetInt("AccessoriesIndex", -1);
+        _currentlySelectedItems.bodyName = PlayerPrefs.GetString("BodyName", "");
+        _currentlySelectedItems.hairName = PlayerPrefs.GetString("HairName", "");
+        _currentlySelectedItems.accessoriesName = PlayerPrefs.GetString("AccessoriesName", "");
 
         UpdateCharacter(_currentlySelectedItems);
     }
@@ -31,25 +33,28 @@ public class PlayerMeshController : MonoBehaviour
         {
             _characterParts.GetChild(i).gameObject.SetActive(false);
         }
-        _characterParts.GetChild(2).gameObject.SetActive(true);
+        _defaultBody.gameObject.SetActive(true);
 
         _currentlySelectedItems = aSelectedItems;
 
-        if (_currentlySelectedItems.bodyIndex >= 0)
-            _characterParts.GetChild(_currentlySelectedItems.bodyIndex).gameObject.SetActive(true);
+        SetEquipment(_currentlySelectedItems.bodyName, true);
+        SetEquipment(_currentlySelectedItems.hairName, true);
+        SetEquipment(_currentlySelectedItems.accessoriesName, true);
+    }
 
-        if (_currentlySelectedItems.hairIndex >= 0)
-            _characterParts.GetChild(_currentlySelectedItems.hairIndex).gameObject.SetActive(true);
+    private void SetEquipment(string aName, bool aActive)
+    {
+        if (aName == "") { return; }
 
-        if (_currentlySelectedItems.accessoriesIndex >= 0)
-            _characterParts.GetChild(_currentlySelectedItems.accessoriesIndex).gameObject.SetActive(true);
+        string fullName = _characterPartBaseName + aName;
+        _characterParts.Find(fullName)?.gameObject.SetActive(aActive);
     }
 
     public void SaveCharacter()
     {
-        PlayerPrefs.SetInt("BodyIndex", _currentlySelectedItems.bodyIndex);
-        PlayerPrefs.SetInt("HairIndex", _currentlySelectedItems.hairIndex);
-        PlayerPrefs.SetInt("AccessoriesIndex", _currentlySelectedItems.accessoriesIndex);
+        PlayerPrefs.SetString("BodyName", _currentlySelectedItems.bodyName);
+        PlayerPrefs.SetString("HairName", _currentlySelectedItems.hairName);
+        PlayerPrefs.SetString("AccessoriesName", _currentlySelectedItems.accessoriesName);
         PlayerPrefs.Save();
     }
 }

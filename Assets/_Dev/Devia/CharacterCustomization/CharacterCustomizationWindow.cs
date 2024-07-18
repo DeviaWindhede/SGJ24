@@ -22,9 +22,9 @@ struct CategoryUI
 [System.Serializable]
 public struct SelectedItems
 {
-    public int bodyIndex;
-    public int hairIndex;
-    public int accessoriesIndex;
+    public string bodyName;
+    public string hairName;
+    public string accessoriesName;
 }
 
 public class CharacterCustomizationWindow : MonoBehaviour
@@ -45,18 +45,18 @@ public class CharacterCustomizationWindow : MonoBehaviour
     private UnityEngine.UI.ScrollRect _scrollRect;
     private CategoryType _currentCategory = 0;
 
-    public void SetItem(CategoryType aType, int aIndex)
+    public void SetItem(CategoryType aType, string aBoneNameEnding)
     {
         switch (aType)
         {
             case CategoryType.Body:
-                _selectedItems.bodyIndex = aIndex;
+                _selectedItems.bodyName = aBoneNameEnding;
                 break;
             case CategoryType.Hair:
-                _selectedItems.hairIndex = aIndex;
+                _selectedItems.hairName = aBoneNameEnding;
                 break;
             case CategoryType.Accessories:
-                _selectedItems.accessoriesIndex = aIndex;
+                _selectedItems.accessoriesName = aBoneNameEnding;
                 break;
             default:
                 break;

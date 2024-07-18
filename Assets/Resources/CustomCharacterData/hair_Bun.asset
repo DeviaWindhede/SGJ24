@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: hair_Bun
   m_EditorClassIdentifier: 
   itemName: Bun
-  index: 3
+  skeletonPartName: hairBun
   itemSprite: {fileID: 21300000, guid: 3d651e6e305978145ad26079f59228e2, type: 3}
   type: 1
