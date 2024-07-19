@@ -7,6 +7,7 @@ public class PlayerInteractable : MonoBehaviour
 {
     [SerializeField] private PlayerInteractionType _playerInteractionType;
 
+    public PlayerInteractionType PlayerInteractionType => _playerInteractionType;
     private ShopManager _shopManager;
     
     private void Awake()

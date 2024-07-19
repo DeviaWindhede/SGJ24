@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 [System.Serializable]
 public struct ShopInteractable
@@ -56,6 +57,7 @@ public enum PlayerInteractionType
 public struct ShopManagerState
 {
     public bool isTarotActive;
+    public bool isStandingInRegister;
 }
 
 public class ShopManager : MonoBehaviour
@@ -67,6 +69,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private float _spawnMaxInterval = 5.0f;
     [SerializeField] private int _maxShoppers = 4;
 
+    private PlayerBehaviour _player;
     private ShopUIManager _uiManager;
     private ShopManagerState _state;
     private float _spawnTimer = 0.0f;
@@ -77,11 +80,13 @@ public class ShopManager : MonoBehaviour
 
     public ShopQueue Queue => _queue;
     public ShopLocations ShopLocations => _shopLocations;
+    public bool IsStandingInRegister => _state.isStandingInRegister;
 
     // Start is called before the first frame update
     void Start()
     {
         _uiManager = FindObjectOfType<ShopUIManager>();
+        _player = FindObjectOfType<PlayerBehaviour>();
 
         _spawnInterval = _spawnMaxInterval;
         _state = PersistentShopData.Instance.shopManagerState;
@@ -107,8 +112,14 @@ public class ShopManager : MonoBehaviour
         }
 
         PersistentShopData.Instance.shopTime.OnTimeChangeEvent += OnTimeChangeEvent;
+        _player.OnInteractableChangedEvent += OnPlayerInteractableChangedEvent;
 
         _uiManager.SetOpenStatus(_shouldLetInCustomers);
+    }
+
+    private void OnPlayerInteractableChangedEvent(PlayerInteractionType aType)
+    {
+        _state.isStandingInRegister = aType == PlayerInteractionType.Register;
     }
 
     private void OnTimeChangeEvent(bool aIsNight)

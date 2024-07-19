@@ -6,6 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class PlayerBehaviour : MonoBehaviour
 {
+    public delegate void OnInteractableChanged(PlayerInteractionType aType);
+    public event OnInteractableChanged OnInteractableChangedEvent;
+    //ShopperWorldCanvas
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _model;
     [SerializeField] private Animator _animator;
@@ -117,6 +120,10 @@ public class PlayerBehaviour : MonoBehaviour
         if (!collision.gameObject.CompareTag("PlayerInteractable")) { return; }
 
         PlayerInteractable interactable = collision.gameObject.GetComponent<PlayerInteractable>();
+        if (interactable != _currentInteractable) 
+        {
+            OnInteractableChangedEvent?.Invoke(interactable.PlayerInteractionType);
+        }
         _currentInteractable = interactable;
     }
 

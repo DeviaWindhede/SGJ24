@@ -30,6 +30,7 @@ public class ShopperWorldCanvas : MonoBehaviour
             return;
         }
         _iconImage.sprite = _speechBubbleIcons[(int)aType];
+        _speechBubble.SetActive(true);
     }
 
     private void Awake()

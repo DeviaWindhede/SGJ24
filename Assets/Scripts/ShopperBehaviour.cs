@@ -51,11 +51,19 @@ class QueueState : IState<ShopperBehaviour>
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper)
     {
         aShopper.SetAvoidancePriority(ShopperBehaviour.DEFAULT_AVOIDANCE_PRIORITY);
+        aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(ShopperIconType.None);
     }
 
     void IState<ShopperBehaviour>.Update(ShopperBehaviour aShopper)
     {
         if (!aShopper.state.hasReachedDestination) { return; }
+
+        {
+            ShopperIconType type = (ShopperIconType)aShopper.state.currentShopDestination;
+            if (!aShopper.ShouldDisplayIcon) { type = ShopperIconType.None; }
+            aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
+        }
+
         if (!aShopper.state.hasInteractedWithPlayer) { return; }
 
         switch (aShopper.state.currentQueueType)
@@ -208,6 +216,7 @@ public class ShopperBehaviour : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private float _stoppingTime = 0.5f;
 
+    private ShopperWorldCanvas _shopperWorldCanvas;
     private StateMachine<ShopperBehaviour> _stateMachine;
     private NavMeshAgent _agent;
     private ShopManager _shopManager;
@@ -215,8 +224,11 @@ public class ShopperBehaviour : MonoBehaviour
     public float distanceToReachDestination = 0.75f;
     private float _agentSpeed;
 
+    public ShopperWorldCanvas ShopperWorldCanvas => _shopperWorldCanvas;
+
     public ShopManager ShopManager => _shopManager;
     public System.Type CurrentStateType => _stateMachine.CurrentState.GetType();
+    public bool ShouldDisplayIcon => _shopManager.IsStandingInRegister && state.queueIndex == 0;
 
     public void SetAvoidancePriority(int aPriority)
     {
@@ -286,6 +298,7 @@ public class ShopperBehaviour : MonoBehaviour
     public void Init(ShopManager aShopManager, ShopperState aState)
     {
         _agent = GetComponent<NavMeshAgent>();
+        _shopperWorldCanvas = GetComponent<ShopperWorldCanvas>();
         _agentSpeed = _agent.speed;
         _shopManager = aShopManager;
         SetAvoidancePriority(DEFAULT_AVOIDANCE_PRIORITY);
