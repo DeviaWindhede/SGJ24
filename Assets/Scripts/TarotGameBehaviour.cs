@@ -82,7 +82,8 @@ public class TarotGameBehaviour : MonoBehaviour
         TEMP_flippedAmount++;
         if (TEMP_flippedAmount >= _deck.TarotCardsToSpawn)
         {
-            SceneManager.LoadScene("ShopScene");
+            print("win?");
+            //SceneManager.LoadScene("ShopScene");
         }
     }
 }
