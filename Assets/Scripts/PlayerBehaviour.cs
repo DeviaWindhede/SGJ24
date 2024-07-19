@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class PlayerBehaviour : MonoBehaviour
 {
+    public delegate void OnInteractableChanged(PlayerInteractionType aType);
+    public event OnInteractableChanged OnInteractableChangedEvent;
+    //ShopperWorldCanvas
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _model;
     [SerializeField] private Animator _animator;
@@ -31,6 +35,7 @@ public class PlayerBehaviour : MonoBehaviour
         _inputActions.ShopControls.Move.canceled += ctx => _moveInput = Vector2.zero;
 
         _inputActions.ShopControls.Interact.performed += _ => OnInteract();
+        _inputActions.ShopControls.Deny.performed += _ => OnDeny();
 
         gameObject.SetActive(false);
         transform.SetPositionAndRotation(
@@ -76,6 +81,12 @@ public class PlayerBehaviour : MonoBehaviour
         _currentInteractable?.OnInteract();
     }
 
+    private void OnDeny()
+    {
+        print("Deny!!!");
+        _currentInteractable?.OnDeny();
+    }
+
     Vector2 GetMoveDir()
     {
         Vector3 cameraForward = _camera.transform.forward;
@@ -110,6 +121,10 @@ public class PlayerBehaviour : MonoBehaviour
         if (!collision.gameObject.CompareTag("PlayerInteractable")) { return; }
 
         PlayerInteractable interactable = collision.gameObject.GetComponent<PlayerInteractable>();
+        if (interactable != _currentInteractable) 
+        {
+            OnInteractableChangedEvent?.Invoke(interactable.PlayerInteractionType);
+        }
         _currentInteractable = interactable;
     }
 
@@ -117,6 +132,10 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("PlayerInteractable")) { return; }
 
+        if (_currentInteractable != null)
+        {
+            OnInteractableChangedEvent?.Invoke(PlayerInteractionType.None);
+        }
         _currentInteractable = null;
     }
 }
