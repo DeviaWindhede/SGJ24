@@ -31,11 +31,13 @@ public class GooberCareBehaviour : MonoBehaviour
     public delegate void OnFinishedSession();
     public event OnFinishedSession FinishedSession;
 
+    [SerializeField] private Camera _mainCamera;
     [SerializeField] private ProgressBar _progressBar;
     [SerializeField] private float _cleanlinessThreshold = 0.9f;
     [SerializeField] private Button _washButton;
     [SerializeField] private Button _petButton;
 
+    [SerializeField] private Transform _gooberCollection;
     [SerializeField] private GameObject _petToolPrefab;
     [SerializeField] private GameObject _washToolPrefab;
 
@@ -98,6 +100,11 @@ public class GooberCareBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        {
+            int childIndex = UnityEngine.Random.Range(0, _gooberCollection.childCount);
+            _gooberCollection.GetChild(childIndex).gameObject.SetActive(true);
+        }
+
         _washButton.onClick.AddListener(SetSoapAsTool);
         _petButton.onClick.AddListener(SetPetAsTool);
 
@@ -133,10 +140,12 @@ public class GooberCareBehaviour : MonoBehaviour
                 grid[x][y].index = new Vector2Int(x, y);
 
                 Vector3 viewport = CellToViewport(new(x, y));
-                Ray ray = Camera.main.ViewportPointToRay(viewport);
+                Ray ray = _mainCamera.ViewportPointToRay(viewport);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
+                    if (!hit.transform.CompareTag("PlayerInteractable")) { continue; }
+
                     if (minMaxHeight.x > y) { minMaxHeight.x = y; }
                     if (minMaxHeight.y < y) { minMaxHeight.y = y; }
                     if (minMaxWidth.x > x) { minMaxWidth.x = x; }
@@ -145,6 +154,12 @@ public class GooberCareBehaviour : MonoBehaviour
                     activeStates.Add(grid[x][y]);
                 }
             }
+        }
+
+        if (activeStates.Count == 0)
+        {
+            Debug.LogError("No goober found!!! D:");
+            return;
         }
 
         int randomIndex = UnityEngine.Random.Range(0, activeStates.Count);
@@ -215,10 +230,10 @@ public class GooberCareBehaviour : MonoBehaviour
             Vector3 mousePos = new Vector3(
                     Input.mousePosition.x,
                     Input.mousePosition.y,
-                    Camera.main.transform.position.z
+                    _mainCamera.transform.position.z
             );
             Transform t = _washToolList[(int)_currentTool].transform;
-            t.SetPositionAndRotation(Camera.main.ScreenToWorldPoint(mousePos), Quaternion.identity);
+            t.SetPositionAndRotation(_mainCamera.ScreenToWorldPoint(mousePos), Quaternion.identity);
             return;
         }
 
@@ -228,7 +243,7 @@ public class GooberCareBehaviour : MonoBehaviour
 
     private void UpdateWashTool()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         bool result = Physics.Raycast(ray, out hit);
@@ -242,7 +257,7 @@ public class GooberCareBehaviour : MonoBehaviour
         }
         if (_mouseDelta.magnitude < 0.1f) { return; }
 
-        Vector3 cell = Camera.main.WorldToViewportPoint(hit.point);
+        Vector3 cell = _mainCamera.WorldToViewportPoint(hit.point);
         cell.x = cell.x * _gridWidth;
         cell.y = cell.y * _gridHeight;
 
@@ -259,7 +274,7 @@ public class GooberCareBehaviour : MonoBehaviour
 
     private void UpdatePetTool()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         bool result = Physics.Raycast(ray, out hit);
@@ -269,7 +284,7 @@ public class GooberCareBehaviour : MonoBehaviour
         if (!_isMouseDown) { return; }
         if (_mouseDelta.magnitude < 0.1f) { return; }
 
-        Vector3 cell = Camera.main.WorldToViewportPoint(hit.point);
+        Vector3 cell = _mainCamera.WorldToViewportPoint(hit.point);
         cell.x = cell.x * _gridWidth;
         cell.y = cell.y * _gridHeight;
 
@@ -282,7 +297,7 @@ public class GooberCareBehaviour : MonoBehaviour
 
     Vector3 CellToViewport(Vector2 cell)
     {
-        return new Vector3(cell.x / _gridWidth, cell.y / _gridHeight, Camera.main.nearClipPlane);
+        return new Vector3(cell.x / _gridWidth, cell.y / _gridHeight, _mainCamera.nearClipPlane);
     }
 
     private void OnDrawGizmosSelected()
@@ -296,7 +311,7 @@ public class GooberCareBehaviour : MonoBehaviour
                 Color c = Color.Lerp(Color.red, Color.green, grid[x][y].dirtiness);
                 Gizmos.color = c;
 
-                Vector3 cell = Camera.main.ViewportToWorldPoint(CellToViewport(new(x, y)));
+                Vector3 cell = _mainCamera.ViewportToWorldPoint(CellToViewport(new(x, y)));
                 Gizmos.DrawWireCube(cell, new Vector3(1.0f / _gridWidth, 1.0f / _gridHeight, 0));
             }
         }
