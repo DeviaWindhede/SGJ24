@@ -100,24 +100,27 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _BubbleAmount: 5
-    - _BubbleAmount2: 2.9
+    - _BubbleAmount: 4
+    - _BubbleAmount2: 2
     - _BubblePopSpeed: -0.52
-    - _BubbleSize: 1.54
-    - _BubbleSize_1: 1.26
-    - _BubbleSpeed: 1
+    - _BubbleSize: 1.5
+    - _BubbleSize_1: 1
+    - _BubbleSpeed: 2
     - _BumpScale: 1
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _CookingPalooza: 10
     - _Cull: 2
     - _Cutoff: 0.5
     - _DebugTimwe: 0.99
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _Displacement: 3
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
+    - _Float: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -138,12 +141,12 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
-    - _debug: 13.64
+    - _debug: 1
     m_Colors:
     - _Aspect: {r: 2, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.15233152, g: 0.554717, b: 0, a: 1}
-    - _ColorWater: {r: 0.053231638, g: 0.19245279, b: 0, a: 0}
+    - _ColorWater: {r: 0.042924475, g: 0.14716971, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
