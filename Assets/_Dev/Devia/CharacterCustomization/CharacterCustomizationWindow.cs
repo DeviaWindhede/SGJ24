@@ -38,6 +38,7 @@ public class CharacterCustomizationWindow : MonoBehaviour
     [SerializeField] private GameObject _categoryTypePrefab;
     [SerializeField] private GameObject _categoryItemPrefab;
     [SerializeField] private UnityEngine.UI.Button _confirmButton;
+    [SerializeField] private UnityEngine.UI.Button _revertButton;
     [SerializeField] private SelectedItems _selectedItems;
 
 
@@ -97,6 +98,7 @@ public class CharacterCustomizationWindow : MonoBehaviour
         _scrollRect = GetComponent<UnityEngine.UI.ScrollRect>();
 
         _confirmButton.onClick.AddListener(OnConfirmButtonPressed);
+        _revertButton.onClick.AddListener(OnRevertButtonPressed);
 
         InstantiateContainers();
         InstantiateItems();
@@ -136,6 +138,18 @@ public class CharacterCustomizationWindow : MonoBehaviour
     private void OnConfirmButtonPressed()
     {
         _playerMeshController.SaveCharacter();
+        LoadShopScene();
+    }
+
+    private void OnRevertButtonPressed()
+    {
+        _playerMeshController.LoadCharacter();
+        _selectedItems = _playerMeshController.CurrentlySelectedItems;
+    }
+
+    private void LoadShopScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
     }
 
     private void OnDestroy()
@@ -147,5 +161,6 @@ public class CharacterCustomizationWindow : MonoBehaviour
             button.onClick.RemoveListener(() => OnCategorySelected(type));
         }
         _confirmButton.onClick.RemoveListener(OnConfirmButtonPressed);
+        _revertButton.onClick.RemoveListener(OnRevertButtonPressed);
     } 
 }
