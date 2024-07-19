@@ -282,6 +282,9 @@ public class ShopManager : MonoBehaviour
                 if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
                 ChangeScene(aType);
                 break;
+            case PlayerInteractionType.CharacterCustomization:
+                ChangeScene(aType);
+                break;
             default:
                 break;
         }

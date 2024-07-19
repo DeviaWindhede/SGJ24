@@ -21,22 +21,47 @@ public class ShopperWorldCanvas : MonoBehaviour
     [SerializeField] private GameObject _speechBubble;
     [SerializeField] private Image _iconImage;
     private Camera _mainCamera;
+    private Animator _animator;
+    private bool _isEnabled;
 
     public void SetSpeechBubbleIcon(ShopperIconType aType)
     {
-        if (aType == ShopperIconType.None)
+        bool enabled = aType != ShopperIconType.None;
+        if (_isEnabled == enabled) { return; }
+
+        _isEnabled = enabled;
+        StartCoroutine(UpdateSpeechBubble(aType));
+    }
+
+    private IEnumerator UpdateSpeechBubble(ShopperIconType aType)
+    {
+        bool isEnabled = aType != ShopperIconType.None;
+        if (isEnabled)
         {
-            _speechBubble.SetActive(false);
-            return;
+            _iconImage.sprite = _speechBubbleIcons[(int)aType];
+            _animator.SetTrigger("Show");
         }
-        _iconImage.sprite = _speechBubbleIcons[(int)aType];
+        else
+        {
+            _animator.SetTrigger("Hide");
+        }
+
         _speechBubble.SetActive(true);
+        while (true)
+        {
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) { break; }
+
+            yield return null;
+        }
+        _speechBubble.SetActive(isEnabled);
     }
 
     private void Awake()
     {
         _mainCamera = FindObjectOfType<PixelCamRaycast>().GetComponent<Camera>();
         _speechBubble.SetActive(false);
+
+        _animator = _speechBubble.GetComponent<Animator>();
     }
 
 
