@@ -31,6 +31,7 @@ public class PlayerBehaviour : MonoBehaviour
         _inputActions.ShopControls.Move.canceled += ctx => _moveInput = Vector2.zero;
 
         _inputActions.ShopControls.Interact.performed += _ => OnInteract();
+        _inputActions.ShopControls.Deny.performed += _ => OnDeny();
 
         gameObject.SetActive(false);
         transform.SetPositionAndRotation(
@@ -74,6 +75,12 @@ public class PlayerBehaviour : MonoBehaviour
     {
         print("Interact!!!");
         _currentInteractable?.OnInteract();
+    }
+
+    private void OnDeny()
+    {
+        print("Deny!!!");
+        _currentInteractable?.OnDeny();
     }
 
     Vector2 GetMoveDir()

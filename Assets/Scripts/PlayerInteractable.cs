@@ -18,4 +18,8 @@ public class PlayerInteractable : MonoBehaviour
     {
         _shopManager.OnPlayerInteract(_playerInteractionType);
     }
+    public void OnDeny()
+    {
+        _shopManager.OnPlayerDeny(_playerInteractionType);
+    }
 }

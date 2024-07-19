@@ -207,6 +207,22 @@ public class ShopManager : MonoBehaviour
 
     }
 
+    public void OnPlayerDeny(PlayerInteractionType aType)
+    {
+        switch (aType)
+        {
+            case PlayerInteractionType.Register:
+                var firstShopper = _queue.GetFirstShopper();
+                if (firstShopper == null) { return; }
+
+                firstShopper.LeaveQueue();
+                firstShopper.ChangeState(typeof(LeavingState));
+                break;
+            default:
+                break;
+        }
+    }
+
     public void OnPlayerInteract(PlayerInteractionType aType)
     {
         switch (aType)
