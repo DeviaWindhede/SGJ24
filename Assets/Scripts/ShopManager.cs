@@ -51,7 +51,8 @@ public enum PlayerInteractionType
     TarotReading,
     GooberCare,
     Enchanting,
-    CharacterCustomization
+    CharacterCustomization,
+    None
 }
 
 public struct ShopManagerState

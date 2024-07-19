@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class PlayerBehaviour : MonoBehaviour
@@ -131,6 +132,10 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("PlayerInteractable")) { return; }
 
+        if (_currentInteractable != null)
+        {
+            OnInteractableChangedEvent?.Invoke(PlayerInteractionType.None);
+        }
         _currentInteractable = null;
     }
 }
