@@ -116,6 +116,12 @@ class LeavingState : IState<ShopperBehaviour>
     void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper)
     {
         aShopper.LeaveShop();
+        aShopper.distanceToReachDestination = 0.75f;
+
+        if (PersistentShopData.Instance.shopTime.IsNight)
+        {
+            aShopper.SetAvoidancePriority(99);
+        }
     }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper) { }
@@ -206,6 +212,7 @@ public class ShopperBehaviour : MonoBehaviour
     private NavMeshAgent _agent;
     private ShopManager _shopManager;
     public ShopperState state = new();
+    public float distanceToReachDestination = 0.75f;
     private float _agentSpeed;
 
     public ShopManager ShopManager => _shopManager;
@@ -321,7 +328,7 @@ public class ShopperBehaviour : MonoBehaviour
         _stateMachine.Update();
 
         var delta = state.currentDestination - transform.position;
-        state.hasReachedDestination = delta.magnitude < 0.75f;
+        state.hasReachedDestination = delta.magnitude < distanceToReachDestination;
         if (state.hasReachedDestination)
         {
             float maxDelta = Time.deltaTime / _stoppingTime;

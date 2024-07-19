@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public struct TransformData
 {
@@ -12,6 +14,102 @@ public struct ShopperData
 {
     public TransformData transformData;
     public ShopperState state;
+}
+
+public struct PotionIngredients
+{
+    public int ingredient1;
+    public int ingredient2;
+}
+
+public class ShopResources
+{
+    private int _coins;
+
+    public PotionIngredients ingredients;
+
+    public int CoinAmount => _coins;
+
+    public bool CanAfford(int aCost)
+    {
+        return _coins >= aCost;
+    }
+
+    public bool Purchase(int aCost)
+    {
+        if (!CanAfford(aCost)) { return false; }
+        _coins -= aCost;
+        return true;
+    }
+
+    public void AddCoins(int aAmount)
+    {
+        _coins += aAmount;
+    }
+}
+
+public class ShopTime
+{
+    public delegate void OnTimeChange(bool aIsNight);
+    public event OnTimeChange OnTimeChangeEvent;
+    public event OnTimeChange OnTimeFreezeEvent;
+
+    private static readonly int DEFAULT_TIME = 8;
+    private static readonly int NIGHT_TIME = 20;
+    private static readonly float TIME_TO_INCREMENT_HOUR = 1.0f;
+    //private static readonly float TIME_TO_INCREMENT_HOUR = 180.0f;
+
+    private float _timer = 0;
+    private int _hour = DEFAULT_TIME;
+    private bool _isTimeFrozen = true;
+
+    public int Time => _hour;
+    public bool IsNight => _hour >= NIGHT_TIME;
+    public bool IsFrozen => _isTimeFrozen;
+
+    public void IncrementHour()
+    {
+        if (IsNight) { return; }
+
+        ++_hour;
+        OnTimeChangeEvent?.Invoke(IsNight);
+        _isTimeFrozen = IsNight;
+    }
+
+    public void ResetDay()
+    {
+        _hour = DEFAULT_TIME;
+        _timer = 0.0f;
+        ShouldFreezeTime(true);
+    }
+
+    public void ShouldFreezeTime(bool aValue)
+    {
+        if (_isTimeFrozen != aValue)
+        {
+            OnTimeFreezeEvent?.Invoke(aValue);
+        }
+        _isTimeFrozen = aValue;
+    }
+
+    public void FastForwardToNight()
+    {
+        _hour = NIGHT_TIME;
+        OnTimeChangeEvent?.Invoke(IsNight);
+    }
+
+    public void UpdateTime()
+    {
+        if (_isTimeFrozen) { return; }
+        if (IsNight) { return; }
+
+        _timer += UnityEngine.Time.deltaTime;
+        if (_timer >= TIME_TO_INCREMENT_HOUR)
+        {
+            _timer = 0.0f;
+            IncrementHour();
+        }
+    }
 }
 
 public class PersistentShopData : MonoBehaviour
@@ -38,9 +136,15 @@ public class PersistentShopData : MonoBehaviour
     public List<ShopperData> shopperData = new();
     public TransformData playerTransform = new();
     public ShopManagerState shopManagerState = new();
+    public ShopResources shopResources = new();
+    public ShopTime shopTime = new();
 
     private void Awake()
     {
+        if (_instance != null)
+        {
+            Destroy(gameObject);
+        }
         DontDestroyOnLoad(gameObject);
     }
 }
