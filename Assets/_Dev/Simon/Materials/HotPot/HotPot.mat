@@ -100,17 +100,17 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _BubbleAmount: 4
+    - _BubbleAmount: 3.32
     - _BubbleAmount2: 2
     - _BubblePopSpeed: -0.52
     - _BubbleSize: 1.5
-    - _BubbleSize_1: 1
+    - _BubbleSize_1: 0.8
     - _BubbleSpeed: 2
     - _BumpScale: 1
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _CookingPalooza: 10
+    - _CookingPalooza: 6
     - _Cull: 2
     - _Cutoff: 0.5
     - _DebugTimwe: 0.99
