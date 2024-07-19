@@ -116,11 +116,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""GooberControls"",
+            ""name"": ""MiniGameControls"",
             ""id"": ""d65ed607-c60b-424a-b647-94c723490dd8"",
             ""actions"": [
                 {
-                    ""name"": ""UseTool"",
+                    ""name"": ""MouseDown"",
                     ""type"": ""Button"",
                     ""id"": ""03135cba-dc58-47a2-9c2e-194c4c1165e8"",
                     ""expectedControlType"": ""Button"",
@@ -146,7 +146,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""UseTool"",
+                    ""action"": ""MouseDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -170,10 +170,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_ShopControls = asset.FindActionMap("ShopControls", throwIfNotFound: true);
         m_ShopControls_Move = m_ShopControls.FindAction("Move", throwIfNotFound: true);
         m_ShopControls_Interact = m_ShopControls.FindAction("Interact", throwIfNotFound: true);
-        // GooberControls
-        m_GooberControls = asset.FindActionMap("GooberControls", throwIfNotFound: true);
-        m_GooberControls_UseTool = m_GooberControls.FindAction("UseTool", throwIfNotFound: true);
-        m_GooberControls_MouseMove = m_GooberControls.FindAction("MouseMove", throwIfNotFound: true);
+        // MiniGameControls
+        m_MiniGameControls = asset.FindActionMap("MiniGameControls", throwIfNotFound: true);
+        m_MiniGameControls_MouseDown = m_MiniGameControls.FindAction("MouseDown", throwIfNotFound: true);
+        m_MiniGameControls_MouseMove = m_MiniGameControls.FindAction("MouseMove", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -286,67 +286,67 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     }
     public ShopControlsActions @ShopControls => new ShopControlsActions(this);
 
-    // GooberControls
-    private readonly InputActionMap m_GooberControls;
-    private List<IGooberControlsActions> m_GooberControlsActionsCallbackInterfaces = new List<IGooberControlsActions>();
-    private readonly InputAction m_GooberControls_UseTool;
-    private readonly InputAction m_GooberControls_MouseMove;
-    public struct GooberControlsActions
+    // MiniGameControls
+    private readonly InputActionMap m_MiniGameControls;
+    private List<IMiniGameControlsActions> m_MiniGameControlsActionsCallbackInterfaces = new List<IMiniGameControlsActions>();
+    private readonly InputAction m_MiniGameControls_MouseDown;
+    private readonly InputAction m_MiniGameControls_MouseMove;
+    public struct MiniGameControlsActions
     {
         private @PlayerInputActions m_Wrapper;
-        public GooberControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @UseTool => m_Wrapper.m_GooberControls_UseTool;
-        public InputAction @MouseMove => m_Wrapper.m_GooberControls_MouseMove;
-        public InputActionMap Get() { return m_Wrapper.m_GooberControls; }
+        public MiniGameControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MouseDown => m_Wrapper.m_MiniGameControls_MouseDown;
+        public InputAction @MouseMove => m_Wrapper.m_MiniGameControls_MouseMove;
+        public InputActionMap Get() { return m_Wrapper.m_MiniGameControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(GooberControlsActions set) { return set.Get(); }
-        public void AddCallbacks(IGooberControlsActions instance)
+        public static implicit operator InputActionMap(MiniGameControlsActions set) { return set.Get(); }
+        public void AddCallbacks(IMiniGameControlsActions instance)
         {
-            if (instance == null || m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Add(instance);
-            @UseTool.started += instance.OnUseTool;
-            @UseTool.performed += instance.OnUseTool;
-            @UseTool.canceled += instance.OnUseTool;
+            if (instance == null || m_Wrapper.m_MiniGameControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MiniGameControlsActionsCallbackInterfaces.Add(instance);
+            @MouseDown.started += instance.OnMouseDown;
+            @MouseDown.performed += instance.OnMouseDown;
+            @MouseDown.canceled += instance.OnMouseDown;
             @MouseMove.started += instance.OnMouseMove;
             @MouseMove.performed += instance.OnMouseMove;
             @MouseMove.canceled += instance.OnMouseMove;
         }
 
-        private void UnregisterCallbacks(IGooberControlsActions instance)
+        private void UnregisterCallbacks(IMiniGameControlsActions instance)
         {
-            @UseTool.started -= instance.OnUseTool;
-            @UseTool.performed -= instance.OnUseTool;
-            @UseTool.canceled -= instance.OnUseTool;
+            @MouseDown.started -= instance.OnMouseDown;
+            @MouseDown.performed -= instance.OnMouseDown;
+            @MouseDown.canceled -= instance.OnMouseDown;
             @MouseMove.started -= instance.OnMouseMove;
             @MouseMove.performed -= instance.OnMouseMove;
             @MouseMove.canceled -= instance.OnMouseMove;
         }
 
-        public void RemoveCallbacks(IGooberControlsActions instance)
+        public void RemoveCallbacks(IMiniGameControlsActions instance)
         {
-            if (m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_MiniGameControlsActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IGooberControlsActions instance)
+        public void SetCallbacks(IMiniGameControlsActions instance)
         {
-            foreach (var item in m_Wrapper.m_GooberControlsActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_MiniGameControlsActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_GooberControlsActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_MiniGameControlsActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public GooberControlsActions @GooberControls => new GooberControlsActions(this);
+    public MiniGameControlsActions @MiniGameControls => new MiniGameControlsActions(this);
     public interface IShopControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
     }
-    public interface IGooberControlsActions
+    public interface IMiniGameControlsActions
     {
-        void OnUseTool(InputAction.CallbackContext context);
+        void OnMouseDown(InputAction.CallbackContext context);
         void OnMouseMove(InputAction.CallbackContext context);
     }
 }

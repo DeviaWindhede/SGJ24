@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TarotDeckBehaviour : MonoBehaviour
 {
+    [SerializeField] private List<GameObject> tarotCardMeshes;
     [SerializeField] private Transform _tarotSpawnPosition;
     [SerializeField] private Transform _tarotFinalCenterPosition;
     [SerializeField] private GameObject _tarotCardPrefab;
@@ -12,11 +14,22 @@ public class TarotDeckBehaviour : MonoBehaviour
     [SerializeField] private float _tarotCardMoveDelayOnSpawn = 0.5f;
     [SerializeField] private float _tarotCardMaxMoveTime = 1.0f;
 
+    private List<CardType> _cards = new();
+
     private int _tarotCardsSpawned = 0;
 
     private Vector3 GetTarotSpawnPosition(int aIndex)
     {
-        return _tarotFinalCenterPosition.position + aIndex * _tarotCardSpacing * Vector3.right;
+        return _tarotFinalCenterPosition.position + aIndex * _tarotCardSpacing * _tarotFinalCenterPosition.right;
+    }
+
+    private void Awake()
+    {
+        int cardCount = Enum.GetValues(typeof(CardType)).Length;
+        for (int i = 0; i < cardCount; i++)
+        {
+            _cards.Add((CardType)i);
+        }
     }
 
     private IEnumerator SpawnCard(int aIndex)
@@ -27,14 +40,22 @@ public class TarotDeckBehaviour : MonoBehaviour
             _tarotSpawnPosition.rotation
         );
 
+
+        TarotCardBehaviour cardBehaviour = tarotCard.GetComponent<TarotCardBehaviour>();
+        {
+            int index = UnityEngine.Random.Range(0, _cards.Count);
+            CardType type = _cards[index];
+            _cards.RemoveAt(index);
+            cardBehaviour.Init(type, tarotCardMeshes[(int)type]);
+        }
+
         AudioManager.Instance.PlaySound(ShopSoundByte.CardDraw);
         yield return new WaitForSeconds(_tarotCardMoveDelayOnSpawn);
 
-        Vector3 startPosition = _tarotSpawnPosition.position;
         Vector3 endPosition = GetTarotSpawnPosition(aIndex);
-        float distance = Vector3.Distance(startPosition, endPosition);
+        float distance = Vector3.Distance(_tarotSpawnPosition.position, endPosition);
 
-        Vector3 delta = startPosition - GetTarotSpawnPosition(0);
+        Vector3 delta = _tarotSpawnPosition.position - GetTarotSpawnPosition(0);
         float maxDistance = delta.magnitude;
         float moveTime = Mathf.Lerp(0.0f, _tarotCardMaxMoveTime, distance / maxDistance);
 
@@ -44,13 +65,16 @@ public class TarotDeckBehaviour : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             float t = elapsedTime / moveTime;
-            tarotCard.transform.position = Vector3.Slerp(startPosition, endPosition, t);
+            tarotCard.transform.SetPositionAndRotation(
+                Vector3.Slerp(_tarotSpawnPosition.position, endPosition, t),
+                Quaternion.Slerp(_tarotSpawnPosition.rotation, Quaternion.identity, t)
+            );
 
             yield return null;
         }
 
         tarotCard.transform.position = endPosition;
-        tarotCard.GetComponent<TarotCardBehaviour>().Init();
+        cardBehaviour.FinishMove();
 
         yield return null;
     }
@@ -69,7 +93,7 @@ public class TarotDeckBehaviour : MonoBehaviour
 
         for (int i = 0; i < _tarotCardsToSpawn; i++)
         {
-            Gizmos.DrawWireCube(GetTarotSpawnPosition(i), new Vector3(0.07f, 0.01f, 0.12f));
+            Gizmos.DrawWireCube(GetTarotSpawnPosition(i), new Vector3(0.11f, 0.01f, 0.21f));
         }
         Gizmos.DrawWireSphere(_tarotFinalCenterPosition.position, 0.01f);
 

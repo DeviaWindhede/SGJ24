@@ -329,7 +329,6 @@ public class ShopperBehaviour : MonoBehaviour
         }
 
         _animator.SetFloat("Speed", _agent.velocity.magnitude);
-        print(_agent.velocity.magnitude);
     }
 
     private void OnDestroy()

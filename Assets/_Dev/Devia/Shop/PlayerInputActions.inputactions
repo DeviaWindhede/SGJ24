@@ -94,11 +94,11 @@
             ]
         },
         {
-            "name": "GooberControls",
+            "name": "MiniGameControls",
             "id": "d65ed607-c60b-424a-b647-94c723490dd8",
             "actions": [
                 {
-                    "name": "UseTool",
+                    "name": "MouseDown",
                     "type": "Button",
                     "id": "03135cba-dc58-47a2-9c2e-194c4c1165e8",
                     "expectedControlType": "Button",
@@ -124,7 +124,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "UseTool",
+                    "action": "MouseDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

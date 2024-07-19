@@ -4,59 +4,72 @@ using UnityEngine;
 
 public class TarotGameBehaviour : MonoBehaviour
 {
+    [SerializeField] private Camera _pixelCam;
     private TarotCardBehaviour _hoveredCard;
+    private PlayerInputActions _inputActions;
+    private RaycastHit _hit;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _inputActions = new();
+        _inputActions.Enable();
+
+        _inputActions.MiniGameControls.Enable();
+        _inputActions.MiniGameControls.MouseDown.performed += _ => OnMouseClick();
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    private void OnDestroy()
+    {
+        _inputActions.MiniGameControls.MouseDown.performed -= _ => OnMouseClick();
+
+        _inputActions.MiniGameControls.Disable();
+        _inputActions.Disable();
+    }
+
+    private void SetHovered(bool aValue)
+    {
+        if (!_hoveredCard) { return; }
+        _hoveredCard.SetHovered(aValue);
+    }
+
+    private void Update()
     {
         Vector2 mousePos = Input.mousePosition;
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, Camera.main.nearClipPlane));
+        Ray ray = _pixelCam.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, _pixelCam.nearClipPlane));
 
-        RaycastHit hit;
-        if (!Physics.Raycast(ray, out hit))
+        if (!Physics.Raycast(ray, out _hit))
         {
-            if (_hoveredCard != null)
-            {
-                _hoveredCard.SetHovered(false);
-            }
+            SetHovered(false);
+            _hoveredCard = null;
             return;
         }
 
-        if (hit.collider.gameObject.CompareTag("TarotCard"))
+        if (_hit.collider.gameObject.CompareTag("TarotDeck")) { return; }
+
+        TarotCardBehaviour tarotCard = _hit.collider.gameObject.GetComponent<TarotCardBehaviour>();
+
+        if (_hoveredCard != tarotCard)
         {
-            TarotCardBehaviour tarotCard = hit.collider.gameObject.GetComponent<TarotCardBehaviour>();
-
-            if (_hoveredCard != null && _hoveredCard != tarotCard)
-            {
-                _hoveredCard.SetHovered(false);
-            }
-
-            _hoveredCard = tarotCard;
-            tarotCard.SetHovered(true);
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                tarotCard.Select();
-            }
+            SetHovered(false);
         }
-        else
+
+        _hoveredCard = tarotCard;
+        SetHovered(true);
+    }
+
+    private void OnMouseClick()
+    {
+        if (_hit.collider != null && _hit.collider.gameObject.CompareTag("TarotDeck"))
         {
-            if (hit.collider.gameObject.CompareTag("TarotDeck") && Input.GetMouseButtonDown(0))
-            {
-                TarotDeckBehaviour tarotDeck = hit.collider.gameObject.GetComponent<TarotDeckBehaviour>();
-                tarotDeck.OnClick();
-            }
-
-            if (_hoveredCard != null)
-            {
-                _hoveredCard.SetHovered(false);
-            }
+            _hit.collider.gameObject.GetComponent<TarotDeckBehaviour>().OnClick();
+            return;
         }
+
+        if (!_hoveredCard) { return; }
+        _hoveredCard.Select();
     }
 }

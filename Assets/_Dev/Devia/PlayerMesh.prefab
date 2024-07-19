@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71487576b2b4b184dbdd6a9618d2de62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterPartBaseName: character:c_
   _defaultBody: {fileID: 5781845346993639535}
   _characterParts: {fileID: 8728279253951000840}
 --- !u!1001 &2455936359856173088
@@ -190,6 +191,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 2670d365c5e2a4b4ab0a119b09af2bae,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: d480c119e4c6c564e914e6228820ea79, type: 2}
     - target: {fileID: 7669534817124402822, guid: 2670d365c5e2a4b4ab0a119b09af2bae,
         type: 3}
       propertyPath: m_IsActive

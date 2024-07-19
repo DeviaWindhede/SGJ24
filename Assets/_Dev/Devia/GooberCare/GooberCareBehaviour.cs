@@ -112,11 +112,11 @@ public class GooberCareBehaviour : MonoBehaviour
 
         _inputActions = new();
         _inputActions.Enable();
-        _inputActions.GooberControls.Enable();
-        _inputActions.GooberControls.UseTool.performed += ctx => { _isMouseDown = true; };
-        _inputActions.GooberControls.UseTool.canceled += ctx => { _isMouseDown = false; };
-        _inputActions.GooberControls.MouseMove.performed += ctx => { _mouseDelta = ctx.ReadValue<Vector2>(); };
-        _inputActions.GooberControls.MouseMove.canceled += ctx => { _mouseDelta = Vector2.zero; };
+        _inputActions.MiniGameControls.Enable();
+        _inputActions.MiniGameControls.MouseDown.performed += ctx => { _isMouseDown = true; };
+        _inputActions.MiniGameControls.MouseDown.canceled += ctx => { _isMouseDown = false; };
+        _inputActions.MiniGameControls.MouseMove.performed += ctx => { _mouseDelta = ctx.ReadValue<Vector2>(); };
+        _inputActions.MiniGameControls.MouseMove.canceled += ctx => { _mouseDelta = Vector2.zero; };
 
 
         // min = x, max = y
@@ -170,11 +170,11 @@ public class GooberCareBehaviour : MonoBehaviour
         _washButton.onClick.RemoveAllListeners();
         _petButton.onClick.RemoveAllListeners();
 
-        _inputActions.GooberControls.UseTool.performed -= ctx => { _isMouseDown = true; };
-        _inputActions.GooberControls.UseTool.canceled -= ctx => { _isMouseDown = false; };
-        _inputActions.GooberControls.MouseMove.performed -= ctx => { _mouseDelta = ctx.ReadValue<Vector2>(); };
-        _inputActions.GooberControls.MouseMove.canceled -= ctx => { _mouseDelta = Vector2.zero; };
-        _inputActions.GooberControls.Disable();
+        _inputActions.MiniGameControls.MouseDown.performed -= ctx => { _isMouseDown = true; };
+        _inputActions.MiniGameControls.MouseDown.canceled -= ctx => { _isMouseDown = false; };
+        _inputActions.MiniGameControls.MouseMove.performed -= ctx => { _mouseDelta = ctx.ReadValue<Vector2>(); };
+        _inputActions.MiniGameControls.MouseMove.canceled -= ctx => { _mouseDelta = Vector2.zero; };
+        _inputActions.MiniGameControls.Disable();
         _inputActions.Disable();
     }
 

@@ -92,7 +92,7 @@ public class PlayerBehaviour : MonoBehaviour
         _model.forward = new Vector3(velocity.x, 0, velocity.y);
     }
 
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerStay(Collider collision)
     {
         if (!collision.gameObject.CompareTag("PlayerInteractable")) { return; }
 
