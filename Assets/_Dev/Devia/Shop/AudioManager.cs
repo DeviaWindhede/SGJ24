@@ -8,6 +8,7 @@ public enum ShopSoundByte
     CardDraw,
     CardShuffleIn,
     CardShuffleOut,
+    Placeholder,
 }
 
 public class AudioManager : MonoBehaviour
@@ -25,6 +26,10 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource _bellAudioSource;
     [SerializeField] private List<AudioClip> _shopBellAudioClips;
 
+    [Header("Placeholder")]
+    [SerializeField] private AudioSource _placeholderAudioSource;
+    [SerializeField] private AudioClip _placeholderAudioClip;
+
     private void Awake()
     {
         if (_instance == null)
@@ -41,6 +46,9 @@ public class AudioManager : MonoBehaviour
     {
         switch (aSoundByte)
         {
+            case ShopSoundByte.Placeholder:
+                _placeholderAudioSource.PlayOneShot(_placeholderAudioClip);
+                break;
             case ShopSoundByte.ShopBell:
                 _bellAudioSource.PlayOneShot(GetRandomAudio(_shopBellAudioClips));
                 break;

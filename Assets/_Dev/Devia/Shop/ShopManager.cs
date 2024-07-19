@@ -67,11 +67,13 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private float _spawnMaxInterval = 5.0f;
     [SerializeField] private int _maxShoppers = 4;
 
+    private ShopUIManager _uiManager;
     private ShopManagerState _state;
     private float _spawnTimer = 0.0f;
     private float _spawnInterval = 5.0f;
     private List<ShopperBehaviour> _activeShoppers = new();
     private string _sceneToLoad = "";
+    private bool _shouldLetInCustomers = false;
 
     public ShopQueue Queue => _queue;
     public ShopLocations ShopLocations => _shopLocations;
@@ -79,8 +81,9 @@ public class ShopManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _spawnInterval = _spawnMaxInterval;
+        _uiManager = FindObjectOfType<ShopUIManager>();
 
+        _spawnInterval = _spawnMaxInterval;
         _state = PersistentShopData.Instance.shopManagerState;
 
         foreach (var t in PersistentShopData.Instance.shopperData)
@@ -102,6 +105,39 @@ public class ShopManager : MonoBehaviour
                 _queue.InitializeShopper(shopperBehaviour, shopperBehaviour.state.queueIndex);
             }
         }
+
+        PersistentShopData.Instance.shopTime.OnTimeChangeEvent += OnTimeChangeEvent;
+
+        _uiManager.SetOpenStatus(_shouldLetInCustomers);
+    }
+
+    private void OnTimeChangeEvent(bool aIsNight)
+    {
+        if (!aIsNight) { return; }
+
+        foreach (var shopper in _activeShoppers)
+        {
+            if (shopper.CurrentStateType == typeof(QueueState)) { continue; }
+            shopper.ChangeState(typeof(LeavingState)); // potential bug :) (stuck on tarot)
+        }
+        ShouldLetInCustomers(false);
+    }
+
+    public void ShouldLetInCustomers(bool aValue)
+    {
+        _shouldLetInCustomers = aValue;
+        AudioManager.Instance.PlaySound(ShopSoundByte.Placeholder);
+
+        if (!_shouldLetInCustomers && !PersistentShopData.Instance.shopTime.IsNight)
+        {
+            PersistentShopData.Instance.shopTime.FastForwardToNight();
+        }
+        else
+        {
+            PersistentShopData.Instance.shopTime.ShouldFreezeTime(!_shouldLetInCustomers);
+        }
+
+        _uiManager.SetOpenStatus(_shouldLetInCustomers);
     }
 
     public Vector3 GetEntrancePosition()
@@ -176,7 +212,12 @@ public class ShopManager : MonoBehaviour
         switch (aType)
         {
             case PlayerInteractionType.Entrance:
+            {
+                if (PersistentShopData.Instance.shopTime.IsNight) { break; }
+
+                ShouldLetInCustomers(!_shouldLetInCustomers);
                 break;
+            }
             case PlayerInteractionType.Register:
                 var firstShopper = _queue.GetFirstShopper();
                 if (firstShopper == null) { return; }
@@ -195,6 +236,7 @@ public class ShopManager : MonoBehaviour
                 firstShopper.Interact();
                 break;
             case PlayerInteractionType.Potions:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.TarotReading:
@@ -205,9 +247,11 @@ public class ShopManager : MonoBehaviour
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.GooberCare:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Enchanting:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
                 ChangeScene(aType);
                 break;
             default:
@@ -267,10 +311,19 @@ public class ShopManager : MonoBehaviour
         {
             _activeShoppers[i].DoUpdate();
         }
+
+        if (PersistentShopData.Instance.shopTime.IsNight && _activeShoppers.Count == 0)
+        {
+            _uiManager.ShowNewDayButton();
+            PersistentShopData.Instance.shopperData.Clear();
+        }
+
+        PersistentShopData.Instance.shopTime.UpdateTime();
     }
 
     private void HandleSpawnShoppers()
     {
+        if (!_shouldLetInCustomers) { return; }
         if (_activeShoppers.Count >= _maxShoppers) { return; }
 
         _spawnTimer += Time.deltaTime;
@@ -287,6 +340,11 @@ public class ShopManager : MonoBehaviour
         if (_sceneToLoad == "") { return; }
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(_sceneToLoad);
+    }
+
+    private void OnDestroy()
+    {
+        PersistentShopData.Instance.shopTime.OnTimeChangeEvent -= OnTimeChangeEvent;
     }
 
     private void OnDrawGizmosSelected()

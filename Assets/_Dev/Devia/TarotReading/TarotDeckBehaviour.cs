@@ -15,8 +15,9 @@ public class TarotDeckBehaviour : MonoBehaviour
     [SerializeField] private float _tarotCardMaxMoveTime = 1.0f;
 
     private List<CardType> _cards = new();
-
     private int _tarotCardsSpawned = 0;
+
+    public int TarotCardsToSpawn => _tarotCardsToSpawn;
 
     private Vector3 GetTarotSpawnPosition(int aIndex)
     {

@@ -15,6 +15,7 @@ public class PlayerBehaviour : MonoBehaviour
     private PlayerInputActions _inputActions;
     private Vector2 _moveInput;
     private Vector3 _previousPosition;
+    private Vector3 _spawnPosition;
 
     private PlayerInteractable _currentInteractable;
 
@@ -39,6 +40,17 @@ public class PlayerBehaviour : MonoBehaviour
         gameObject.SetActive(true);
 
         _previousPosition = transform.position;
+        _spawnPosition = transform.position;
+    }
+
+    public void ResetPosition()
+    {
+        gameObject.SetActive(false);
+        transform.SetPositionAndRotation(
+            transform.position = -Vector3.forward,
+            Quaternion.identity
+        );
+        gameObject.SetActive(true);
     }
 
     private void OnDestroy()
@@ -47,7 +59,7 @@ public class PlayerBehaviour : MonoBehaviour
         _inputActions.ShopControls.Move.canceled -= ctx => _moveInput = Vector2.zero;
 
         _inputActions.ShopControls.Interact.performed -= _ => OnInteract();
-     
+
         _inputActions.Disable();
 
 
@@ -60,6 +72,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnInteract()
     {
+        print("Interact!!!");
         _currentInteractable?.OnInteract();
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TarotGameBehaviour : MonoBehaviour
 {
@@ -8,11 +9,15 @@ public class TarotGameBehaviour : MonoBehaviour
     private TarotCardBehaviour _hoveredCard;
     private PlayerInputActions _inputActions;
     private RaycastHit _hit;
+    private TarotDeckBehaviour _deck;
 
+    private int TEMP_flippedAmount = 0;
 
     // Start is called before the first frame update
     void Start()
     {
+        _deck = FindObjectOfType<TarotDeckBehaviour>();
+
         _inputActions = new();
         _inputActions.Enable();
 
@@ -71,5 +76,13 @@ public class TarotGameBehaviour : MonoBehaviour
 
         if (!_hoveredCard) { return; }
         _hoveredCard.Select();
+        
+        
+        // TEMP
+        TEMP_flippedAmount++;
+        if (TEMP_flippedAmount >= _deck.TarotCardsToSpawn)
+        {
+            SceneManager.LoadScene("ShopScene");
+        }
     }
 }
