@@ -72,6 +72,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnInteract()
     {
+        print("Interact!!!");
         _currentInteractable?.OnInteract();
     }
 
