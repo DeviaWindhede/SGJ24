@@ -1,16 +1,23 @@
 Shader "Assa/PixelRenderingTest"
 {
+
     HLSLINCLUDE
     
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         // The Blit.hlsl file provides the vertex shader (Vert),
         // the input structure (Attributes), and the output structure (Varyings)
         #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
-
+        
     
         Texture2D _CameraNormalsTexture;
         Texture2D _CameraDepthTexture  ;
 
+        float _NormalEdgeThreshold;
+        float _NormalEdgeFactor;
+        float _DepthEdgeThreshold;
+        float _DepthEdgeFactor;
+
+        
         void GetSobelMatrices(out float3x3 horizontal, out float3x3 vertical)
         {
             horizontal = float3x3(
@@ -132,13 +139,13 @@ Shader "Assa/PixelRenderingTest"
             
 
             float4 outCol = float4(color, 1.0f);
-            if (SobelResultDepth > 0.2f)
+            if (SobelResultDepth > _DepthEdgeThreshold)
             {
-                outCol.rgb *= 0.75f;
+                outCol.rgb *= _DepthEdgeFactor;
             }
-            else if (SobelResultNormal > 2.0f)
+            else if (SobelResultNormal > _NormalEdgeThreshold)
             {
-                outCol.rgb *= 1.2f;
+                outCol.rgb *= _NormalEdgeFactor;
             }
 
 
@@ -153,7 +160,14 @@ Shader "Assa/PixelRenderingTest"
         }
     
     ENDHLSL
-    
+
+    Properties
+    {
+        _NormalEdgeThreshold("Normal Edge Threshold", Float) = 1
+        _NormalEdgeFactor("Normal Edge Factor", Float) = 1
+        _DepthEdgeThreshold("Depth Edge Threshold", Float) = 1
+        _DepthEdgeFactor("Depth Edge Factor", Float) = 1
+    }
     SubShader
     {
         Tags { "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline"}
