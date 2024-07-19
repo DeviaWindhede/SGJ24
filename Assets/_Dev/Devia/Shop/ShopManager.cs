@@ -117,6 +117,7 @@ public class ShopManager : MonoBehaviour
 
         foreach (var shopper in _activeShoppers)
         {
+            if (shopper.CurrentStateType != typeof(QueueState)) { continue; }
             shopper.ChangeState(typeof(LeavingState)); // potential bug :) (stuck on tarot)
         }
 

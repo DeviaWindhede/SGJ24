@@ -56,8 +56,8 @@ public class ShopTime
 
     private static readonly int DEFAULT_TIME = 8;
     private static readonly int NIGHT_TIME = 20;
-    private static readonly float TIME_TO_INCREMENT_HOUR = 1.0f;
-    //private static readonly float TIME_TO_INCREMENT_HOUR = 180.0f;
+    private static readonly float TIME_TO_INCREMENT_HOUR = 180.0f;
+    //private static readonly float TIME_TO_INCREMENT_HOUR = 1.0f;
 
     private float _timer = 0;
     private int _hour = DEFAULT_TIME;
