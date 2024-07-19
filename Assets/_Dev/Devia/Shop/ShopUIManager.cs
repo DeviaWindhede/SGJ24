@@ -10,7 +10,7 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI _shopStatusText;
     [SerializeField] private Button _newDayButton;
 
-    private void Start()
+    private void Awake()
     {
         OnTimeFreezeEvent(PersistentShopData.Instance.shopTime.IsFrozen);
         OnTimeChangeEvent(PersistentShopData.Instance.shopTime.IsNight);
@@ -19,6 +19,11 @@ public class ShopUIManager : MonoBehaviour
         PersistentShopData.Instance.shopTime.OnTimeFreezeEvent += OnTimeFreezeEvent;
 
         _newDayButton.onClick.AddListener(OnNewDayButton);
+        _newDayButton.gameObject.SetActive(false);
+    }
+
+    public void ShowNewDayButton()
+    {
         _newDayButton.gameObject.SetActive(PersistentShopData.Instance.shopTime.IsNight);
     }
 
@@ -45,10 +50,6 @@ public class ShopUIManager : MonoBehaviour
     private void OnTimeChangeEvent(bool aIsNight)
     {
         _timeText.text = PersistentShopData.Instance.shopTime.Time.ToString() + ":00";
-        if (aIsNight)
-        {
-            _newDayButton.gameObject.SetActive(true);
-        }
     }
 
     public void SetOpenStatus(bool aIsOpen)

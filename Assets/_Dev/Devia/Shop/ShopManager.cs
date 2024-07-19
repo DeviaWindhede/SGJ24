@@ -117,10 +117,9 @@ public class ShopManager : MonoBehaviour
 
         foreach (var shopper in _activeShoppers)
         {
-            if (shopper.CurrentStateType != typeof(QueueState)) { continue; }
+            if (shopper.CurrentStateType == typeof(QueueState)) { continue; }
             shopper.ChangeState(typeof(LeavingState)); // potential bug :) (stuck on tarot)
         }
-
         ShouldLetInCustomers(false);
     }
 
@@ -237,6 +236,7 @@ public class ShopManager : MonoBehaviour
                 firstShopper.Interact();
                 break;
             case PlayerInteractionType.Potions:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.TarotReading:
@@ -247,9 +247,11 @@ public class ShopManager : MonoBehaviour
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.GooberCare:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Enchanting:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
                 ChangeScene(aType);
                 break;
             default:
@@ -308,6 +310,12 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < _activeShoppers.Count; i++)
         {
             _activeShoppers[i].DoUpdate();
+        }
+
+        if (PersistentShopData.Instance.shopTime.IsNight && _activeShoppers.Count == 0)
+        {
+            _uiManager.ShowNewDayButton();
+            PersistentShopData.Instance.shopperData.Clear();
         }
 
         PersistentShopData.Instance.shopTime.UpdateTime();
