@@ -22,6 +22,13 @@ public struct PotionIngredients
     public int ingredient2;
 }
 
+public class Unlockables
+{
+    public bool goober1 = false;
+    public bool goober2 = false;
+    public bool goober3 = false;
+}
+
 public class ShopResources
 {
     private int _coins;
