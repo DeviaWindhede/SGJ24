@@ -59,7 +59,7 @@ public class ShopUIManager : MonoBehaviour
 
     private void OnTimeFreezeEvent(bool aIsFrozen)
     {
-        _timeText.color = aIsFrozen ? Color.grey : Color.white;
+        _timeText.color = aIsFrozen ? new Color(128 / 255.0f, 125 / 255.0f, 127 / 255.0f) : new Color(61 / 255.0f, 38 / 255.0f, 53 / 255.0f);
     }
 
     private void OnTimeChangeEvent(bool aIsNight)
