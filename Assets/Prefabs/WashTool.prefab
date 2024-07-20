@@ -169,8 +169,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6694819123007928068, guid: 27586fa7a154494459a9fce2cefd5259,
         type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 100
+      propertyPath: NoiseModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694819123007928068, guid: 27586fa7a154494459a9fce2cefd5259,
+        type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694819123007928068, guid: 27586fa7a154494459a9fce2cefd5259,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694819123007928068, guid: 27586fa7a154494459a9fce2cefd5259,
+        type: 3}
+      propertyPath: NoiseModule.strength.scalar
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694819123007928068, guid: 27586fa7a154494459a9fce2cefd5259,
+        type: 3}
+      propertyPath: VelocityModule.inWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694819123007928068, guid: 27586fa7a154494459a9fce2cefd5259,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
