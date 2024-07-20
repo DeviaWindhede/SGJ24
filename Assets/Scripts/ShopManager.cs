@@ -116,8 +116,6 @@ public class ShopManager : MonoBehaviour
 
         PersistentShopData.Instance.shopTime.OnTimeChangeEvent += OnTimeChangeEvent;
         _player.OnInteractableChangedEvent += OnPlayerInteractableChangedEvent;
-
-        _uiManager.SetOpenStatus(_shouldLetInCustomers);
     }
 
     private void OnPlayerInteractableChangedEvent(PlayerInteractionType aType)
@@ -150,8 +148,6 @@ public class ShopManager : MonoBehaviour
         {
             PersistentShopData.Instance.shopTime.ShouldFreezeTime(!_shouldLetInCustomers);
         }
-
-        _uiManager.SetOpenStatus(_shouldLetInCustomers);
     }
 
     public Vector3 GetEntrancePosition()
