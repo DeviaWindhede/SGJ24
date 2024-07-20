@@ -48,6 +48,10 @@ public class EnchantableObject : MonoBehaviour
             lineRenderers.Add(lineRenderer);
         }
 
+
+        ConfigureLine(0);
+        ConfigureLine(1);
+        ConfigureLine(2);
     }
 
     void MoveCameraToRune(Camera cameraToMove, int runeIndex)
@@ -101,12 +105,6 @@ public class EnchantableObject : MonoBehaviour
 
             if (focusedRuneIndex >= requestedRunes.Count) { focusedRuneIndex = -1; }
         }
-
-        
-
-        ConfigureLine(0);
-        ConfigureLine(1);
-        ConfigureLine(2);
     }
 
     List<Vector3> GetRuneWorldPositions(int runeIndex)
@@ -166,7 +164,7 @@ public class EnchantableObject : MonoBehaviour
         return subdivided;
     }
 
-    int GetNearestPointIndex(List<Vector3> points, Vector3 target, out float outDistance)
+    public int GetNearestPointIndex(List<Vector3> points, Vector3 target, out float outDistance)
     {
         float minDistance = float.MaxValue;
         int minDistanceIndex = 0;
@@ -184,6 +182,8 @@ public class EnchantableObject : MonoBehaviour
         return minDistanceIndex;
     }
 
+    
+
     public float GetShapeMatchingFactor(int runeIndex, List<Vector3> drawnShape, Camera cam)
     {
         List<Vector3> runeShape = GetShapeScreenPositions(runeIndex, cam);
@@ -199,7 +199,7 @@ public class EnchantableObject : MonoBehaviour
         return average;
     }
 
-    List<Vector3> GetShapeScreenPositions(int runeShapeIndex, Camera cam)
+    public List<Vector3> GetShapeScreenPositions(int runeShapeIndex, Camera cam)
     {
         List<Vector3> outScreenPoints = new List<Vector3>();
 

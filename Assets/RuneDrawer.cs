@@ -13,11 +13,14 @@ public class RuneDrawer : MonoBehaviour
     TrailRenderer trail;
 
     [SerializeField] private float trailDrawDistance = 0.25f;
-    List<Vector3> points = new List<Vector3>();
 
     [SerializeField] public EnchantableObject enchantableObject;
 
     Vector3 lastDrawnPosition = Vector3.negativeInfinity;
+
+    private List<Vector3> drawnPoints = new List<Vector3>();
+    private List<Vector3> runeShapeScreenPoints = new List<Vector3>();
+    private float accumulatedDrawnDistance = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -35,14 +38,28 @@ public class RuneDrawer : MonoBehaviour
 
     float CalculateMatchScore()
     {
-        float average = enchantableObject.GetShapeMatchingFactor(enchantableObject.focusedRuneIndex, points, usingCameraComponent);
-        return average;
+        //float average = enchantableObject.GetShapeMatchingFactor(enchantableObject.focusedRuneIndex, points, usingCameraComponent);
+        //return average;
+
+        return accumulatedDrawnDistance / drawnPoints.Count;
+
+    }
+
+    void StartDrawingRune(int runeIndex)
+    {
+        runeShapeScreenPoints = enchantableObject.GetShapeScreenPositions(runeIndex, usingCameraComponent);
+        accumulatedDrawnDistance = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         Ray ray = usingCamera.GetRay(Input.mousePosition);
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            StartDrawingRune(enchantableObject.focusedRuneIndex);
+        }
 
         if (Input.GetMouseButton(0))
         {
@@ -56,10 +73,15 @@ public class RuneDrawer : MonoBehaviour
 
             if (Vector3.Distance(screenPosition, lastDrawnPosition) > 0.1f)
             {
-                points.Add(screenPosition);
+                drawnPoints.Add(screenPosition);
                 lastDrawnPosition = screenPosition;
-                float score = CalculateMatchScore();
-                Debug.Log(score);
+
+                int nearestIndex = enchantableObject.GetNearestPointIndex(runeShapeScreenPoints, screenPosition, out float pointDistance);
+                accumulatedDrawnDistance += pointDistance;
+                //float score = CalculateMatchScore();
+                Debug.Log(CalculateMatchScore());
+                //Debug.Log(drawnPoints.Count);
+                Debug.Log(runeShapeScreenPoints.Count);
             }
             
 
@@ -68,7 +90,7 @@ public class RuneDrawer : MonoBehaviour
         {
             trail.transform.position = ray.origin + ray.direction * trailDrawDistance;
             trail.Clear();
-            points.Clear();
+            drawnPoints.Clear();
         }
 
     }
