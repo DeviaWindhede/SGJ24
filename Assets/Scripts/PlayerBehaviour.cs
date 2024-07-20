@@ -20,6 +20,7 @@ public class PlayerBehaviour : MonoBehaviour
     private Vector2 _moveInput;
     private Vector3 _previousPosition;
     private Vector3 _spawnPosition;
+    private bool _shouldMove = true;
 
     private PlayerInteractable _currentInteractable;
 
@@ -46,6 +47,11 @@ public class PlayerBehaviour : MonoBehaviour
 
         _previousPosition = transform.position;
         _spawnPosition = transform.position;
+    }
+
+    public void ShouldEnableMovement(bool aValue)
+    {
+        _shouldMove = aValue;
     }
 
     public void ResetPosition()
@@ -106,7 +112,12 @@ public class PlayerBehaviour : MonoBehaviour
         float speed = (transform.position - _previousPosition).magnitude;
         _animator.SetFloat("Speed", speed);
         _previousPosition = transform.position;
-        //print(speed);
+
+        if (!_shouldMove)
+        {
+            _rigidBody.velocity = Vector3.zero;
+            return; 
+        }
 
         Vector2 velocity = _speed * Time.deltaTime * GetMoveDir();
         _rigidBody.velocity = new Vector3(velocity.x, 0, velocity.y);

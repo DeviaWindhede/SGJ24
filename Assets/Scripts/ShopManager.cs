@@ -52,6 +52,7 @@ public enum PlayerInteractionType
     GooberCare,
     Enchanting,
     CharacterCustomization,
+    Computer,
     None
 }
 
@@ -230,6 +231,10 @@ public class ShopManager : MonoBehaviour
                 firstShopper.LeaveQueue();
                 firstShopper.ChangeState(typeof(LeavingState));
                 break;
+            case PlayerInteractionType.Computer:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                _uiManager.ShouldShowComputerUI(false);
+                break;
             default:
                 break;
         }
@@ -284,6 +289,10 @@ public class ShopManager : MonoBehaviour
                 break;
             case PlayerInteractionType.CharacterCustomization:
                 ChangeScene(aType);
+                break;
+            case PlayerInteractionType.Computer:
+                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                _uiManager.ShouldShowComputerUI(true);
                 break;
             default:
                 break;
