@@ -13,6 +13,8 @@ public class RuneDrawer : MonoBehaviour
     TrailRenderer trail;
 
     [SerializeField] private float trailDrawDistance = 0.25f;
+    [SerializeField] private float trailDrawWidth = 0.01f;
+    [SerializeField] private float minVertexDistance = 0.01f;
 
     [SerializeField] public EnchantableObject enchantableObject;
 
@@ -22,6 +24,7 @@ public class RuneDrawer : MonoBehaviour
     private List<Vector3> runeShapeScreenPoints = new List<Vector3>();
     private float accumulatedDrawnDistance = 0.0f;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +32,8 @@ public class RuneDrawer : MonoBehaviour
         trailObj.name = "RuneTrail";
         trail = trailObj.AddComponent<TrailRenderer>();
         trail.time = 1000;
-        trail.widthMultiplier = 0.01f;
-        trail.minVertexDistance = 0.01f;
+        trail.widthMultiplier = trailDrawWidth;
+        trail.minVertexDistance = minVertexDistance;
         trail.material = trailMaterial;
 
         usingCameraComponent = usingCamera.GetComponent<Camera>();
