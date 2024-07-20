@@ -83,6 +83,7 @@ public class TarotGameBehaviour : MonoBehaviour
         if (TEMP_flippedAmount >= _deck.TarotCardsToSpawn)
         {
             print("win?");
+            PersistentShopData.Instance.shopManagerState.tarotPrice = 40; // TODO
             //SceneManager.LoadScene("ShopScene");
         }
     }

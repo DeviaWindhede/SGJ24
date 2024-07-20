@@ -61,6 +61,7 @@ public struct ShopManagerState
 {
     public bool isTarotActive;
     public bool isStandingInRegister;
+    public int tarotPrice;
 }
 
 public class ShopManager : MonoBehaviour
