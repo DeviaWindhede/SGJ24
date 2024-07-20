@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 [System.Serializable]
@@ -185,6 +186,7 @@ public class ShopManager : MonoBehaviour
         ShopperBehaviour shopperBehaviour = InstantiateShopper(aType);
         shopperBehaviour.Init(this, new ShopperState());
         shopperBehaviour.SetDestination(GetRandomType());
+
         if (!aShouldPlaySound) { return; }
 
         AudioManager.Instance.PlaySound(ShopSoundByte.ShopBell);
@@ -276,7 +278,14 @@ public class ShopManager : MonoBehaviour
                 if (!_state.isTarotActive) { break; }
 
                 _state.isTarotActive = false;
-                _activeShoppers.Find(x => x.state.currentShopDestination == ShopLocationType.TarotReading).Interact();
+
+                var shopper = _activeShoppers.Where(x => 
+                    x.state.currentStateType == typeof(ActionState) && 
+                    x.state.currentShopDestination == ShopLocationType.TarotReading
+                ).FirstOrDefault();
+                if (!shopper) { break; }
+
+                shopper.Interact();
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.GooberCare:

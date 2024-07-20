@@ -10,6 +10,7 @@ public enum ShopperIconType
     GooberAdoption,
     Enchanting,
     Waiting,
+    Paying,
     None
 }
 

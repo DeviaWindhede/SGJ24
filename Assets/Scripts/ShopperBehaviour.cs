@@ -31,10 +31,7 @@ class QueueState : IState<ShopperBehaviour>
                     case ShopperQueueType.Purchase:
                         aShopper.state.currentQueueType = ShopperQueueType.Action;
                         break;
-                    case ShopperQueueType.Action:
-                    case ShopperQueueType.PostActionPay:
                     default:
-                        aShopper.state.currentQueueType = ShopperQueueType.PostActionPay;
                         break;
                 }
                 break;
@@ -45,7 +42,7 @@ class QueueState : IState<ShopperBehaviour>
             default:
                 break;
         }
-        aShopper.SetAvoidancePriority(0);
+        aShopper.SetAvoidancePriority(3);
     }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper)
@@ -61,6 +58,7 @@ class QueueState : IState<ShopperBehaviour>
         {
             ShopperIconType type = (ShopperIconType)aShopper.state.currentShopDestination;
             if (!aShopper.ShouldDisplayIcon) { type = ShopperIconType.None; }
+            else if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay) { type = ShopperIconType.Paying; }
             aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
         }
 
@@ -89,7 +87,7 @@ class ActionState : IState<ShopperBehaviour>
     void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper)
     {
         aShopper.SetDestination(aShopper.state.currentShopDestination, true);
-        aShopper.SetAvoidancePriority(99);
+        aShopper.state.currentQueueType = ShopperQueueType.PostActionPay;
     }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper)
@@ -103,7 +101,12 @@ class ActionState : IState<ShopperBehaviour>
 
     void IState<ShopperBehaviour>.Update(ShopperBehaviour aShopper)
     {
-        if (!aShopper.state.hasReachedDestination) { return; }
+        if (!aShopper.state.hasReachedDestination)
+        {
+            aShopper.SetAvoidancePriority(0);
+            return;
+        }
+        aShopper.SetAvoidancePriority(99);
         if (!aShopper.state.hasPerformedAction)
         { 
             if (aShopper.state.currentShopDestination == ShopLocationType.TarotReading)
