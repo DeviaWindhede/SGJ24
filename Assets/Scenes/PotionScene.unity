@@ -1462,6 +1462,94 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 13.711, y: -5.056, z: -1.201}
+--- !u!1001 &297500927
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4029983
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4029983
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4029983
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.481
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.621
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31419a0b1e29087488caaa70c338095f, type: 2}
+    - target: {fileID: 919132149155446097, guid: 425ced502ea1e304591ba36c43c06e61,
+        type: 3}
+      propertyPath: m_Name
+      value: HotPotPlane
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 425ced502ea1e304591ba36c43c06e61, type: 3}
 --- !u!1001 &315514244
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2249,7 +2337,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
+    - _BaseColor: {r: 0, g: 1, b: 0.24607038, a: 0.48235294}
     - _Color: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
@@ -4575,7 +4663,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
+    - _BaseColor: {r: 0, g: 1, b: 0.24607038, a: 0.48235294}
     - _Color: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
@@ -7438,3 +7526,4 @@ SceneRoots:
   - {fileID: 1513294214}
   - {fileID: 1004339758}
   - {fileID: 416642092}
+  - {fileID: 297500927}
