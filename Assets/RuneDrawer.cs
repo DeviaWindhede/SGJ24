@@ -16,7 +16,11 @@ public class RuneDrawer : MonoBehaviour
     [SerializeField] private float trailDrawWidth = 0.01f;
     [SerializeField] private float minVertexDistance = 0.01f;
 
+    [SerializeField] private Vector2 trailTextureScale = new Vector2(-1.0f, -1.0f);
+    [SerializeField] private LineTextureMode trailTextureMode = LineTextureMode.Stretch;
+
     [SerializeField] public EnchantableObject enchantableObject;
+
 
     Vector3 lastDrawnPosition = Vector3.negativeInfinity;
 
@@ -35,6 +39,8 @@ public class RuneDrawer : MonoBehaviour
         trail.widthMultiplier = trailDrawWidth;
         trail.minVertexDistance = minVertexDistance;
         trail.material = trailMaterial;
+        trail.textureScale = trailTextureScale;
+        trail.textureMode = trailTextureMode;
 
         usingCameraComponent = usingCamera.GetComponent<Camera>();
     }
