@@ -47,20 +47,30 @@ public class ShopNextDayButton : MonoBehaviour
         _button.enabled = true;
         PersistentShopData.Instance.shopTime.ResetDay();
         FindObjectOfType<PlayerBehaviour>().ResetPosition();
-        ResetGooberActiveStates();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void ResetGooberActiveStates()
+    public void ResetGooberHappiness()
     {
         var goobers = PersistentShopData.Instance.shopResources.goobers;
         for (int i = 0; i < goobers.Count; i++)
         {
-            goobers[i].petPercentage = 0.0f;
-            foreach (var state in goobers[i].activeStates)
+            var goob = goobers[i];
+            goob.petPercentage = 0.0f;
+            goob.cleanlinessPercentage = 0.0f;
+
+            foreach (var state in goob.activeStates)
             {
                 state.dirtiness = 0.0f;
             }
+        }
+    }
+
+    public void ResetGooberRental()
+    {
+        for (int i = 0; i < PersistentShopData.Instance.shopResources.goobers.Count; i++)
+        {
+            PersistentShopData.Instance.shopResources.goobers[i].isClaimed = false;
         }
     }
 

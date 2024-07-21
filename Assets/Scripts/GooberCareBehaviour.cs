@@ -332,7 +332,7 @@ public class GooberCareBehaviour : MonoBehaviour
         cell.x = cell.x * _gridWidth;
         cell.y = cell.y * _gridHeight;
 
-        var c = grid[(int)cell.x][(int)cell.y];
+        var c = grid[Mathf.RoundToInt(cell.x)][Mathf.RoundToInt(cell.y)];
         if (c.shouldIgnore) { return; }
 
         c.dirtiness += _cleaningSpeed * Time.deltaTime;
@@ -357,7 +357,7 @@ public class GooberCareBehaviour : MonoBehaviour
         cell.x = cell.x * _gridWidth;
         cell.y = cell.y * _gridHeight;
 
-        var c = grid[(int)cell.x][(int)cell.y];
+        var c = grid[Mathf.RoundToInt(cell.x)][Mathf.RoundToInt(cell.y)];
         if (c.shouldIgnore) { return; }
 
         CurrentGooberData.petPercentage += _pettingSpeed * Time.deltaTime * c.petMultiplier;

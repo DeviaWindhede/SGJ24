@@ -13,6 +13,8 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI _timeText;
     [SerializeField] private ShopNextDayButton _newDayButton;
 
+    public ShopNextDayButton ShopNextDayButton => _newDayButton;
+
     private void Awake()
     {
         OnTimeFreezeEvent(PersistentShopData.Instance.shopTime.IsFrozen);
@@ -23,11 +25,6 @@ public class ShopUIManager : MonoBehaviour
 
         _shopCamera.gameObject.SetActive(true);
         _computerCamera.gameObject.SetActive(false);
-    }
-
-    public void ShowNewDayButton()
-    {
-        _newDayButton.SetVisibility(PersistentShopData.Instance.shopTime.IsNight);
     }
 
     public void ShouldShowComputerUI(bool aValue)
