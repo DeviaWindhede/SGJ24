@@ -176,7 +176,7 @@ public class CharacterCustomizationWindow : MonoBehaviour
                     break;
             }
 
-            bool isLocked = items[i].setType != ClothingSetType.None && !PersistentShopData.Instance.shopResources.clothingSets[(int)items[i].setType].isUnlocked;
+            bool isLocked = items[i].setType != ClothingSetType.None && !PersistentShopData.Instance.shopResources.outfits[(int)items[i].setType].isUnlocked;
             item.Init(items[i], this, isSelected, isLocked);
 
             if (isSelected)

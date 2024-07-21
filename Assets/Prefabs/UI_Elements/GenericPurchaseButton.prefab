@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 6737976420280023014}
   - component: {fileID: 8490675096081239225}
   m_Layer: 5
-  m_Name: AkrenGoobPurchaseButton
+  m_Name: GenericPurchaseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 0}
-    m_PressedColor: {r: 1, g: 1, b: 1, a: 0.5294118}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 0}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
@@ -164,7 +164,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2540187288043722977}
+  m_TargetGraphic: {fileID: 463829941312760317}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -180,9 +180,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c76c0f3176600543a67937036d7563d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _purchaseType: 0
   _border: {fileID: 4493785045132172713}
   _nameText: {fileID: 6907745665590363969}
   _costText: {fileID: 1561913342723731558}
+  _index: 0
 --- !u!1 &1944921141461994256
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +197,7 @@ GameObject:
   - component: {fileID: 7889149110359199781}
   - component: {fileID: 463829941312760317}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SelectionOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -533,81 +535,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 1
---- !u!1 &6952805622754628630
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4847244537316173952}
-  - component: {fileID: 1785197275809070108}
-  - component: {fileID: 2540187288043722977}
-  m_Layer: 5
-  m_Name: SelectionOverlay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4847244537316173952
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6952805622754628630}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 973539881234215820}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1785197275809070108
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6952805622754628630}
-  m_CullTransparentMesh: 1
---- !u!114 &2540187288043722977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6952805622754628630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.39215687, g: 0.09019608, b: 0.090196066, a: 0}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 483b931c04e9e0f4aaf9a7aa6503e146, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7061846311361454558
 GameObject:
   m_ObjectHideFlags: 0
@@ -716,7 +643,6 @@ RectTransform:
   - {fileID: 1835415153702491080}
   - {fileID: 3232835383951240199}
   - {fileID: 1550483503101583932}
-  - {fileID: 4847244537316173952}
   m_Father: {fileID: 3041625517440601746}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
