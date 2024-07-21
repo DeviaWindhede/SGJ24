@@ -27,6 +27,7 @@ public class InteractionSystem : MonoBehaviour
         Cutting,
         Grinding,
         Stirring,
+        Recipes,
 
     }
     [SerializeField] private GameObject cameraObject;
