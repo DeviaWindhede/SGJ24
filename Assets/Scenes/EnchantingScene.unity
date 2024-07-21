@@ -904,8 +904,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usingCamera: {fileID: 760240467}
-  trailMaterial: {fileID: 2100000, guid: a87f3e705441751448e02e956c5431f8, type: 2}
+  trailMaterial: {fileID: 2100000, guid: 66c11e33df90e254dbfdc4e31deea132, type: 2}
   trailDrawDistance: 0.2
+  trailDrawWidth: 0.01
+  minVertexDistance: 0.01
+  trailTextureScale: {x: -1, y: -1}
+  trailTextureMode: 0
   enchantableObject: {fileID: 1119791103}
 --- !u!4 &1119231384
 Transform:
