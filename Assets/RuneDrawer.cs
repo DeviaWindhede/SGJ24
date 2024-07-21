@@ -28,7 +28,6 @@ public class RuneDrawer : MonoBehaviour
     private List<Vector3> runeShapeScreenPoints = new List<Vector3>();
     private float accumulatedDrawnDistance = 0.0f;
 
-
     // Start is called before the first frame update
     void Start()
     {

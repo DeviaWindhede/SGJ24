@@ -17,6 +17,7 @@ public class AlchemyInteractArea : MonoBehaviour
         Mortar,
         Pot,
         CuttingBoard,
+        MortarPosition,
     }
 
     public AreaType type;
@@ -38,10 +39,15 @@ public class AlchemyInteractArea : MonoBehaviour
         return transform.position + transform.TransformDirection(offset) + (pourable ? transform.TransformDirection(pourOffset) : Vector3.zero);
     }
 
-    public bool AcceptsType(MovableObject.ObjectType objType)
+    public bool AcceptsObject(MovableObject objectQuery)
     {
+
+        var objType = objectQuery.type;
+        
         switch (type)
         {
+            case AreaType.MortarPosition:
+                return objType == MovableObject.ObjectType.Mortar;
             case AreaType.Mortar:
                 return objType == MovableObject.ObjectType.Ingredient;
             case AreaType.Pot:
