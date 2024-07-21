@@ -144,7 +144,7 @@ public class ShopManager : MonoBehaviour
     public void ShouldLetInCustomers(bool aValue)
     {
         _shouldLetInCustomers = aValue;
-        AudioManager.Instance.PlaySound(ShopSoundByte.Placeholder);
+        AudioManager.Instance.PlaySound(ShopSoundByte.ShopBell);
 
         if (!_shouldLetInCustomers && !PersistentShopData.Instance.shopTime.IsNight)
         {
