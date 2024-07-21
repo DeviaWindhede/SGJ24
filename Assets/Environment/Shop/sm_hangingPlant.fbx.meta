@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: c29b5eb52df1e474dad21412368c074f
+guid: aa28a1a03da743b469fa02e83975c5a8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
   externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: m_desk
-    second: {fileID: 2100000, guid: 97f649d065828c847be651a66da3b9b3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
