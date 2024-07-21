@@ -31,7 +31,7 @@ public class GooberCareBehaviour : MonoBehaviour
     public delegate void OnFinishedSession();
     public event OnFinishedSession FinishedSession;
 
-    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private Camera _initalRayCamera;
     [SerializeField] private ProgressBar _progressBar;
     [SerializeField] private float _cleanlinessThreshold = 0.9f;
     [SerializeField] private Button _washButton;
@@ -47,9 +47,12 @@ public class GooberCareBehaviour : MonoBehaviour
     [SerializeField] private float _pettingSpeed;
 
     private List<GameObject> _washToolList = new();
-    private List<GooberState> activeStates = new();
+    [SerializeField] private List<GooberState> activeStates = new();
     private List<List<GooberState>> grid = new();
 
+    private PlayerInputActions _inputActions;
+    private Camera _camera;
+    private PixelCamRaycast _pixelCamRay;
     private bool _hasCalledFinishedSession = false;
     private Vector2 _mouseDelta;
     private bool _isMouseDown;
@@ -83,7 +86,6 @@ public class GooberCareBehaviour : MonoBehaviour
         }
     }
 
-    PlayerInputActions _inputActions;
 
     private void SetSoapAsTool()
     {
@@ -100,6 +102,8 @@ public class GooberCareBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _pixelCamRay = FindObjectOfType<PixelCamRaycast>();
+        _camera = _pixelCamRay.GetComponent<Camera>();
         {
             int childIndex = UnityEngine.Random.Range(0, _gooberCollection.childCount);
             _gooberCollection.GetChild(childIndex).gameObject.SetActive(true);
@@ -140,7 +144,7 @@ public class GooberCareBehaviour : MonoBehaviour
                 grid[x][y].index = new Vector2Int(x, y);
 
                 Vector3 viewport = CellToViewport(new(x, y));
-                Ray ray = _mainCamera.ViewportPointToRay(viewport);
+                Ray ray = _initalRayCamera.ViewportPointToRay(viewport);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -230,10 +234,10 @@ public class GooberCareBehaviour : MonoBehaviour
             Vector3 mousePos = new Vector3(
                     Input.mousePosition.x,
                     Input.mousePosition.y,
-                    _mainCamera.transform.position.z
+                    _camera.transform.position.z
             );
             Transform t = _washToolList[(int)_currentTool].transform;
-            t.SetPositionAndRotation(_mainCamera.ScreenToWorldPoint(mousePos), Quaternion.identity);
+            t.SetPositionAndRotation(_initalRayCamera.ScreenToWorldPoint(mousePos), Quaternion.identity);
             return;
         }
 
@@ -243,7 +247,7 @@ public class GooberCareBehaviour : MonoBehaviour
 
     private void UpdateWashTool()
     {
-        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _pixelCamRay.GetRay(Input.mousePosition);
         RaycastHit hit;
 
         bool result = Physics.Raycast(ray, out hit);
@@ -257,7 +261,7 @@ public class GooberCareBehaviour : MonoBehaviour
         }
         if (_mouseDelta.magnitude < 0.1f) { return; }
 
-        Vector3 cell = _mainCamera.WorldToViewportPoint(hit.point);
+        Vector3 cell = _camera.WorldToViewportPoint(hit.point);
         cell.x = cell.x * _gridWidth;
         cell.y = cell.y * _gridHeight;
 
@@ -274,17 +278,15 @@ public class GooberCareBehaviour : MonoBehaviour
 
     private void UpdatePetTool()
     {
-        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _pixelCamRay.GetRay(Input.mousePosition);
         RaycastHit hit;
-
         bool result = Physics.Raycast(ray, out hit);
         UpdateVisualToolLocation(_washToolList[(int)_currentTool], hit);
 
         if (!result) { return; }
         if (!_isMouseDown) { return; }
         if (_mouseDelta.magnitude < 0.1f) { return; }
-
-        Vector3 cell = _mainCamera.WorldToViewportPoint(hit.point);
+        Vector3 cell = _camera.WorldToViewportPoint(hit.point);
         cell.x = cell.x * _gridWidth;
         cell.y = cell.y * _gridHeight;
 
@@ -297,7 +299,7 @@ public class GooberCareBehaviour : MonoBehaviour
 
     Vector3 CellToViewport(Vector2 cell)
     {
-        return new Vector3(cell.x / _gridWidth, cell.y / _gridHeight, _mainCamera.nearClipPlane);
+        return new Vector3(cell.x / _gridWidth, cell.y / _gridHeight, _initalRayCamera.nearClipPlane);
     }
 
     private void OnDrawGizmosSelected()
@@ -311,7 +313,7 @@ public class GooberCareBehaviour : MonoBehaviour
                 Color c = Color.Lerp(Color.red, Color.green, grid[x][y].dirtiness);
                 Gizmos.color = c;
 
-                Vector3 cell = _mainCamera.ViewportToWorldPoint(CellToViewport(new(x, y)));
+                Vector3 cell = _camera.ViewportToWorldPoint(CellToViewport(new(x, y)));
                 Gizmos.DrawWireCube(cell, new Vector3(1.0f / _gridWidth, 1.0f / _gridHeight, 0));
             }
         }
