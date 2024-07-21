@@ -27,9 +27,10 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _CenterStr: -0.8
+    - _CenterStr: 1.57
     - _GlowStr: 2
     m_Colors:
+    - _Color: {r: 0.9150943, g: 0.3927999, b: 0.64969486, a: 1}
     - _ObjectCenterOffset: {r: -0.21, g: -0.8, b: -0.36, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &7972801267791190024
