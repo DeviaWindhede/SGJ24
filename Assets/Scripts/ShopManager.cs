@@ -289,6 +289,7 @@ public class ShopManager : MonoBehaviour
                 break;
             case PlayerInteractionType.GooberCare:
                 if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!PersistentShopData.Instance.shopResources.goobers.Any(x => x.isUnlocked)) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Enchanting:

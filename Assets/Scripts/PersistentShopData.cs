@@ -26,7 +26,7 @@ public class GooberData
 {
     public float cleanlinessPercentage = 0;
     public float petPercentage = 0;
-    public bool isUnlocked = true;
+    public bool isUnlocked = false;
     public int unlockCost = 0;
     public List<GooberState> activeStates = new();
 
