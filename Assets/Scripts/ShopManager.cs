@@ -95,6 +95,8 @@ public class ShopManager : MonoBehaviour
         _spawnInterval = _spawnMaxInterval;
         _state = PersistentShopData.Instance.shopManagerState;
 
+        _shouldLetInCustomers = !PersistentShopData.Instance.shopTime.IsNight && PersistentShopData.Instance.shopTime.Time > 8;
+
         foreach (var t in PersistentShopData.Instance.shopperData)
         {
             InstantiateShopper(t.state.currentStateType);
