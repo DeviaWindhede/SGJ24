@@ -41,9 +41,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _CenterStr: -0.81
-    - _GlowStr: 2
+    - _GlowStr: 312.15
     m_Colors:
     - _CenterOffset: {r: 0.5, g: -0.27, b: 0, a: 0}
+    - _Color: {r: 0.86666673, g: 0.41176474, b: 0.854902, a: 1}
     - _ObjectCenterOffset: {r: -0.33, g: -0.89, b: -0.43, a: 0}
     - _ScreenCenterOffset: {r: 0.5, g: -0.17, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -114,8 +114,8 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
-    - _NormalEdgeFactor: 1.35
-    - _NormalEdgeThreshold: 1.4
+    - _NormalEdgeFactor: 4.87
+    - _NormalEdgeThreshold: 28.88
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0

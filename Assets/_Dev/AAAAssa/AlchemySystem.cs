@@ -15,6 +15,7 @@ public class AlchemySystem : MonoBehaviour
     {
         CrystalPink,
         CrystalGreen,
+        GnomecapMushroom,
         
     }
 
