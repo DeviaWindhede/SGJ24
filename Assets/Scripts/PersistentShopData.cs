@@ -28,6 +28,7 @@ public class GooberData
     public float petPercentage = 0;
     public bool isUnlocked = false;
     public int unlockCost = 0;
+    public string name = "Goober Name";
     public List<GooberState> activeStates = new();
 
     public float HappinessPercentage => (petPercentage + cleanlinessPercentage) / 2.0f;
@@ -41,7 +42,11 @@ public class ShopResources
     private int _coins;
 
     public PotionIngredients ingredients;
-    public List<GooberData> goobers = new() { new(), new(), new() };
+    public List<GooberData> goobers = new() { 
+        new() { name = "Bunny" },
+        new() { name = "Pants" },
+        new() { name = "Wolf" }
+    };
 
     public int CoinAmount => _coins;
 
