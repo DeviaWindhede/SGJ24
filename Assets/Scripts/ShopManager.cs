@@ -62,6 +62,7 @@ public struct ShopManagerState
     public bool isTarotActive;
     public bool isStandingInRegister;
     public int tarotPrice;
+    public int activeEnchantments;
 }
 
 public class ShopManager : MonoBehaviour
@@ -281,6 +282,9 @@ public class ShopManager : MonoBehaviour
                         }
                         break;
                     case ShopLocationType.Enchanting:
+                        if (PersistentShopData.Instance.shopManagerState.activeEnchantments >= 3) { return; }
+
+                        ++PersistentShopData.Instance.shopManagerState.activeEnchantments;
                         break;
                     default:
                         break;
@@ -313,6 +317,7 @@ public class ShopManager : MonoBehaviour
                 break;
             case PlayerInteractionType.Enchanting:
                 if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (PersistentShopData.Instance.shopManagerState.activeEnchantments == 0) { return; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.CharacterCustomization:
@@ -371,6 +376,14 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    private bool CanShowNextDayButton()
+    {
+        return 
+            PersistentShopData.Instance.shopTime.IsNight &&
+            _activeShoppers.Count == 0 &&
+            PersistentShopData.Instance.shopManagerState.activeEnchantments == 0;
+    }
+
     void Update()
     {
         HandleSpawnShoppers();
@@ -380,7 +393,7 @@ public class ShopManager : MonoBehaviour
             _activeShoppers[i].DoUpdate();
         }
 
-        if (PersistentShopData.Instance.shopTime.IsNight && _activeShoppers.Count == 0)
+        if (CanShowNextDayButton())
         {
             _uiManager.ShopNextDayButton.SetVisibility(true);
             PersistentShopData.Instance.shopperData.Clear();
