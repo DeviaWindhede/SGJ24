@@ -40,6 +40,7 @@ public class ShopUIManager : MonoBehaviour
 
     private void OnPotionChangeEvent(PotionType aType, int aAmount)
     {
+        print("Potion Change Event");
         switch (aType)
         {
             case PotionType.Sleep:

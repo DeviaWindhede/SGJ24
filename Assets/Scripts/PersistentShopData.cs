@@ -49,7 +49,7 @@ public enum PotionType
 
 public class Potion
 {
-    public int amount;
+    public int amount = 0;
     public int sellPrice = 10;
     public PotionType type;
 }
@@ -79,6 +79,11 @@ public class ShopResources
     public List<Unlockable> outfits = new() { new() { unlockCost = 3000, name = "Arcana" }, new() { unlockCost = 1000, name = "Astro" } };
 
     public int CoinAmount => _coins;
+
+    public int GetPotionSellPrice(PotionType aType)
+    {
+        return GetPotion(aType).sellPrice;
+    }
 
     public void AddPotion(PotionType aType, int aAmount = 1)
     {

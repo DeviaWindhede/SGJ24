@@ -31,7 +31,7 @@ class QueueState : IState<ShopperBehaviour>
                 Leave(aShopper);
                 return;
             case ShopLocationType.Potions:
-                amount = 10;
+                amount = PersistentShopData.Instance.shopResources.GetPotionSellPrice(aShopper.state.potionType);
                 break;
             case ShopLocationType.GooberAdoption:
                 float percentage = 0.0f;
@@ -106,16 +106,22 @@ class QueueState : IState<ShopperBehaviour>
 
         {
             ShopperIconType type = (ShopperIconType)aShopper.state.currentShopDestination;
-            if (!aShopper.ShouldDisplayIcon) { type = ShopperIconType.None; }
-            else if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay) { type = ShopperIconType.Paying; }
-
-            if (aShopper.state.currentShopDestination == ShopLocationType.Potions)
+            if (!aShopper.ShouldDisplayIcon)
             {
-                aShopper.ShopperWorldCanvas.SetSpeechBubblePotionIcon(aShopper.state.potionType);
+                type = ShopperIconType.None;
+                aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
             }
+            else if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay) { type = ShopperIconType.Paying; }
             else
             {
-                aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
+                if (aShopper.state.currentShopDestination == ShopLocationType.Potions)
+                {
+                    aShopper.ShopperWorldCanvas.SetSpeechBubblePotionIcon(aShopper.state.potionType);
+                }
+                else
+                {
+                    aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
+                }
             }
         }
 
@@ -252,6 +258,7 @@ public enum ShopperQueueType
     PostActionPay, // eg pay for tarot reading action
 }
 
+[System.Serializable]
 public class ShopperState
 {
     public Vector3 currentDestination;
