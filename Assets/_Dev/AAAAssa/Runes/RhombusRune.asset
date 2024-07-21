@@ -19,3 +19,5 @@ MonoBehaviour:
   - {x: -0.1, y: 0}
   - {x: 0, y: -0.1}
   isClosed: 1
+  runePointsString: 0.1,0 0,0.1 -0.1,0 0,-0.1,
+  runeSizeMultiplier: 1

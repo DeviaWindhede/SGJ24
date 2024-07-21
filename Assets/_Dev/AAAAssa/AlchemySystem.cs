@@ -9,12 +9,21 @@ public class AlchemySystem : MonoBehaviour
         Cut,
         Grind,
         Pour,
+        Place,
     }
 
     public enum Ingredient
     {
         CrystalPink,
         CrystalGreen,
+        CrystalBlue,
+        GnomecapMushroom,
+        CyclopsEyeball,
+        Lavender,
+        Peppermint,
+        SnakeVenom,
+        ToadSlime,
+        Worm,
         
     }
 
