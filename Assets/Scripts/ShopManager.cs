@@ -237,7 +237,7 @@ public class ShopManager : MonoBehaviour
                 firstShopper.ChangeState(typeof(LeavingState));
                 break;
             case PlayerInteractionType.Computer:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 _uiManager.ShouldShowComputerUI(false);
                 break;
             default:
@@ -296,7 +296,7 @@ public class ShopManager : MonoBehaviour
                 firstShopper.Interact();
                 break;
             case PlayerInteractionType.Potions:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.TarotReading:
@@ -314,20 +314,21 @@ public class ShopManager : MonoBehaviour
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.GooberCare:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 if (!PersistentShopData.Instance.shopResources.goobers.Any(x => x.isUnlocked)) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Enchanting:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 if (PersistentShopData.Instance.shopManagerState.activeEnchantments == 0) { return; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.CharacterCustomization:
+                if (!CanUseNightInteraction()) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Computer:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 _uiManager.ShouldShowComputerUI(true);
                 break;
             default:
@@ -377,6 +378,13 @@ public class ShopManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private bool CanUseNightInteraction()
+    {
+        bool nightCheck = PersistentShopData.Instance.shopTime.IsNight && _activeShoppers.Count == 0;
+        bool morningCheck = PersistentShopData.Instance.shopTime.Time == 8 && PersistentShopData.Instance.shopTime.IsFrozen;
+        return nightCheck || morningCheck;
     }
 
     private bool CanShowNextDayButton()

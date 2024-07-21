@@ -189,18 +189,24 @@ public class CharacterCustomizationWindow : MonoBehaviour
     private void OnConfirmButtonPressed()
     {
         _playerMeshController.SaveCharacter();
-        LoadShopScene();
+        StartCoroutine(LoadShopScene());
+    }
+
+    private IEnumerator LoadShopScene()
+    {
+        _confirmButton.enabled = false;
+        AudioManager.Instance.PlaySound(ShopSoundByte.CharacterCreated);
+
+        yield return new WaitForSeconds(1.2f);
+        
+        UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
     }
 
     private void OnRevertButtonPressed()
     {
         _playerMeshController.LoadCharacter();
         _selectedItems = _playerMeshController.CurrentlySelectedItems;
-    }
-
-    private void LoadShopScene()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
+        AudioManager.Instance.PlaySound(ShopSoundByte.Click);
     }
 
     private void OnDestroy()
