@@ -906,7 +906,7 @@ MonoBehaviour:
   usingCamera: {fileID: 760240467}
   trailMaterial: {fileID: 2100000, guid: a87f3e705441751448e02e956c5431f8, type: 2}
   trailDrawDistance: 0.2
-  enchantableObject: {fileID: 1470533485}
+  enchantableObject: {fileID: 1119791103}
 --- !u!4 &1119231384
 Transform:
   m_ObjectHideFlags: 0
@@ -1606,10 +1606,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f0fff23f79690ba40a1e0d8448242c5c, type: 2}
   - {fileID: 11400000, guid: 39dd5908a960c8d458ff58c85f320f9b, type: 2}
   - {fileID: 11400000, guid: bd84f95887a3e9b4db6ebe36c15bdda2, type: 2}
+  - {fileID: 11400000, guid: 18a9333fee44f064db81c3062838cca5, type: 2}
   runePositions:
   - {x: 0, y: 0.2, z: 0}
   - {x: 0, y: -0.1, z: 0}
   - {x: 0, y: -0.4, z: 0}
+  - {x: 0, y: -1, z: 0}
   lineMaterial: {fileID: 2100000, guid: 07537dada2738be4c8d1c4350530cc92, type: 2}
   focusedLineMaterial: {fileID: 2100000, guid: 66069d4876dd3074da1765a840f5c9ae, type: 2}
   runeFocusDistance: 0.5
