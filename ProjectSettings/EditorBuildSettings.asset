@@ -6,15 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ShopScene.unity
-    guid: a6a62628ecd28b44fa97f5bda3c74099
+    path: Assets/Scenes/TitleScene.unity
+    guid: 9e99c78dda636fa48abac543ef278694
   - enabled: 1
     path: Assets/Scenes/CharacterCustomizationScene.unity
     guid: 921c00ddd2606624ab18fb270bce7a49
+  - enabled: 1
+    path: Assets/Scenes/ShopScene.unity
+    guid: a6a62628ecd28b44fa97f5bda3c74099
   - enabled: 1
     path: Assets/Scenes/TarotReadingScene.unity
     guid: 9dbd711de9ee48b49b4470173bc5d38b
   - enabled: 1
     path: Assets/Scenes/GooberCareScene.unity
     guid: a971f30ea85013d499e3b347776b72f0
+  - enabled: 1
+    path: Assets/Scenes/PotionScene.unity
+    guid: 1a7bde9cc52a12342810dbc99787f2f7
+  - enabled: 1
+    path: Assets/Scenes/EnchantingScene.unity
+    guid: 47b3a1909332b8f4f94c6de556fe5470
   m_configObjects: {}
