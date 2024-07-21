@@ -79,7 +79,7 @@ public class ShopResources
     public delegate void OnPotionChange(PotionType aType, int aAmount);
     public event OnPotionChange OnPotionChangeEvent;
 
-    private int _coins = 9990;
+    private int _coins = 0;
     private Potion[] potions = {
         new() { type = PotionType.Sleep, sellPrice = 40 },
         new() { type = PotionType.Health, sellPrice = 50 },
