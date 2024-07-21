@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum CategoryType
 {
@@ -41,13 +43,17 @@ public class CharacterCustomizationWindow : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Button _revertButton;
     [SerializeField] private SelectedItems _selectedItems;
 
+    [SerializeField] private Color _categorySelectedColor;
+    [SerializeField] private Color _categoryUnselectedColor;
 
+    private Dictionary<CategoryType, GameObject> _borders = new();
+    private List<Button> _categoryButtons = new();
     private PlayerMeshController _playerMeshController;
-    private UnityEngine.UI.ScrollRect _scrollRect;
     private CategoryType _currentCategory = 0;
 
-    public void SetItem(CategoryType aType, string aBoneNameEnding)
+    public void SetItem(CategoryType aType, string aBoneNameEnding, GameObject aBorder)
     {
+        _borders[aType]?.SetActive(false);
         switch (aType)
         {
             case CategoryType.Body:
@@ -62,6 +68,8 @@ public class CharacterCustomizationWindow : MonoBehaviour
             default:
                 break;
         }
+        _borders[aType] = aBorder;
+        _borders[aType].SetActive(true);
 
         _playerMeshController.UpdateCharacter(_selectedItems);
     }
@@ -70,7 +78,7 @@ public class CharacterCustomizationWindow : MonoBehaviour
         return _grindMask.transform.GetChild((int)aType);
     }
 
-    void OnCategorySelected(CategoryType aType)
+    void OnCategorySelected(CategoryType aType, bool aShouldLayoutGroupBeEnabled = false)
     {
         GetGrid(_currentCategory).gameObject.SetActive(false);
         GetGrid(aType).gameObject.SetActive(true);
@@ -78,15 +86,21 @@ public class CharacterCustomizationWindow : MonoBehaviour
         _categories[(int)_currentCategory].camera.gameObject.SetActive(false);
         _categories[(int)aType].camera.gameObject.SetActive(true);
 
+        _categoryContainer.GetComponent<HorizontalLayoutGroup>().enabled = aShouldLayoutGroupBeEnabled;
+        for (int i = 0; i < _categoryButtons.Count; i++)
+        {
+            _categoryButtons[i].transform.SetSiblingIndex(i);
+            _categoryButtons[i].GetComponent<Image>().color = _categoryUnselectedColor;
+        }
+
         _currentCategory = aType;
-        _scrollRect.content = GetGrid(aType).GetComponent<RectTransform>();
-        _scrollRect.normalizedPosition = new(0, _scrollRect.normalizedPosition.y);
+        _categoryButtons[(int)_currentCategory].GetComponent<Image>().color = _categorySelectedColor;
+        _categoryButtons[(int)_currentCategory].transform.SetAsLastSibling();
 
         _categoryTitle.text = aType.ToString();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _playerMeshController = FindObjectOfType<PlayerMeshController>();
         _fullBodyCamera.gameObject.SetActive(false);
@@ -95,15 +109,22 @@ public class CharacterCustomizationWindow : MonoBehaviour
             _categories[i].camera.gameObject.SetActive(false);
         }
 
-        _scrollRect = GetComponent<UnityEngine.UI.ScrollRect>();
-
         _confirmButton.onClick.AddListener(OnConfirmButtonPressed);
         _revertButton.onClick.AddListener(OnRevertButtonPressed);
 
+        StartCoroutine(Initialize());
+    }
+
+    private IEnumerator Initialize()
+    {
         InstantiateContainers();
         InstantiateItems();
 
-        OnCategorySelected(_currentCategory);
+        OnCategorySelected((CategoryType)(Enum.GetValues(typeof(CategoryType)).Length - 1), true);
+
+        yield return null;
+
+        OnCategorySelected(CategoryType.Body, false);
     }
 
     private void InstantiateContainers()
@@ -116,8 +137,11 @@ public class CharacterCustomizationWindow : MonoBehaviour
 
             CategoryType type = _categories[i].type;
             var go = Instantiate(_categoryTypePrefab, _categoryContainer.transform);
-            var button = go.GetComponent<UnityEngine.UI.Button>();
+            var button = go.GetComponent<Button>();
+            button.GetComponent<Image>().color = _categoryUnselectedColor;
             button.onClick.AddListener(() => OnCategorySelected(type));
+
+            _categoryButtons.Add(button);
         }
     }
 
@@ -125,14 +149,41 @@ public class CharacterCustomizationWindow : MonoBehaviour
     {
         List<CharacterCustomItem> items = Resources.LoadAll<CharacterCustomItem>("CustomCharacterData").ToList();
 
+        _selectedItems = _playerMeshController.CurrentlySelectedItems;
+
+        _borders.Add(CategoryType.Body, null);
+        _borders.Add(CategoryType.Hair, null);
+        _borders.Add(CategoryType.Accessories, null);
+
         for (int i = 0; i < items.Count; i++)
         {
             var go = Instantiate(_categoryItemPrefab, GetGrid(items[i].type));
             var item = go.GetComponent<CustomizationCategoryItem>();
-            item.Init(items[i], this);
-        }
 
-        _selectedItems = _playerMeshController.CurrentlySelectedItems;
+            bool isSelected = false;
+            switch (items[i].type)
+            {
+                case CategoryType.Body:
+                    isSelected = _selectedItems.bodyName == items[i].skeletonPartName;
+                    break;
+                case CategoryType.Hair:
+                    isSelected = _selectedItems.hairName == items[i].skeletonPartName;
+                    break;
+                case CategoryType.Accessories:
+                    isSelected = _selectedItems.accessoriesName == items[i].skeletonPartName;
+                    break;
+                default:
+                    break;
+            }
+
+            bool isLocked = items[i].setType != ClothingSetType.None && !PersistentShopData.Instance.shopResources.outfits[(int)items[i].setType].isUnlocked;
+            item.Init(items[i], this, isSelected, isLocked);
+
+            if (isSelected)
+            {
+                _borders[items[i].type] = item.Border.gameObject;
+            }
+        }
     }
 
     private void OnConfirmButtonPressed()

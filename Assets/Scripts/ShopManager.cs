@@ -136,12 +136,15 @@ public class ShopManager : MonoBehaviour
             shopper.ChangeState(typeof(LeavingState)); // potential bug :) (stuck on tarot)
         }
         ShouldLetInCustomers(false);
+        _uiManager.ShopNextDayButton.SetVisibility(PersistentShopData.Instance.shopTime.IsNight);
+        _uiManager.ShopNextDayButton.ResetGooberHappiness();
+        _uiManager.ShopNextDayButton.ResetGooberRental();
     }
 
     public void ShouldLetInCustomers(bool aValue)
     {
         _shouldLetInCustomers = aValue;
-        AudioManager.Instance.PlaySound(ShopSoundByte.Placeholder);
+        AudioManager.Instance.PlaySound(ShopSoundByte.ShopBell);
 
         if (!_shouldLetInCustomers && !PersistentShopData.Instance.shopTime.IsNight)
         {
@@ -256,15 +259,31 @@ public class ShopManager : MonoBehaviour
                 var firstShopper = _queue.GetFirstShopper();
                 if (firstShopper == null) { return; }
 
-                if (firstShopper.state.currentShopDestination == ShopLocationType.TarotReading &&
-                    firstShopper.state.currentQueueType == ShopperQueueType.Action)
+                switch (firstShopper.state.currentShopDestination)
                 {
-                    if (!_state.isTarotActive)
-                    {
-                        _state.isTarotActive = true;
-                        firstShopper.Interact();
-                    }
-                    break;
+                    case ShopLocationType.Potions:
+                        break;
+                    case ShopLocationType.TarotReading:
+                        if (firstShopper.state.currentQueueType == ShopperQueueType.Action)
+                        {
+                            if (!_state.isTarotActive)
+                            {
+                                _state.isTarotActive = true;
+                                firstShopper.Interact();
+                            }
+                            return;
+                        }
+                        break;
+                    case ShopLocationType.GooberAdoption:
+                        if (!PersistentShopData.Instance.shopResources.goobers.Any(x => x.isUnlocked && !x.isClaimed))
+                        {
+                            return;
+                        }
+                        break;
+                    case ShopLocationType.Enchanting:
+                        break;
+                    default:
+                        break;
                 }
 
                 firstShopper.Interact();
@@ -289,6 +308,7 @@ public class ShopManager : MonoBehaviour
                 break;
             case PlayerInteractionType.GooberCare:
                 if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!PersistentShopData.Instance.shopResources.goobers.Any(x => x.isUnlocked)) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Enchanting:
@@ -362,7 +382,7 @@ public class ShopManager : MonoBehaviour
 
         if (PersistentShopData.Instance.shopTime.IsNight && _activeShoppers.Count == 0)
         {
-            _uiManager.ShowNewDayButton();
+            _uiManager.ShopNextDayButton.SetVisibility(true);
             PersistentShopData.Instance.shopperData.Clear();
         }
 

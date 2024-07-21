@@ -50,6 +50,30 @@ public class ShopNextDayButton : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void ResetGooberHappiness()
+    {
+        var goobers = PersistentShopData.Instance.shopResources.goobers;
+        for (int i = 0; i < goobers.Count; i++)
+        {
+            var goob = goobers[i];
+            goob.petPercentage = 0.0f;
+            goob.cleanlinessPercentage = 0.0f;
+
+            foreach (var state in goob.activeStates)
+            {
+                state.dirtiness = 0.0f;
+            }
+        }
+    }
+
+    public void ResetGooberRental()
+    {
+        for (int i = 0; i < PersistentShopData.Instance.shopResources.goobers.Count; i++)
+        {
+            PersistentShopData.Instance.shopResources.goobers[i].isClaimed = false;
+        }
+    }
+
     public void SetVisibility(bool aIsVisible)
     {
         if (_isVisible == aIsVisible) { return; }

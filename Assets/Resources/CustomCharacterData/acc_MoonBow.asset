@@ -16,3 +16,4 @@ MonoBehaviour:
   skeletonPartName: moonBow
   itemSprite: {fileID: 21300000, guid: 0de4055c27e795e469bb0ab22147dc41, type: 3}
   type: 2
+  setType: 0

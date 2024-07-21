@@ -16,3 +16,4 @@ MonoBehaviour:
   skeletonPartName: arcanaDress
   itemSprite: {fileID: 21300000, guid: d6d102cb9ad5c0d4aa401ca8f3751e4d, type: 3}
   type: 0
+  setType: 0

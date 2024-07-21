@@ -22,11 +22,21 @@ public struct PotionIngredients
     public int ingredient2;
 }
 
-public class Unlockables
+public class Unlockable
 {
-    public bool goober1 = false;
-    public bool goober2 = false;
-    public bool goober3 = false;
+    public bool isUnlocked = false;
+    public int unlockCost = 0;
+    public string name = "Goober Name";
+}
+
+public class GooberData : Unlockable
+{
+    public float cleanlinessPercentage = 0;
+    public float petPercentage = 0;
+    public bool isClaimed = false;
+    public List<GooberState> activeStates = new();
+
+    public float HappinessPercentage => (petPercentage + cleanlinessPercentage) / 2.0f;
 }
 
 public class ShopResources
@@ -34,9 +44,16 @@ public class ShopResources
     public delegate void OnCurrencyChange(int aAmount);
     public event OnCurrencyChange OnCurrencyChangeEvent;
 
-    private int _coins;
+    private int _coins = 0;
 
     public PotionIngredients ingredients;
+    public List<GooberData> goobers = new() {
+        new() { name = "Bunny", unlockCost = 250 },
+        new() { name = "Pants!!!", unlockCost = 5000 },
+        new() { name = "Sheep", unlockCost = 1000 }
+    };
+
+    public List<Unlockable> outfits = new() { new() { unlockCost = 3000, name = "Arcana" }, new() { unlockCost = 1000, name = "Astro" } };
 
     public int CoinAmount => _coins;
 
@@ -57,6 +74,20 @@ public class ShopResources
     {
         _coins += aAmount;
         OnCurrencyChangeEvent?.Invoke(_coins);
+    }
+
+    public void UnlockGoober(int aIndex)
+    {
+        if (!Purchase(goobers[aIndex].unlockCost)) { return; }
+
+        goobers[aIndex].isUnlocked = true;
+    }
+
+    public void UnlockOutfit(int aIndex)
+    {
+        if (!Purchase(outfits[aIndex].unlockCost)) { return; }
+
+        outfits[aIndex].isUnlocked = true;
     }
 }
 

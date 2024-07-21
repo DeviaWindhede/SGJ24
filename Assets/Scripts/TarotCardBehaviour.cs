@@ -70,7 +70,6 @@ public class TarotCardBehaviour : MonoBehaviour
 
         _isHovered = aValue;
         _animator.SetBool("Hovered", _isHovered);
-        print($"{_animator.GetBool("Hovered")}, {_isHovered}");
     }
 
     public void Select()

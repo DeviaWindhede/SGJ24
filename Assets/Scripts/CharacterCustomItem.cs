@@ -1,6 +1,13 @@
 using UnityEditor;
 using UnityEngine;
 
+public enum ClothingSetType
+{
+    One,
+    Two,
+    None,
+}
+
 [CreateAssetMenu(fileName = "CustomItem", menuName = "ScriptableObjects/CharacterCustomItem", order = 1)]
 public class CharacterCustomItem : ScriptableObject
 {
@@ -8,6 +15,7 @@ public class CharacterCustomItem : ScriptableObject
     public string skeletonPartName;
     public Sprite itemSprite;
     public CategoryType type;
+    public ClothingSetType setType = ClothingSetType.None;
 
     private void OnValidate()
     {
