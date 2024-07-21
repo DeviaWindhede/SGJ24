@@ -16,3 +16,4 @@ MonoBehaviour:
   skeletonPartName: astroDress
   itemSprite: {fileID: 21300000, guid: 3329215745b9f3a4dba05d4d62ddf360, type: 3}
   type: 0
+  setType: 1

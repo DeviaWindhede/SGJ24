@@ -35,6 +35,13 @@ public class GooberData
     public float HappinessPercentage => (petPercentage + cleanlinessPercentage) / 2.0f;
 }
 
+[System.Serializable]
+public class ClothingSet
+{
+    public bool isUnlocked = false;
+    public int unlockCost;
+}
+
 public class ShopResources
 {
     public delegate void OnCurrencyChange(int aAmount);
@@ -48,6 +55,8 @@ public class ShopResources
         new() { name = "Pants!!!", unlockCost = 5000 },
         new() { name = "Sheep", unlockCost = 1000 }
     };
+
+    public List<ClothingSet> clothingSets = new() { new() { unlockCost = 3000 }, new() { unlockCost = 1000 } };
 
     public int CoinAmount => _coins;
 

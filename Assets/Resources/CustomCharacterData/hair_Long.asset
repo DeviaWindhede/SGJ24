@@ -16,3 +16,4 @@ MonoBehaviour:
   skeletonPartName: hairLong
   itemSprite: {fileID: 21300000, guid: ecd34225d15a8f94faa78aea59859564, type: 3}
   type: 1
+  setType: 0

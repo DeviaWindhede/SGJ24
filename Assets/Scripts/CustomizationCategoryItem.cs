@@ -6,6 +6,7 @@ using UnityEngine;
 public class CustomizationCategoryItem : MonoBehaviour
 {
     [SerializeField] private UnityEngine.UI.Image _border;
+    [SerializeField] private UnityEngine.UI.Image _lockIcon;
     [SerializeField] private UnityEngine.UI.Image _icon;
 
     private CharacterCustomizationWindow _window;
@@ -14,16 +15,18 @@ public class CustomizationCategoryItem : MonoBehaviour
 
     public UnityEngine.UI.Image Border => _border;
 
-    public void Init(CharacterCustomItem aCustomItem, CharacterCustomizationWindow aWindow, bool aIsSelected)
+    public void Init(CharacterCustomItem aCustomItem, CharacterCustomizationWindow aWindow, bool aIsSelected, bool aIsLocked)
     {
         _window = aWindow;
         _button = GetComponent<UnityEngine.UI.Button>();
         _button.onClick.AddListener(OnClick);
+        _button.enabled = !aIsLocked;
 
         _item = aCustomItem;
         _icon.sprite = _item.itemSprite;
         name = _item.itemName;
         _border.gameObject.SetActive(aIsSelected);
+        _lockIcon.gameObject.SetActive(aIsLocked);
     }
 
     private void OnDestroy()

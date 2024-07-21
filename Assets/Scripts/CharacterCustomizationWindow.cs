@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,8 +100,7 @@ public class CharacterCustomizationWindow : MonoBehaviour
         _categoryTitle.text = aType.ToString();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _playerMeshController = FindObjectOfType<PlayerMeshController>();
         _fullBodyCamera.gameObject.SetActive(false);
@@ -112,10 +112,19 @@ public class CharacterCustomizationWindow : MonoBehaviour
         _confirmButton.onClick.AddListener(OnConfirmButtonPressed);
         _revertButton.onClick.AddListener(OnRevertButtonPressed);
 
+        StartCoroutine(Initialize());
+    }
+
+    private IEnumerator Initialize()
+    {
         InstantiateContainers();
         InstantiateItems();
 
-        OnCategorySelected(_currentCategory, true);
+        OnCategorySelected((CategoryType)(Enum.GetValues(typeof(CategoryType)).Length - 1), true);
+
+        yield return null;
+
+        OnCategorySelected(CategoryType.Body, false);
     }
 
     private void InstantiateContainers()
@@ -167,7 +176,8 @@ public class CharacterCustomizationWindow : MonoBehaviour
                     break;
             }
 
-            item.Init(items[i], this, isSelected);
+            bool isLocked = items[i].setType != ClothingSetType.None && !PersistentShopData.Instance.shopResources.clothingSets[(int)items[i].setType].isUnlocked;
+            item.Init(items[i], this, isSelected, isLocked);
 
             if (isSelected)
             {
