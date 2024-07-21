@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
-[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
+[RequireComponent(typeof(CharacterController))]
 public class PlayerBehaviour : MonoBehaviour
 {
     public delegate void OnInteractableChanged(PlayerInteractionType aType);
@@ -13,13 +14,19 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _model;
     [SerializeField] private Animator _animator;
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _maxSpeed = 5f;
+    [SerializeField] private float _acceleration = 1f;
+    [SerializeField] private float _decceleration = 1f;
+    [SerializeField] private float _turnSpeed = 1f;
 
-    private Rigidbody _rigidBody;
+    private float _speed = 0.0f;
+    private CharacterController _controller;
     private PlayerInputActions _inputActions;
     private Vector2 _moveInput;
     private Vector3 _previousPosition;
     private Vector3 _spawnPosition;
+    private Vector3 _previousInput;
+    private Vector3 _movementDirection;
     private bool _shouldMove = true;
 
     private PlayerInteractable _currentInteractable;
@@ -27,7 +34,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _rigidBody = GetComponent<Rigidbody>();
+        _controller = GetComponent<CharacterController>();
 
         _inputActions = new();
         _inputActions.Enable();
@@ -93,14 +100,14 @@ public class PlayerBehaviour : MonoBehaviour
         _currentInteractable?.OnDeny();
     }
 
-    Vector2 GetMoveDir()
+    Vector3 GetMoveDir()
     {
         Vector3 cameraForward = _camera.transform.forward;
         Vector3 cameraRight = _camera.transform.right;
 
         Vector3 result = cameraForward * _moveInput.y + cameraRight * _moveInput.x;
 
-        return new Vector2(result.x, result.z);
+        return new Vector3(result.x, 0, result.z).normalized;
     }
 
     //_animator.SetBool("IsTalking", true);
@@ -109,22 +116,28 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float speed = (transform.position - _previousPosition).magnitude;
-        _animator.SetFloat("Speed", speed);
+        float speed = Mathf.Lerp(0, 2, _speed / _maxSpeed);
+        _animator.SetFloat("Speed", _speed);
         _previousPosition = transform.position;
 
-        if (!_shouldMove)
+        _movementDirection = Vector3.MoveTowards(_movementDirection, _previousInput, _turnSpeed * Time.deltaTime);
+        _model.forward = _movementDirection;
+
+        if (!_shouldMove) { return; }
+
+        var inputDir = GetMoveDir();
+        if (inputDir.sqrMagnitude > 0)
         {
-            _rigidBody.velocity = Vector3.zero;
-            return; 
+            _speed = Mathf.MoveTowards(_speed, _maxSpeed, _acceleration * Time.deltaTime);
+            _previousInput = inputDir;
+        }
+        else
+        {
+            _speed = Mathf.MoveTowards(_speed, 0, _decceleration * Time.deltaTime);
         }
 
-        Vector2 velocity = _speed * Time.deltaTime * GetMoveDir();
-        _rigidBody.velocity = new Vector3(velocity.x, 0, velocity.y);
-
-        if (velocity.magnitude == 0) { return; }
-
-        _model.forward = new Vector3(velocity.x, 0, velocity.y);
+        Vector3 moveAmount = _speed * Time.deltaTime * _movementDirection;
+        _controller.Move(moveAmount);
     }
 
     private void OnTriggerStay(Collider collision)
