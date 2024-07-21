@@ -33,6 +33,7 @@ public class PurchaseButtonBehaviour : MonoBehaviour
                 case PurchaseType.Outfit:
                     return PersistentShopData.Instance.shopResources.outfits[_index];
                 case PurchaseType.PotionIngredient:
+                    return PersistentShopData.Instance.shopResources.ingredients[_index];
                 default:
                     return null;
             }
@@ -58,18 +59,22 @@ public class PurchaseButtonBehaviour : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        if (CurrentData.isUnlocked) { return; }
+        if (CurrentData.isUnlocked && !CurrentData.unlimitedPurchases) { return; }
         if (!PersistentShopData.Instance.shopResources.CanAfford(CurrentData.unlockCost)) { return; }
 
         switch (_purchaseType)
         {
             case PurchaseType.Goober:
                 PersistentShopData.Instance.shopResources.UnlockGoober(_index);
+                AudioManager.Instance.PlaySound(ShopSoundByte.Click);
                 break;
             case PurchaseType.Outfit:
                 PersistentShopData.Instance.shopResources.UnlockOutfit(_index);
+                AudioManager.Instance.PlaySound(ShopSoundByte.MajorPurchase);
                 break;
             case PurchaseType.PotionIngredient:
+                PersistentShopData.Instance.shopResources.PurchaseIngredient(_index);
+                AudioManager.Instance.PlaySound(ShopSoundByte.Click);
                 break;
             default:
                 break;
@@ -80,6 +85,7 @@ public class PurchaseButtonBehaviour : MonoBehaviour
     private void SetEnableButton(bool aIsEnabled)
     {
         _button.enabled = aIsEnabled;
+        if (_border == null) { return; }
         _border.SetActive(!aIsEnabled);
     }
 

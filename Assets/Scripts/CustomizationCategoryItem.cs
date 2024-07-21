@@ -36,6 +36,7 @@ public class CustomizationCategoryItem : MonoBehaviour
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySound(ShopSoundByte.Click);
         _window.SetItem(_item.type, _item.skeletonPartName, _border.gameObject);
     }
 }

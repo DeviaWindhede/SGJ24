@@ -265,6 +265,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1f88ddbb1ff4c754498f3f8cfb941802, type: 3}
   - {fileID: 21300000, guid: 5766883000f0f7e47bd884e42fe95c2c, type: 3}
   - {fileID: 21300000, guid: 61802cc691d16c44986e0a1d255ae3a4, type: 3}
+  _potionIcons:
+  - {fileID: 21300000, guid: a3d97cd299560804a8a873855065d401, type: 3}
+  - {fileID: 21300000, guid: 099899ea7c39acc4ea25fc16429c9548, type: 3}
+  - {fileID: 21300000, guid: 93a96bb10b4bfa242887d1903ed77238, type: 3}
   _canvas: {fileID: 1521973771881170465}
   _speechBubble: {fileID: 3916787426808077273}
   _iconImage: {fileID: 9146136367069020368}

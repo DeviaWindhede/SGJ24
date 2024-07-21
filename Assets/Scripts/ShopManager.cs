@@ -62,6 +62,7 @@ public struct ShopManagerState
     public bool isTarotActive;
     public bool isStandingInRegister;
     public int tarotPrice;
+    public int activeEnchantments;
 }
 
 public class ShopManager : MonoBehaviour
@@ -236,7 +237,7 @@ public class ShopManager : MonoBehaviour
                 firstShopper.ChangeState(typeof(LeavingState));
                 break;
             case PlayerInteractionType.Computer:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 _uiManager.ShouldShowComputerUI(false);
                 break;
             default:
@@ -262,6 +263,9 @@ public class ShopManager : MonoBehaviour
                 switch (firstShopper.state.currentShopDestination)
                 {
                     case ShopLocationType.Potions:
+                        if (!PersistentShopData.Instance.shopResources.DoesPotionExist(firstShopper.state.potionType)) { return; }
+
+                        PersistentShopData.Instance.shopResources.RemovePotion(firstShopper.state.potionType);
                         break;
                     case ShopLocationType.TarotReading:
                         if (firstShopper.state.currentQueueType == ShopperQueueType.Action)
@@ -281,6 +285,9 @@ public class ShopManager : MonoBehaviour
                         }
                         break;
                     case ShopLocationType.Enchanting:
+                        if (PersistentShopData.Instance.shopManagerState.activeEnchantments >= 3) { return; }
+
+                        ++PersistentShopData.Instance.shopManagerState.activeEnchantments;
                         break;
                     default:
                         break;
@@ -289,7 +296,7 @@ public class ShopManager : MonoBehaviour
                 firstShopper.Interact();
                 break;
             case PlayerInteractionType.Potions:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.TarotReading:
@@ -307,19 +314,21 @@ public class ShopManager : MonoBehaviour
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.GooberCare:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 if (!PersistentShopData.Instance.shopResources.goobers.Any(x => x.isUnlocked)) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Enchanting:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
+                if (PersistentShopData.Instance.shopManagerState.activeEnchantments == 0) { return; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.CharacterCustomization:
+                if (!CanUseNightInteraction()) { break; }
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.Computer:
-                if (!PersistentShopData.Instance.shopTime.IsNight) { break; }
+                if (!CanUseNightInteraction()) { break; }
                 _uiManager.ShouldShowComputerUI(true);
                 break;
             default:
@@ -371,6 +380,21 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    private bool CanUseNightInteraction()
+    {
+        bool nightCheck = PersistentShopData.Instance.shopTime.IsNight && _activeShoppers.Count == 0;
+        bool morningCheck = PersistentShopData.Instance.shopTime.Time == 8 && PersistentShopData.Instance.shopTime.IsFrozen;
+        return nightCheck || morningCheck;
+    }
+
+    private bool CanShowNextDayButton()
+    {
+        return 
+            PersistentShopData.Instance.shopTime.IsNight &&
+            _activeShoppers.Count == 0 &&
+            PersistentShopData.Instance.shopManagerState.activeEnchantments == 0;
+    }
+
     void Update()
     {
         HandleSpawnShoppers();
@@ -380,7 +404,7 @@ public class ShopManager : MonoBehaviour
             _activeShoppers[i].DoUpdate();
         }
 
-        if (PersistentShopData.Instance.shopTime.IsNight && _activeShoppers.Count == 0)
+        if (CanShowNextDayButton())
         {
             _uiManager.ShopNextDayButton.SetVisibility(true);
             PersistentShopData.Instance.shopperData.Clear();

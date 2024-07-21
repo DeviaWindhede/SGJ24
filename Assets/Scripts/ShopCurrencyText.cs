@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(TMPro.TextMeshProUGUI))]
 public class ShopCurrencyText : MonoBehaviour
 {
-    [SerializeField] private TMPro.TextMeshProUGUI _text;
+    private TMPro.TextMeshProUGUI _text;
 
     void Awake()
     {

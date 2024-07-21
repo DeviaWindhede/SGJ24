@@ -17,7 +17,7 @@ public enum ShopperIconType
 public class ShopperWorldCanvas : MonoBehaviour
 {
     [SerializeField] private List<Sprite> _speechBubbleIcons;
-
+    [SerializeField] private List<Sprite> _potionIcons;
     [SerializeField] private Canvas _canvas;
     [SerializeField] private GameObject _speechBubble;
     [SerializeField] private Image _iconImage;
@@ -25,21 +25,38 @@ public class ShopperWorldCanvas : MonoBehaviour
     private Animator _animator;
     private bool _isEnabled;
 
+    public void SetSpeechBubblePotionIcon(PotionType aType)
+    {
+        SetSpeechBubbleInternal(ShopperIconType.Potions, aType);
+    }
+
     public void SetSpeechBubbleIcon(ShopperIconType aType)
+    {
+        SetSpeechBubbleInternal(aType, PotionType.Sleep);
+    }
+
+    private void SetSpeechBubbleInternal(ShopperIconType aType, PotionType aPotionType)
     {
         bool enabled = aType != ShopperIconType.None;
         if (_isEnabled == enabled) { return; }
 
         _isEnabled = enabled;
-        StartCoroutine(UpdateSpeechBubble(aType));
+        StartCoroutine(UpdateSpeechBubble(aType, aPotionType));
     }
 
-    private IEnumerator UpdateSpeechBubble(ShopperIconType aType)
+    private IEnumerator UpdateSpeechBubble(ShopperIconType aType, PotionType aPotionType)
     {
         bool isEnabled = aType != ShopperIconType.None;
         if (isEnabled)
         {
-            _iconImage.sprite = _speechBubbleIcons[(int)aType];
+            if (aType == ShopperIconType.Potions)
+            {
+                _iconImage.sprite = _potionIcons[(int)aPotionType];
+            }
+            else
+            {
+                _iconImage.sprite = _speechBubbleIcons[(int)aType];
+            }
             _animator.SetTrigger("Show");
         }
         else

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -16,15 +17,11 @@ public struct ShopperData
     public ShopperState state;
 }
 
-public struct PotionIngredients
-{
-    public int ingredient1;
-    public int ingredient2;
-}
 
 public class Unlockable
 {
     public bool isUnlocked = false;
+    public bool unlimitedPurchases = false;
     public int unlockCost = 0;
     public string name = "Goober Name";
 }
@@ -39,14 +36,65 @@ public class GooberData : Unlockable
     public float HappinessPercentage => (petPercentage + cleanlinessPercentage) / 2.0f;
 }
 
+public enum PotionIngredientType
+{
+    Lavender,
+    Crystals,
+    Peppermint,
+    Worms,
+    Gnomecap,
+    Toadslime
+}
+
+public class PotionIngredient : Unlockable
+{
+    public int amount = 0;
+    public PotionIngredientType type;
+
+    public PotionIngredient()
+    {
+        unlimitedPurchases = true;
+    }
+}
+
+public enum PotionType
+{
+    Sleep,
+    Health,
+    Love
+}
+
+public class Potion
+{
+    public int amount = 0;
+    public int sellPrice = 10;
+    public PotionType type;
+}
+
 public class ShopResources
 {
     public delegate void OnCurrencyChange(int aAmount);
     public event OnCurrencyChange OnCurrencyChangeEvent;
 
-    private int _coins = 0;
+    public delegate void OnPotionChange(PotionType aType, int aAmount);
+    public event OnPotionChange OnPotionChangeEvent;
 
-    public PotionIngredients ingredients;
+    private int _coins = 0;
+    private Potion[] potions = {
+        new() { type = PotionType.Sleep, sellPrice = 40 },
+        new() { type = PotionType.Health, sellPrice = 50 },
+        new() { type = PotionType.Love, sellPrice = 60 }
+    };
+
+    public PotionIngredient[] ingredients = {
+        new() { unlockCost = 1, type = PotionIngredientType.Lavender, name = "Lavender" },
+        new() { unlockCost = 2, type = PotionIngredientType.Crystals, name = "Crystals" },
+        new() { unlockCost = 3, type = PotionIngredientType.Peppermint, name = "Peppermint" },
+        new() { unlockCost = 4, type = PotionIngredientType.Worms, name = "Worms" },
+        new() { unlockCost = 5, type = PotionIngredientType.Gnomecap, name = "Gnomecap" },
+        new() { unlockCost = 6, type = PotionIngredientType.Toadslime, name = "Toadslime" }
+    };
+
     public List<GooberData> goobers = new() {
         new() { name = "Bunny", unlockCost = 250 },
         new() { name = "Pants!!!", unlockCost = 5000 },
@@ -56,6 +104,42 @@ public class ShopResources
     public List<Unlockable> outfits = new() { new() { unlockCost = 3000, name = "Arcana" }, new() { unlockCost = 1000, name = "Astro" } };
 
     public int CoinAmount => _coins;
+
+    public int GetPotionSellPrice(PotionType aType)
+    {
+        return GetPotion(aType).sellPrice;
+    }
+
+    public void AddPotion(PotionType aType, int aAmount = 1)
+    {
+        GetPotion(aType).amount += aAmount;
+        OnPotionChangeEvent?.Invoke(aType, aAmount);
+    }
+    public int GetPotionAmount(PotionType aType)
+    {
+        return GetPotion(aType).amount;
+    }
+
+    public bool RemovePotion(PotionType aType, int aAmount = 1)
+    {
+        Potion potion = GetPotion(aType);
+        if (potion.amount < aAmount) { return false; }
+
+        potion.amount -= aAmount;
+        OnPotionChangeEvent?.Invoke(aType, potion.amount);
+
+        return true;
+    }
+
+    public bool DoesPotionExist(PotionType aType)
+    {
+        return GetPotion(aType).amount > 0;
+    }
+
+    private Potion GetPotion(PotionType aType)
+    {
+        return potions[(int)aType];
+    }
 
     public bool CanAfford(int aCost)
     {
@@ -88,6 +172,13 @@ public class ShopResources
         if (!Purchase(outfits[aIndex].unlockCost)) { return; }
 
         outfits[aIndex].isUnlocked = true;
+    }
+
+    public void PurchaseIngredient(int aIndex)
+    {
+        if (!Purchase(ingredients[aIndex].unlockCost)) { return; }
+
+        ingredients[aIndex].amount++;
     }
 }
 

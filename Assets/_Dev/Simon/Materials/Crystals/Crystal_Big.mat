@@ -27,7 +27,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _CenterStr: 0.85
+    - _CenterStr: 3.15
     - _GlowStr: 0.31
     - _debug: 0.01
     - _debug2: 0.29
