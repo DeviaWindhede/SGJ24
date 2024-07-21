@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -39,12 +40,34 @@ public class GooberData : Unlockable
     public float HappinessPercentage => (petPercentage + cleanlinessPercentage) / 2.0f;
 }
 
+public enum PotionType
+{
+    Sleep,
+    Health,
+    Love
+}
+
+public class Potion
+{
+    public int amount;
+    public int sellPrice = 10;
+    public PotionType type;
+}
+
 public class ShopResources
 {
     public delegate void OnCurrencyChange(int aAmount);
     public event OnCurrencyChange OnCurrencyChangeEvent;
 
+    public delegate void OnPotionChange(PotionType aType, int aAmount);
+    public event OnPotionChange OnPotionChangeEvent;
+
     private int _coins = 0;
+    private Potion[] potions = { 
+        new() { type = PotionType.Sleep, sellPrice = 40 },
+        new() { type = PotionType.Health, sellPrice = 50 },
+        new() { type = PotionType.Love, sellPrice = 60 }
+    };
 
     public PotionIngredients ingredients;
     public List<GooberData> goobers = new() {
@@ -56,6 +79,37 @@ public class ShopResources
     public List<Unlockable> outfits = new() { new() { unlockCost = 3000, name = "Arcana" }, new() { unlockCost = 1000, name = "Astro" } };
 
     public int CoinAmount => _coins;
+
+    public void AddPotion(PotionType aType, int aAmount = 1)
+    {
+        GetPotion(aType).amount += aAmount;
+        OnPotionChangeEvent?.Invoke(aType, aAmount);
+    }
+    public int GetPotionAmount(PotionType aType)
+    {
+        return GetPotion(aType).amount;
+    }
+
+    public bool RemovePotion(PotionType aType, int aAmount = 1)
+    {
+        Potion potion = GetPotion(aType);
+        if (potion.amount < aAmount) { return false; }
+
+        potion.amount -= aAmount;
+        OnPotionChangeEvent?.Invoke(aType, potion.amount);
+
+        return true;
+    }
+
+    public bool DoesPotionExist(PotionType aType)
+    {
+        return GetPotion(aType).amount > 0;
+    }
+
+    private Potion GetPotion(PotionType aType)
+    {
+        return potions[(int)aType];
+    }
 
     public bool CanAfford(int aCost)
     {

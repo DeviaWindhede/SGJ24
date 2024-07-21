@@ -82,6 +82,10 @@ class QueueState : IState<ShopperBehaviour>
                 break;
             }
             case ShopLocationType.Potions:
+            {
+                aShopper.state.potionType = (PotionType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(PotionType)).Length);
+                break;
+            }
             case ShopLocationType.GooberAdoption:
             case ShopLocationType.Enchanting:
             default:
@@ -104,7 +108,15 @@ class QueueState : IState<ShopperBehaviour>
             ShopperIconType type = (ShopperIconType)aShopper.state.currentShopDestination;
             if (!aShopper.ShouldDisplayIcon) { type = ShopperIconType.None; }
             else if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay) { type = ShopperIconType.Paying; }
-            aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
+
+            if (aShopper.state.currentShopDestination == ShopLocationType.Potions)
+            {
+                aShopper.ShopperWorldCanvas.SetSpeechBubblePotionIcon(aShopper.state.potionType);
+            }
+            else
+            {
+                aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
+            }
         }
 
         if (!aShopper.state.hasInteractedWithPlayer) { return; }
@@ -249,6 +261,7 @@ public class ShopperState
     public bool hasPerformedAction;
     public ShopperQueueType currentQueueType;
     public ShopLocationType currentShopDestination;
+    public PotionType potionType;
     public System.Type currentStateType = typeof(DecisionState);
     public int queueIndex = -1;
 

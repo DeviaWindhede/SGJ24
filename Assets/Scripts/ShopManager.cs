@@ -263,6 +263,9 @@ public class ShopManager : MonoBehaviour
                 switch (firstShopper.state.currentShopDestination)
                 {
                     case ShopLocationType.Potions:
+                        if (!PersistentShopData.Instance.shopResources.DoesPotionExist(firstShopper.state.potionType)) { return; }
+
+                        PersistentShopData.Instance.shopResources.RemovePotion(firstShopper.state.potionType);
                         break;
                     case ShopLocationType.TarotReading:
                         if (firstShopper.state.currentQueueType == ShopperQueueType.Action)

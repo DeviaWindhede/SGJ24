@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,11 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField] private Cinemachine.CinemachineVirtualCamera _computerCamera;
     [SerializeField] private GameObject _shopUI;
     [SerializeField] private GameObject _computerUI;
-    [SerializeField] private TMPro.TextMeshProUGUI _timeText;
     [SerializeField] private ShopNextDayButton _newDayButton;
+    [SerializeField] private TMPro.TextMeshProUGUI _timeText;
+    [SerializeField] private TMPro.TextMeshProUGUI _sleepPotionText;
+    [SerializeField] private TMPro.TextMeshProUGUI _healthPotionText;
+    [SerializeField] private TMPro.TextMeshProUGUI _lovePotionText;
 
     public ShopNextDayButton ShopNextDayButton => _newDayButton;
 
@@ -20,11 +24,34 @@ public class ShopUIManager : MonoBehaviour
         OnTimeFreezeEvent(PersistentShopData.Instance.shopTime.IsFrozen);
         OnTimeChangeEvent(PersistentShopData.Instance.shopTime.IsNight);
 
+        for (int i = 0; i < Enum.GetValues(typeof(PotionType)).Length; i++)
+        {
+            PotionType type = (PotionType)i;
+            OnPotionChangeEvent(type, PersistentShopData.Instance.shopResources.GetPotionAmount(type));
+        }
+
         PersistentShopData.Instance.shopTime.OnTimeChangeEvent += OnTimeChangeEvent;
         PersistentShopData.Instance.shopTime.OnTimeFreezeEvent += OnTimeFreezeEvent;
+        PersistentShopData.Instance.shopResources.OnPotionChangeEvent += OnPotionChangeEvent;
 
         _shopCamera.gameObject.SetActive(true);
         _computerCamera.gameObject.SetActive(false);
+    }
+
+    private void OnPotionChangeEvent(PotionType aType, int aAmount)
+    {
+        switch (aType)
+        {
+            case PotionType.Sleep:
+                _sleepPotionText.text = aAmount.ToString();
+                break;
+            case PotionType.Health:
+                _healthPotionText.text = aAmount.ToString();
+                break;
+            case PotionType.Love:
+                _lovePotionText.text = aAmount.ToString();
+                break;
+        }
     }
 
     public void ShouldShowComputerUI(bool aValue)
@@ -52,6 +79,7 @@ public class ShopUIManager : MonoBehaviour
     {
         PersistentShopData.Instance.shopTime.OnTimeChangeEvent -= OnTimeChangeEvent;
         PersistentShopData.Instance.shopTime.OnTimeFreezeEvent -= OnTimeFreezeEvent;
+        PersistentShopData.Instance.shopResources.OnPotionChangeEvent -= OnPotionChangeEvent;
     }
 
     private void OnTimeFreezeEvent(bool aIsFrozen)
