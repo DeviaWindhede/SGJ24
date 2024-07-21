@@ -22,11 +22,15 @@ public struct PotionIngredients
     public int ingredient2;
 }
 
-public class Unlockables
+public class GooberData
 {
-    public bool goober1 = false;
-    public bool goober2 = false;
-    public bool goober3 = false;
+    public float cleanlinessPercentage = 0;
+    public float petPercentage = 0;
+    public bool isUnlocked = true;
+    public int unlockCost = 0;
+    public List<GooberState> activeStates = new();
+
+    public float HappinessPercentage => (petPercentage + cleanlinessPercentage) / 2.0f;
 }
 
 public class ShopResources
@@ -37,6 +41,7 @@ public class ShopResources
     private int _coins;
 
     public PotionIngredients ingredients;
+    public List<GooberData> goobers = new() { new(), new(), new() };
 
     public int CoinAmount => _coins;
 
@@ -57,6 +62,11 @@ public class ShopResources
     {
         _coins += aAmount;
         OnCurrencyChangeEvent?.Invoke(_coins);
+    }
+
+    public void UnlockGoober(int aIndex)
+    {
+        goobers[aIndex].isUnlocked = true;
     }
 }
 
