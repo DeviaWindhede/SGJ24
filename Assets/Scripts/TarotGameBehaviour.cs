@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class TarotGameBehaviour : MonoBehaviour
 {
+    private readonly static int MIN_TAROT_PRICE = 1;
+    private readonly static int MAX_TAROT_PRICE = 10;
+
     [SerializeField] private GameObject _backButton;
 
     private PixelCamRaycast _pixelCamRaycast;
@@ -12,7 +15,7 @@ public class TarotGameBehaviour : MonoBehaviour
     private PlayerInputActions _inputActions;
     private RaycastHit _hit;
     private TarotDeckBehaviour _deck;
-
+    private float _readingPercentage = 1.0f; // TODO
     private int _flippedCards = 0;
 
     // Start is called before the first frame update
@@ -84,7 +87,7 @@ public class TarotGameBehaviour : MonoBehaviour
         _flippedCards++;
         if (_flippedCards < _deck.TarotCardsToSpawn) { return; }
 
-        PersistentShopData.Instance.shopManagerState.tarotPrice = 40; // TODO
+        PersistentShopData.Instance.shopManagerState.tarotPrice = (int)Mathf.Lerp(MIN_TAROT_PRICE, MAX_TAROT_PRICE, _readingPercentage);
         _backButton.SetActive(true);
     }
 }

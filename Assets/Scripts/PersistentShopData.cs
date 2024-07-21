@@ -27,6 +27,7 @@ public class GooberData
     public float cleanlinessPercentage = 0;
     public float petPercentage = 0;
     public bool isUnlocked = false;
+    public bool isClaimed = false;
     public int unlockCost = 0;
     public string name = "Goober Name";
     public List<GooberState> activeStates = new();
@@ -39,13 +40,13 @@ public class ShopResources
     public delegate void OnCurrencyChange(int aAmount);
     public event OnCurrencyChange OnCurrencyChangeEvent;
 
-    private int _coins;
+    private int _coins = 0;
 
     public PotionIngredients ingredients;
-    public List<GooberData> goobers = new() { 
-        new() { name = "Bunny" },
-        new() { name = "Pants" },
-        new() { name = "Wolf" }
+    public List<GooberData> goobers = new() {
+        new() { name = "Bunny", unlockCost = 250 },
+        new() { name = "Pants", unlockCost = 5000 },
+        new() { name = "Wolf", unlockCost = 1000 }
     };
 
     public int CoinAmount => _coins;
@@ -71,6 +72,8 @@ public class ShopResources
 
     public void UnlockGoober(int aIndex)
     {
+        if (!Purchase(goobers[aIndex].unlockCost)) { return; }
+
         goobers[aIndex].isUnlocked = true;
     }
 }

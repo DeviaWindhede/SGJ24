@@ -7,6 +7,9 @@ using UnityEngine.AI;
 
 class QueueState : IState<ShopperBehaviour>
 {
+    private readonly static int MIN_GOOBER_PRICE = 10;
+    private readonly static int MAX_GOOBER_PRICE = 50;
+
     private void Leave(ShopperBehaviour aShopper)
     {
         aShopper.LeaveQueue();
@@ -31,7 +34,19 @@ class QueueState : IState<ShopperBehaviour>
                 amount = 10;
                 break;
             case ShopLocationType.GooberAdoption:
-                amount = 20;
+                float percentage = 0.0f;
+                for (int i = 0; i < PersistentShopData.Instance.shopResources.goobers.Count; i++)
+                {
+                    var goober = PersistentShopData.Instance.shopResources.goobers[i];
+                    if (!goober.isUnlocked) { continue; }
+                    if (goober.isClaimed) { continue; }
+
+                    percentage = goober.HappinessPercentage;
+                    goober.isClaimed = true;
+
+                    break;
+                }
+                amount = (int)Mathf.Lerp(MIN_GOOBER_PRICE, MAX_GOOBER_PRICE, percentage);
                 break;
             case ShopLocationType.Enchanting:
                 amount = 30;
