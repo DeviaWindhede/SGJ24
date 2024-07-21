@@ -1460,7 +1460,6 @@ MonoBehaviour:
   _gridHeight: 18
   _cleaningSpeed: 5
   _pettingSpeed: 0.15
-  activeStates: []
 --- !u!4 &1328493085
 Transform:
   m_ObjectHideFlags: 0
