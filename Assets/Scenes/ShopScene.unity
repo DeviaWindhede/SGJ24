@@ -315,7 +315,6 @@ GameObject:
   - component: {fileID: 102848211}
   - component: {fileID: 102848213}
   - component: {fileID: 102848214}
-  - component: {fileID: 102848215}
   m_Layer: 5
   m_Name: Items
   m_TagString: Untagged
@@ -379,20 +378,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &102848215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 102848210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea1244c709d72bc4bad33fb719835634, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _purchaseButtonPrefab: {fileID: 453035847511563135, guid: d7895c4c6a5c5864c9a259871a5a0195,
-    type: 3}
 --- !u!1001 &113626005
 PrefabInstance:
   m_ObjectHideFlags: 0
