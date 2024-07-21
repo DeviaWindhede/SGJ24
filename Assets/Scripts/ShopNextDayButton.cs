@@ -47,7 +47,21 @@ public class ShopNextDayButton : MonoBehaviour
         _button.enabled = true;
         PersistentShopData.Instance.shopTime.ResetDay();
         FindObjectOfType<PlayerBehaviour>().ResetPosition();
+        ResetGooberActiveStates();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void ResetGooberActiveStates()
+    {
+        var goobers = PersistentShopData.Instance.shopResources.goobers;
+        for (int i = 0; i < goobers.Count; i++)
+        {
+            goobers[i].petPercentage = 0.0f;
+            foreach (var state in goobers[i].activeStates)
+            {
+                state.dirtiness = 0.0f;
+            }
+        }
     }
 
     public void SetVisibility(bool aIsVisible)

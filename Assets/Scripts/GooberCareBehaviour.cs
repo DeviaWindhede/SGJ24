@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [System.Serializable]
-class GooberState
+public class GooberState
 {
     public Vector2Int index;
 
@@ -28,14 +30,12 @@ public enum GooberType
 
 public class GooberCareBehaviour : MonoBehaviour
 {
-    public delegate void OnFinishedSession();
-    public event OnFinishedSession FinishedSession;
-
     [SerializeField] private Camera _initalRayCamera;
     [SerializeField] private ProgressBar _progressBar;
     [SerializeField] private float _cleanlinessThreshold = 0.9f;
     [SerializeField] private Button _washButton;
     [SerializeField] private Button _petButton;
+    [SerializeField] private TMPro.TMP_Dropdown _gooberDropdown;
 
     [SerializeField] private Transform _gooberCollection;
     [SerializeField] private GameObject _petToolPrefab;
@@ -47,19 +47,18 @@ public class GooberCareBehaviour : MonoBehaviour
     [SerializeField] private float _pettingSpeed;
 
     private List<GameObject> _washToolList = new();
-    [SerializeField] private List<GooberState> activeStates = new();
     private List<List<GooberState>> grid = new();
 
     private PlayerInputActions _inputActions;
     private Camera _camera;
     private PixelCamRaycast _pixelCamRay;
-    private bool _hasCalledFinishedSession = false;
     private Vector2 _mouseDelta;
     private bool _isMouseDown;
     private GooberType _currentTool;
-    private float _petPercentage;
-    private float _cleanlinessPercentage;
-    public float HappinessPercentage => (_petPercentage + _cleanlinessPercentage) / 2.0f;
+    private bool _hasInitialized = false;
+    private int _currentGooberIndex = 0;
+    private List<int> _gooberIndices = new();
+
     private void CalculateCleanliness()
     {
         int total = 0;
@@ -73,16 +72,17 @@ public class GooberCareBehaviour : MonoBehaviour
                 clean += grid[i][j].IsDirty ? 0 : 1;
             }
         }
-        _cleanlinessPercentage = (float)clean / (float)total;
 
-        if (_cleanlinessPercentage >= _cleanlinessThreshold)
+        CurrentGooberData.cleanlinessPercentage = (float)clean / (float)total;
+
+        if (CurrentGooberData.cleanlinessPercentage >= _cleanlinessThreshold)
         {
-            _cleanlinessPercentage = 1.0f;
+            CurrentGooberData.cleanlinessPercentage = 1.0f;
         }
 
         if (_progressBar != null)
         {
-            _progressBar.SetTargetFillPercentage(HappinessPercentage);
+            _progressBar.SetTargetFillPercentage(CurrentGooberData.HappinessPercentage);
         }
     }
 
@@ -99,14 +99,45 @@ public class GooberCareBehaviour : MonoBehaviour
         SetUpdateTool(GooberType.PetTool);
     }
 
+    private GameObject GetCurrentGoober()
+    {
+        return _gooberCollection.GetChild(_currentGooberIndex).gameObject;
+    }
+
+    private GooberData CurrentGooberData => PersistentShopData.Instance.shopResources.goobers[_currentGooberIndex];
+
     // Start is called before the first frame update
     void Start()
     {
         _pixelCamRay = FindObjectOfType<PixelCamRaycast>();
         _camera = _pixelCamRay.GetComponent<Camera>();
         {
-            int childIndex = UnityEngine.Random.Range(0, _gooberCollection.childCount);
-            _gooberCollection.GetChild(childIndex).gameObject.SetActive(true);
+            int gooberDropdownIndex = 0;
+            for (int i = 0; i < PersistentShopData.Instance.shopResources.goobers.Count; i++)
+            {
+                var goober = PersistentShopData.Instance.shopResources.goobers[i];
+
+                if (goober.isUnlocked)
+                {
+                    _gooberIndices.Add(i);
+                    ++gooberDropdownIndex;
+                    continue;
+                }
+
+                _gooberDropdown.options.RemoveAt(gooberDropdownIndex);
+            }
+
+            if (_gooberIndices.Count == 0)
+            {
+                Debug.LogError("No goobers unlocked");
+                SceneManager.LoadScene("ShopScene");
+                return;
+            }
+
+            int randomValue = UnityEngine.Random.Range(0, _gooberIndices.Count);
+            OnDropdownChanged(randomValue);
+            _gooberDropdown.value = randomValue;
+            _gooberDropdown.onValueChanged.AddListener(OnDropdownChanged);
         }
 
         _washButton.onClick.AddListener(SetSoapAsTool);
@@ -130,10 +161,28 @@ public class GooberCareBehaviour : MonoBehaviour
         _inputActions.MiniGameControls.MouseMove.canceled += ctx => { _mouseDelta = Vector2.zero; };
 
 
+        _hasInitialized = true;
+    }
+
+    private void OnActiveStateChange()
+    {
+        foreach (var state in CurrentGooberData.activeStates)
+        {
+            //state.dirtiness = 0.0f;
+            //state.
+            grid[state.index.x][state.index.y].dirtiness = state.dirtiness;
+        }
+    }
+
+    private void InitializeGrid()
+    {
+        grid.Clear();
+
         // min = x, max = y
         Vector2Int minMaxHeight = new();
         Vector2Int minMaxWidth = new();
 
+        bool shouldPerformFirstInitialization = CurrentGooberData.activeStates.Count == 0;
         for (int x = 0; x < _gridWidth; x++)
         {
             grid.Add(new List<GooberState>());
@@ -155,37 +204,59 @@ public class GooberCareBehaviour : MonoBehaviour
                     if (minMaxWidth.x > x) { minMaxWidth.x = x; }
                     if (minMaxWidth.y < x) { minMaxWidth.y = x; }
                     grid[x][y].shouldIgnore = false;
-                    activeStates.Add(grid[x][y]);
+
+                    if (shouldPerformFirstInitialization)
+                    {
+                        CurrentGooberData.activeStates.Add(grid[x][y]);
+                    }
+                    else
+                    {
+                        grid[x][y] = CurrentGooberData.activeStates.Where(s => s.index.x == x && s.index.y == y).First();
+                    }
                 }
             }
         }
 
-        if (activeStates.Count == 0)
+        if (!shouldPerformFirstInitialization) { return; }
+
+        if (CurrentGooberData.activeStates.Count == 0)
         {
             Debug.LogError("No goober found!!! D:");
             return;
         }
 
-        int randomIndex = UnityEngine.Random.Range(0, activeStates.Count);
-        activeStates[randomIndex].petMultiplier = 2.0f;
+        int randomIndex = UnityEngine.Random.Range(0, CurrentGooberData.activeStates.Count);
+        CurrentGooberData.activeStates[randomIndex].petMultiplier = 2.0f;
 
-        Vector2Int startingIndex = activeStates[randomIndex].index;
-        for (int i = 0; i < activeStates.Count; i++)
+        Vector2Int startingIndex = CurrentGooberData.activeStates[randomIndex].index;
+        for (int i = 0; i < CurrentGooberData.activeStates.Count; i++)
         {
             if (randomIndex == i) { continue; }
 
-            int xIndex = activeStates[i].index.x - minMaxWidth.x;
-            int yIndex = activeStates[i].index.y - minMaxHeight.x;
+            int xIndex = CurrentGooberData.activeStates[i].index.x - minMaxWidth.x;
+            int yIndex = CurrentGooberData.activeStates[i].index.y - minMaxHeight.x;
 
             float xDistance = (float)xIndex / (float)(minMaxWidth.y - minMaxWidth.x);
             float yDistance = (float)yIndex / (float)(minMaxHeight.y - minMaxHeight.x);
 
-            activeStates[i].petMultiplier = 2.0f - (xDistance / yDistance);
+            CurrentGooberData.activeStates[i].petMultiplier = 2.0f - (xDistance / yDistance);
         }
+    }
+
+    private void OnDropdownChanged(int aValue)
+    {
+        GetCurrentGoober().SetActive(false);
+        _currentGooberIndex = _gooberIndices[aValue];
+        GetCurrentGoober().SetActive(true);
+        InitializeGrid();
     }
 
     private void OnDestroy()
     {
+        _gooberDropdown.onValueChanged.RemoveListener(OnDropdownChanged);
+
+        if (!_hasInitialized) { return; }
+
         _washButton.onClick.RemoveAllListeners();
         _petButton.onClick.RemoveAllListeners();
 
@@ -206,6 +277,8 @@ public class GooberCareBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (!_hasInitialized) { return; }
+
         switch (_currentTool)
         {
             case GooberType.SoapSponge:
@@ -218,13 +291,7 @@ public class GooberCareBehaviour : MonoBehaviour
                 break;
         }
 
-        if (FinishedSession != null && !_hasCalledFinishedSession && HappinessPercentage >= 1.0f)
-        {
-            FinishedSession();
-            _hasCalledFinishedSession = true;
-        }
-
-        _progressBar.SetTargetFillPercentage(HappinessPercentage);
+        _progressBar.SetTargetFillPercentage(CurrentGooberData.HappinessPercentage);
     }
 
     void UpdateVisualToolLocation(GameObject aGameObject, RaycastHit aHit)
@@ -293,8 +360,8 @@ public class GooberCareBehaviour : MonoBehaviour
         var c = grid[(int)cell.x][(int)cell.y];
         if (c.shouldIgnore) { return; }
 
-        _petPercentage += _pettingSpeed * Time.deltaTime * c.petMultiplier;
-        _petPercentage = Mathf.Clamp(_petPercentage, 0.0f, 1.0f);
+        CurrentGooberData.petPercentage += _pettingSpeed * Time.deltaTime * c.petMultiplier;
+        CurrentGooberData.petPercentage = Mathf.Clamp(CurrentGooberData.petPercentage, 0.0f, 1.0f);
     }
 
     Vector3 CellToViewport(Vector2 cell)
