@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 [System.Serializable]
@@ -60,6 +61,7 @@ public struct ShopManagerState
 {
     public bool isTarotActive;
     public bool isStandingInRegister;
+    public int tarotPrice;
 }
 
 public class ShopManager : MonoBehaviour
@@ -93,6 +95,8 @@ public class ShopManager : MonoBehaviour
         _spawnInterval = _spawnMaxInterval;
         _state = PersistentShopData.Instance.shopManagerState;
 
+        _shouldLetInCustomers = !PersistentShopData.Instance.shopTime.IsNight && PersistentShopData.Instance.shopTime.Time > 8;
+
         foreach (var t in PersistentShopData.Instance.shopperData)
         {
             InstantiateShopper(t.state.currentStateType);
@@ -115,8 +119,6 @@ public class ShopManager : MonoBehaviour
 
         PersistentShopData.Instance.shopTime.OnTimeChangeEvent += OnTimeChangeEvent;
         _player.OnInteractableChangedEvent += OnPlayerInteractableChangedEvent;
-
-        _uiManager.SetOpenStatus(_shouldLetInCustomers);
     }
 
     private void OnPlayerInteractableChangedEvent(PlayerInteractionType aType)
@@ -149,8 +151,6 @@ public class ShopManager : MonoBehaviour
         {
             PersistentShopData.Instance.shopTime.ShouldFreezeTime(!_shouldLetInCustomers);
         }
-
-        _uiManager.SetOpenStatus(_shouldLetInCustomers);
     }
 
     public Vector3 GetEntrancePosition()
@@ -185,6 +185,7 @@ public class ShopManager : MonoBehaviour
         ShopperBehaviour shopperBehaviour = InstantiateShopper(aType);
         shopperBehaviour.Init(this, new ShopperState());
         shopperBehaviour.SetDestination(GetRandomType());
+
         if (!aShouldPlaySound) { return; }
 
         AudioManager.Instance.PlaySound(ShopSoundByte.ShopBell);
@@ -276,7 +277,14 @@ public class ShopManager : MonoBehaviour
                 if (!_state.isTarotActive) { break; }
 
                 _state.isTarotActive = false;
-                _activeShoppers.Find(x => x.state.currentShopDestination == ShopLocationType.TarotReading).Interact();
+
+                var shopper = _activeShoppers.Where(x => 
+                    x.state.currentStateType == typeof(ActionState) && 
+                    x.state.currentShopDestination == ShopLocationType.TarotReading
+                ).FirstOrDefault();
+                if (!shopper) { break; }
+
+                shopper.Interact();
                 ChangeScene(aType);
                 break;
             case PlayerInteractionType.GooberCare:

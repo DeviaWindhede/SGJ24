@@ -31,6 +31,9 @@ public class Unlockables
 
 public class ShopResources
 {
+    public delegate void OnCurrencyChange(int aAmount);
+    public event OnCurrencyChange OnCurrencyChangeEvent;
+
     private int _coins;
 
     public PotionIngredients ingredients;
@@ -46,12 +49,14 @@ public class ShopResources
     {
         if (!CanAfford(aCost)) { return false; }
         _coins -= aCost;
+        OnCurrencyChangeEvent?.Invoke(_coins);
         return true;
     }
 
     public void AddCoins(int aAmount)
     {
         _coins += aAmount;
+        OnCurrencyChangeEvent?.Invoke(_coins);
     }
 }
 

@@ -110,7 +110,7 @@ Material:
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _CookingPalooza: 6
+    - _CookingPalooza: 8
     - _Cull: 2
     - _Cutoff: 0.5
     - _DebugTimwe: 0.99

@@ -264,6 +264,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6fd3aa61734cd264cb55b04c5505d50c, type: 3}
   - {fileID: 21300000, guid: 1f88ddbb1ff4c754498f3f8cfb941802, type: 3}
   - {fileID: 21300000, guid: 5766883000f0f7e47bd884e42fe95c2c, type: 3}
+  - {fileID: 21300000, guid: 61802cc691d16c44986e0a1d255ae3a4, type: 3}
   _canvas: {fileID: 1521973771881170465}
   _speechBubble: {fileID: 3916787426808077273}
   _iconImage: {fileID: 9146136367069020368}
@@ -279,6 +280,7 @@ GameObject:
   - component: {fileID: 1521973771881170465}
   - component: {fileID: 4017238372612476445}
   - component: {fileID: 7910866031644772456}
+  - component: {fileID: 2236239082029146493}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -369,6 +371,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2236239082029146493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5266031622402853877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d90561cbdc2bbf04180c49ad9610f776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 0}
 --- !u!1001 &3754814184509748734
 PrefabInstance:
   m_ObjectHideFlags: 0

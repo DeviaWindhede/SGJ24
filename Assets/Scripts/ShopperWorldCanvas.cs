@@ -10,6 +10,7 @@ public enum ShopperIconType
     GooberAdoption,
     Enchanting,
     Waiting,
+    Paying,
     None
 }
 
@@ -62,18 +63,5 @@ public class ShopperWorldCanvas : MonoBehaviour
         _speechBubble.SetActive(false);
 
         _animator = _speechBubble.GetComponent<Animator>();
-    }
-
-
-    public void RotateTowardsCamera()
-    {
-        _canvas.transform.rotation = _mainCamera.transform.rotation;
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        RotateTowardsCamera();
     }
 }

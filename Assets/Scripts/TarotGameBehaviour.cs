@@ -5,17 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class TarotGameBehaviour : MonoBehaviour
 {
-    [SerializeField] private Camera _pixelCam;
+    [SerializeField] private GameObject _backButton;
+
+    private PixelCamRaycast _pixelCamRaycast;
     private TarotCardBehaviour _hoveredCard;
     private PlayerInputActions _inputActions;
     private RaycastHit _hit;
     private TarotDeckBehaviour _deck;
 
-    private int TEMP_flippedAmount = 0;
+    private int _flippedCards = 0;
 
     // Start is called before the first frame update
     void Start()
     {
+        _pixelCamRaycast = FindObjectOfType<PixelCamRaycast>();
         _deck = FindObjectOfType<TarotDeckBehaviour>();
 
         _inputActions = new();
@@ -23,6 +26,8 @@ public class TarotGameBehaviour : MonoBehaviour
 
         _inputActions.MiniGameControls.Enable();
         _inputActions.MiniGameControls.MouseDown.performed += _ => OnMouseClick();
+
+        _backButton.SetActive(false);
     }
 
 
@@ -43,8 +48,7 @@ public class TarotGameBehaviour : MonoBehaviour
 
     private void Update()
     {
-        Vector2 mousePos = Input.mousePosition;
-        Ray ray = _pixelCam.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, _pixelCam.nearClipPlane));
+        Ray ray = _pixelCamRaycast.GetRay(Input.mousePosition);
 
         if (!Physics.Raycast(ray, out _hit))
         {
@@ -76,14 +80,11 @@ public class TarotGameBehaviour : MonoBehaviour
 
         if (!_hoveredCard) { return; }
         _hoveredCard.Select();
-        
-        
-        // TEMP
-        TEMP_flippedAmount++;
-        if (TEMP_flippedAmount >= _deck.TarotCardsToSpawn)
-        {
-            print("win?");
-            //SceneManager.LoadScene("ShopScene");
-        }
+
+        _flippedCards++;
+        if (_flippedCards < _deck.TarotCardsToSpawn) { return; }
+
+        PersistentShopData.Instance.shopManagerState.tarotPrice = 40; // TODO
+        _backButton.SetActive(true);
     }
 }

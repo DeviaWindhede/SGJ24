@@ -11,8 +11,7 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField] private GameObject _shopUI;
     [SerializeField] private GameObject _computerUI;
     [SerializeField] private TMPro.TextMeshProUGUI _timeText;
-    [SerializeField] private TMPro.TextMeshProUGUI _shopStatusText;
-    [SerializeField] private Button _newDayButton;
+    [SerializeField] private ShopNextDayButton _newDayButton;
 
     private void Awake()
     {
@@ -22,16 +21,13 @@ public class ShopUIManager : MonoBehaviour
         PersistentShopData.Instance.shopTime.OnTimeChangeEvent += OnTimeChangeEvent;
         PersistentShopData.Instance.shopTime.OnTimeFreezeEvent += OnTimeFreezeEvent;
 
-        _newDayButton.onClick.AddListener(OnNewDayButton);
-        _newDayButton.gameObject.SetActive(false);
-
         _shopCamera.gameObject.SetActive(true);
         _computerCamera.gameObject.SetActive(false);
     }
 
     public void ShowNewDayButton()
     {
-        _newDayButton.gameObject.SetActive(PersistentShopData.Instance.shopTime.IsNight);
+        _newDayButton.SetVisibility(PersistentShopData.Instance.shopTime.IsNight);
     }
 
     public void ShouldShowComputerUI(bool aValue)
@@ -54,40 +50,20 @@ public class ShopUIManager : MonoBehaviour
         FindObjectOfType<PlayerBehaviour>().ShouldEnableMovement(!aValue);
     }
 
-    private void OnNewDayButton()
-    {
-        PersistentShopData.Instance.shopTime.ResetDay();
-        FindObjectOfType<PlayerBehaviour>().ResetPosition();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        _newDayButton.gameObject.SetActive(false);
-    }
 
     private void OnDestroy()
     {
         PersistentShopData.Instance.shopTime.OnTimeChangeEvent -= OnTimeChangeEvent;
         PersistentShopData.Instance.shopTime.OnTimeFreezeEvent -= OnTimeFreezeEvent;
-        _newDayButton.onClick.RemoveListener(OnNewDayButton);
     }
 
     private void OnTimeFreezeEvent(bool aIsFrozen)
     {
-        _timeText.color = aIsFrozen ? Color.grey : Color.white;
+        _timeText.color = aIsFrozen ? new Color(128 / 255.0f, 125 / 255.0f, 127 / 255.0f) : new Color(61 / 255.0f, 38 / 255.0f, 53 / 255.0f);
     }
 
     private void OnTimeChangeEvent(bool aIsNight)
     {
         _timeText.text = PersistentShopData.Instance.shopTime.Time.ToString() + ":00";
-    }
-
-    public void SetOpenStatus(bool aIsOpen)
-    {
-        if (aIsOpen)
-        {
-            _shopStatusText.text = "Open";
-        }
-        else
-        {
-            _shopStatusText.text = "Closed";
-        }
     }
 }

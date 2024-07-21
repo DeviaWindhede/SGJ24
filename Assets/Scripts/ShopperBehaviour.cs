@@ -7,11 +7,41 @@ using UnityEngine.AI;
 
 class QueueState : IState<ShopperBehaviour>
 {
-    private void LeaveAndPay(ShopperBehaviour aShopper, int aAmount)
+    private void Leave(ShopperBehaviour aShopper)
     {
-        aShopper.Pay(aAmount);
         aShopper.LeaveQueue();
         aShopper.ChangeState(typeof(LeavingState));
+    }
+
+    private void LeaveAndPay(ShopperBehaviour aShopper)
+    {
+        int amount = 0;
+
+        switch (aShopper.state.currentShopDestination)
+        {
+            case ShopLocationType.TarotReading:
+                if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay)
+                {
+                    aShopper.Pay(PersistentShopData.Instance.shopManagerState.tarotPrice);
+                }
+
+                Leave(aShopper);
+                return;
+            case ShopLocationType.Potions:
+                amount = 10;
+                break;
+            case ShopLocationType.GooberAdoption:
+                amount = 20;
+                break;
+            case ShopLocationType.Enchanting:
+                amount = 30;
+                break;
+            default:
+                break;
+        }
+
+        aShopper.Pay(amount);
+        Leave(aShopper);
     }
 
     void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper)
@@ -31,10 +61,7 @@ class QueueState : IState<ShopperBehaviour>
                     case ShopperQueueType.Purchase:
                         aShopper.state.currentQueueType = ShopperQueueType.Action;
                         break;
-                    case ShopperQueueType.Action:
-                    case ShopperQueueType.PostActionPay:
                     default:
-                        aShopper.state.currentQueueType = ShopperQueueType.PostActionPay;
                         break;
                 }
                 break;
@@ -45,7 +72,7 @@ class QueueState : IState<ShopperBehaviour>
             default:
                 break;
         }
-        aShopper.SetAvoidancePriority(0);
+        aShopper.SetAvoidancePriority(3);
     }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper)
@@ -61,6 +88,7 @@ class QueueState : IState<ShopperBehaviour>
         {
             ShopperIconType type = (ShopperIconType)aShopper.state.currentShopDestination;
             if (!aShopper.ShouldDisplayIcon) { type = ShopperIconType.None; }
+            else if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay) { type = ShopperIconType.Paying; }
             aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
         }
 
@@ -80,7 +108,7 @@ class QueueState : IState<ShopperBehaviour>
             default:
                 break;
         }
-        LeaveAndPay(aShopper, 10); // TODO: REMOVE PROPER AMOUNT
+        LeaveAndPay(aShopper); // TODO: REMOVE PROPER AMOUNT
     }
 }
 
@@ -89,7 +117,7 @@ class ActionState : IState<ShopperBehaviour>
     void IState<ShopperBehaviour>.Enter(ShopperBehaviour aShopper)
     {
         aShopper.SetDestination(aShopper.state.currentShopDestination, true);
-        aShopper.SetAvoidancePriority(99);
+        aShopper.state.currentQueueType = ShopperQueueType.PostActionPay;
     }
 
     void IState<ShopperBehaviour>.Exit(ShopperBehaviour aShopper)
@@ -103,7 +131,12 @@ class ActionState : IState<ShopperBehaviour>
 
     void IState<ShopperBehaviour>.Update(ShopperBehaviour aShopper)
     {
-        if (!aShopper.state.hasReachedDestination) { return; }
+        if (!aShopper.state.hasReachedDestination)
+        {
+            aShopper.SetAvoidancePriority(0);
+            return;
+        }
+        aShopper.SetAvoidancePriority(99);
         if (!aShopper.state.hasPerformedAction)
         { 
             if (aShopper.state.currentShopDestination == ShopLocationType.TarotReading)
@@ -204,6 +237,7 @@ public class ShopperState
     public System.Type currentStateType = typeof(DecisionState);
     public int queueIndex = -1;
 
+    public int spendingGold = 0;
     public float decideTimer = 0.0f;
     public float decideInterval = 5.0f;
 }
@@ -242,7 +276,7 @@ public class ShopperBehaviour : MonoBehaviour
 
     public void Pay(int aAmount)
     {
-        print("Paying " + aAmount + " coins");
+        PersistentShopData.Instance.shopResources.AddCoins(aAmount);
     }
 
     public void Interact()
