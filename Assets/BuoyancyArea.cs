@@ -6,7 +6,8 @@ public class BuoyancyArea : MonoBehaviour
 {
     [SerializeField] public float areaRadius = 1.0f;
     [SerializeField] public float buoyancyForce = 1.0f;
-   
+    [SerializeField] public Vector3 offset = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +35,6 @@ public class BuoyancyArea : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        DrawCircle(transform.position, areaRadius, 16);
+        DrawCircle(transform.position + offset, areaRadius, 16);
     }
 }

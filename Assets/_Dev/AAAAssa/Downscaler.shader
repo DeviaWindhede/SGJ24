@@ -140,17 +140,17 @@
                
                float4 noised = col + bayer * spread;
                
-               float sobel = GetSobelResultHV(i.uv);
+               // float sobel = GetSobelResultHV(i.uv);
                         
-               float4 downscaled = GetDownscaledColor(i.uv);
+               // float4 downscaled = GetDownscaledColor(i.uv);
 
-               float4 quantizedColor = QuantizeColor(noised, 8);
             
-               float4 final = downscaled;
-               final -= sobel;
+               // float4 final = downscaled;
+               // final -= sobel;
 
-               return final;
-               // return quantizedColor;
+               float4 quantizedColor = QuantizeColor(noised, _QuantizationValue);
+               //return final;
+               return noised;
 
             }
             ENDCG

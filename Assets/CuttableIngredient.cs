@@ -126,10 +126,14 @@ public class CuttableIngredient : MonoBehaviour
             GetComponent<MeshCollider>().enabled = false;
             GetComponent<Rigidbody>().isKinematic = true;
 
+            GetComponent<MovableObject>().enabled = false;
+
             foreach (GameObject cut in cutObjects)
             {
                 cut.GetComponent<MeshCollider>().enabled = true;
                 cut.GetComponent<Rigidbody>().isKinematic = false;
+                cut.GetComponent<MovableObject>().enabled = true;
+
             }
         }
         else

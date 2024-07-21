@@ -66,7 +66,22 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: af10a758b72e0e54293fc25ec15e7336,
         type: 3}
       propertyPath: m_Name
-      value: sm_potionFlask_extra01
+      value: ExtraFlask
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: af10a758b72e0e54293fc25ec15e7336,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1593528455299961781, guid: af10a758b72e0e54293fc25ec15e7336,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553192678916569930, guid: af10a758b72e0e54293fc25ec15e7336,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8533433745514493219, guid: af10a758b72e0e54293fc25ec15e7336,
         type: 3}

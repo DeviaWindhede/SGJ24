@@ -89,6 +89,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6618377228139619507}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6569a6822d76c0b49b8041efa8090cf0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8112550259318417136}
   m_SourcePrefab: {fileID: 100100000, guid: 6569a6822d76c0b49b8041efa8090cf0, type: 3}
 --- !u!1 &828117078407507338 stripped
 GameObject:
@@ -157,12 +161,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0da0da7c0d3300542bb5551d905416af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactType: 0
-  ingredientType: 0
-  ingredientColor: {r: 0, g: 0, b: 0, a: 0}
+  interactType: 3
+  ingredientType: 4
+  ingredientColor: {r: 0.8867924, g: 0.6759693, b: 0.6567283, a: 1}
   BaseScale: 1
   buoyancyAreas: []
   AirDrag: 0
   AirAngularDrag: 0.05
   WaterDrag: 0.5
   WaterAngularDrag: 0.5
+--- !u!114 &-8112550259318417136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828117078407507338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe88bb16b77d8a1458c06d4d820a5beb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  moveType: 1
+  hasTargetOrientation: 0
+  targetOrientation: {x: 0, y: 0, z: 0, w: 1}
+  positionOffset: {x: 0, y: 0.5, z: 0}
+  carriedLayerMaskExcludes:
+    serializedVersion: 2
+    m_Bits: 0
+  droppedLayerMaskExcludes:
+    serializedVersion: 2
+    m_Bits: 0
+  kinematicOnStart: 0
+  kinematicOnPickup: 0
+  kinematicOnDrop: 0

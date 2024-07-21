@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,9 @@ public class PhysicalIngredient : MonoBehaviour
     public AlchemySystem.Ingredient ingredientType;
     public Color ingredientColor;
 
-    public float BaseScale = 0.6f;
+    public float IngredientAmount = 1.0f;
+
+    public float BaseScale = 1.0f;
 
     public List<BuoyancyArea> buoyancyAreas;
 
@@ -22,7 +25,6 @@ public class PhysicalIngredient : MonoBehaviour
 
     bool inWater = false;
 
-    
 
     // Start is called before the first frame update
     void Start()
@@ -85,5 +87,29 @@ public class PhysicalIngredient : MonoBehaviour
     private void OnValidate()
     {
         transform.localScale = new Vector3(BaseScale, BaseScale, BaseScale);
+    }
+
+    public void UseAnimationBegin()
+    {
+        if (interactType == AlchemySystem.IngredientInteractType.Pour)
+        {
+            var pourable = GetComponent<PourableIngredient>();
+            pourable.ConfigurePouringEffect(ingredientColor);
+            pourable.BeginPour();
+        }
+    }
+
+    public void UseAnimationEnd()
+    {
+        if (interactType == AlchemySystem.IngredientInteractType.Pour)
+        {
+            var pourable = GetComponent<PourableIngredient>();
+            pourable.EndPour();
+        }
+    }
+
+    public float GetProvidedAmount()
+    {
+        return IngredientAmount;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -50,6 +51,26 @@ public class InteractionSystem : MonoBehaviour
     //}
 
     // Update is called once per frame
+    bool TargetingCuttableSeam(MovableObject targetedObject, Vector3 hitPosition, out Vector3 targetPosition, out int targetSeamIndex)
+    {
+        if (targetedObject != null && targetedObject.type == MovableObject.ObjectType.Cuttable)
+        {
+            CuttableIngredient cuttable = targetedObject.GetComponent<CuttableIngredient>();
+            int cutIndex = cuttable.GetCutPoint(hitPosition, out Vector3 outHitCutPoint);
+            if (cutIndex >= 0)
+            {
+                targetSeamIndex = cutIndex;
+                targetPosition = outHitCutPoint;
+                return true;
+            }
+
+        }
+
+        targetSeamIndex = -1;
+        targetPosition = new Vector3();
+        return false;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -74,40 +95,88 @@ public class InteractionSystem : MonoBehaviour
             cameraObject.transform.rotation = Quaternion.Slerp(currentOrientation, targetOrientation, Time.deltaTime * cameraTransitionSpeed);
         }
 
+        Vector3 target = Vector3.zero;
 
-        //cast ray on CookingIngredient layer
-        RaycastHit hit;
 
-        float div = Screen.width / 640.0f;
+        LayerMask interactMask = LayerMask.GetMask("CookingGeometry", "CookingIngredient", "CookingTool", "CuttableObject");
+        if (heldObject != null && heldObject.type != MovableObject.ObjectType.Tool) { interactMask |= LayerMask.GetMask("AlchemyInteractArea"); }
 
-        cutIndex = -1;
+        MovableObject hitMovableObject = null;
 
         Ray ray = cameraObject.GetComponent<PixelCamRaycast>().GetRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, 1000f))
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000f, interactMask))
         {
             if (hit.collider != null)
             {
+                target = hit.point;
+
                 if (hit.collider.gameObject.TryGetComponent<MovableObject>(out var movable))
                 {
-                    if (heldObject == null && Input.GetMouseButtonDown(0))
+                    hitMovableObject = movable;
+                }
+                else 
+                {
+                    MovableObject parentMovable = hit.collider.gameObject.GetComponentInParent<MovableObject>();
+                    if (parentMovable != null)
                     {
-                        heldObject = movable;
-                        heldObject.Pickup();
+                        hitMovableObject = parentMovable;
                     }
+                }
+                if (hitMovableObject != null && heldObject == null && Input.GetMouseButtonDown(0))
+                {
+                    heldObject = hitMovableObject;
+                    heldObject.Pickup();
+                }
+
+                if (hit.collider.gameObject.TryGetComponent<AlchemyInteractArea>(out var interactArea))
+                {                   
+                    if (heldObject && interactArea.AcceptsType(heldObject.type)) 
+                    {
+                        bool pourable = heldObject.type == MovableObject.ObjectType.Ingredient && heldObject.GetComponent<PhysicalIngredient>().interactType == AlchemySystem.IngredientInteractType.Pour;
+
+                        target = interactArea.GetTargetWorldPos(pourable);
+                        heldObject.AssignToArea(interactArea);
+                    }
+                }
+                else
+                {
+                    if (heldObject) { heldObject.AssignToArea(null); }
                 }
             }
         }
 
         if (heldObject)
         {
-            heldObject.SetTargetPosition(hit.point);
+            heldObject.SetTargetPosition(target);
+
+            TryCutConditions(hitMovableObject, hit);
 
             if (Input.GetMouseButtonUp(0))
             {
                 heldObject.Drop();
                 heldObject = null;
             }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (heldObject)
+                {
+                    heldObject.BeginUse();
+                }
+            }
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                if (heldObject)
+                {
+                    heldObject.EndUse();
+                }
+            }
         }
+
+
 
         //Ray ray = cameraObject.GetComponent<PixelCamRaycast>().GetRay(Input.mousePosition);
         //if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("CookingIngredient")))
@@ -200,4 +269,21 @@ public class InteractionSystem : MonoBehaviour
         //}
 
     }
+
+    private void TryCutConditions(MovableObject hitMovableObject, RaycastHit hit)
+    {
+        if (heldObject.type == MovableObject.ObjectType.Tool)
+        {
+            CookingTool heldTool = heldObject.GetComponent<CookingTool>();
+            if (heldTool.toolType == CookingToolType.Knife)
+            {
+                if (TargetingCuttableSeam(hitMovableObject, hit.point, out Vector3 targetPosition, out int targetSeamIndex))
+                {
+                    heldObject.SetTargetPosition(targetPosition);
+                    heldTool.KnifeAssignCuttable(targetSeamIndex, hitMovableObject.GetComponent<CuttableIngredient>());
+                }
+            }
+        }
+    }
 }
+

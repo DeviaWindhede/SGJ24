@@ -19,8 +19,8 @@ TagManager:
   - CookingGeometry
   - CookingTool
   - CuttableObject
-  - 
-  - 
+  - CarriedObject
+  - AlchemyInteractArea
   - 
   - 
   - 
