@@ -40,7 +40,7 @@ public class ShopResources
     public delegate void OnCurrencyChange(int aAmount);
     public event OnCurrencyChange OnCurrencyChangeEvent;
 
-    private int _coins;
+    private int _coins = 0;
 
     public PotionIngredients ingredients;
     public List<GooberData> goobers = new() {
@@ -72,6 +72,8 @@ public class ShopResources
 
     public void UnlockGoober(int aIndex)
     {
+        if (!Purchase(goobers[aIndex].unlockCost)) { return; }
+
         goobers[aIndex].isUnlocked = true;
     }
 }
