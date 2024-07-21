@@ -45,8 +45,8 @@ public class ShopResources
     public PotionIngredients ingredients;
     public List<GooberData> goobers = new() {
         new() { name = "Bunny", unlockCost = 250 },
-        new() { name = "Pants", unlockCost = 5000 },
-        new() { name = "Wolf", unlockCost = 1000 }
+        new() { name = "Pants!!!", unlockCost = 5000 },
+        new() { name = "Sheep", unlockCost = 1000 }
     };
 
     public int CoinAmount => _coins;

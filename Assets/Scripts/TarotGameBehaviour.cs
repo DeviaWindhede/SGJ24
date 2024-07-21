@@ -9,14 +9,13 @@ public class TarotGameBehaviour : MonoBehaviour
     private readonly static int MAX_TAROT_PRICE = 10;
 
     [SerializeField] private GameObject _backButton;
-
     private PixelCamRaycast _pixelCamRaycast;
     private TarotCardBehaviour _hoveredCard;
     private PlayerInputActions _inputActions;
     private RaycastHit _hit;
     private TarotDeckBehaviour _deck;
-    private float _readingPercentage = 1.0f; // TODO
     private int _flippedCards = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +30,9 @@ public class TarotGameBehaviour : MonoBehaviour
         _inputActions.MiniGameControls.MouseDown.performed += _ => OnMouseClick();
 
         _backButton.SetActive(false);
+
+        //_innerBar.transform.localPosition.x = -_width / 2.0f;
+        //_progressBarGameObject.SetActive(false);
     }
 
 
@@ -75,11 +77,10 @@ public class TarotGameBehaviour : MonoBehaviour
 
     private void OnMouseClick()
     {
-        if (_hit.collider != null && _hit.collider.gameObject.CompareTag("TarotDeck"))
-        {
-            _hit.collider.gameObject.GetComponent<TarotDeckBehaviour>().OnClick();
-            return;
-        }
+        bool hasHitDeck = _hit.collider != null && _hit.collider.gameObject.CompareTag("TarotDeck");
+        _deck.OnClick(hasHitDeck);
+        
+        if (hasHitDeck) { return; }
 
         if (!_hoveredCard) { return; }
         _hoveredCard.Select();
@@ -87,7 +88,7 @@ public class TarotGameBehaviour : MonoBehaviour
         _flippedCards++;
         if (_flippedCards < _deck.TarotCardsToSpawn) { return; }
 
-        PersistentShopData.Instance.shopManagerState.tarotPrice = (int)Mathf.Lerp(MIN_TAROT_PRICE, MAX_TAROT_PRICE, _readingPercentage);
+        PersistentShopData.Instance.shopManagerState.tarotPrice = Mathf.RoundToInt(Mathf.Lerp(MIN_TAROT_PRICE, MAX_TAROT_PRICE, _deck.TotalHitPercentage));
         _backButton.SetActive(true);
     }
 }
