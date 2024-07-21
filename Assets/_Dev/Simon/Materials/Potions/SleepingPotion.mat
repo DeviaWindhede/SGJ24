@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: t_lovePotion
+  m_Name: SleepingPotion
   m_Shader: {fileID: -6465566751694194690, guid: 4ed7ca53414ef3d4f9521e6d3cf7d892,
     type: 3}
-  m_Parent: {fileID: 2100000, guid: 2e0d52698539caa4eba865ad01d99322, type: 2}
+  m_Parent: {fileID: 2100000, guid: d142a600eab0e3f4b9e82a3932b86364, type: 2}
   m_ModifiedSerializedProperties: 2
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -26,22 +26,17 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColor:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 8bad1e230cc2a2b4f8bfdbd88ce1748b, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8bad1e230cc2a2b4f8bfdbd88ce1748b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8892054cfa37c124ab8f4ceaf8951750, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _ColorMaskFloat: 1.23
+    - _Emissive: 5.35
+    - _SillyGoober: 10.45
     m_Colors: []
   m_BuildTextureStacks: []
---- !u!114 &3394537677707965693
+--- !u!114 &266794064685819192
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
