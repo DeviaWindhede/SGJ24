@@ -490,7 +490,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &354230294
 MonoBehaviour:
@@ -512,7 +512,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6fd3aa61734cd264cb55b04c5505d50c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 361f20c5f6047964abe27ea167c71678, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1332,7 +1332,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 75, y: 75}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1185997765
 MonoBehaviour:
@@ -2947,9 +2947,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: v
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a5a806cb44df4524fbcb1de07f030c30, type: 2}
-  m_sharedMaterial: {fileID: 4438046178061127525, guid: a5a806cb44df4524fbcb1de07f030c30,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3114,11 +3113,11 @@ MonoBehaviour:
   m_Options:
     m_Options:
     - m_Text: 0
-      m_Image: {fileID: 21300000, guid: 6fd3aa61734cd264cb55b04c5505d50c, type: 3}
+      m_Image: {fileID: 21300000, guid: 361f20c5f6047964abe27ea167c71678, type: 3}
     - m_Text: 1
-      m_Image: {fileID: 21300000, guid: 61802cc691d16c44986e0a1d255ae3a4, type: 3}
+      m_Image: {fileID: 21300000, guid: 408e09a15ab0cc342bec145dfb73f18d, type: 3}
     - m_Text: 2
-      m_Image: {fileID: 21300000, guid: 1a439bcd8306e314b8707243332f296c, type: 3}
+      m_Image: {fileID: 21300000, guid: 7e8b3cc1c36e909418cbc3dcad6530dc, type: 3}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

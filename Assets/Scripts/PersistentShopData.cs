@@ -44,7 +44,7 @@ public class ShopResources
     public delegate void OnCurrencyChange(int aAmount);
     public event OnCurrencyChange OnCurrencyChangeEvent;
 
-    private int _coins = 9090;
+    private int _coins = 0;
 
     public PotionIngredients ingredients;
     public List<GooberData> goobers = new() {
