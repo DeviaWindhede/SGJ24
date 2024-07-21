@@ -11,7 +11,6 @@ public class PlayerBehaviour : MonoBehaviour
     public delegate void OnInteractableChanged(PlayerInteractionType aType);
     public event OnInteractableChanged OnInteractableChangedEvent;
     //ShopperWorldCanvas
-    [SerializeField] private Camera _camera;
     [SerializeField] private Transform _model;
     [SerializeField] private Animator _animator;
     [SerializeField] private float _maxSpeed = 5f;
@@ -20,13 +19,13 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float _turnSpeed = 1f;
 
     private float _speed = 0.0f;
+    private Camera _camera;
     private CharacterController _controller;
     private PlayerInputActions _inputActions;
     private Vector2 _moveInput;
     private Vector3 _previousPosition;
-    private Vector3 _spawnPosition;
-    private Vector3 _previousInput;
-    private Vector3 _movementDirection;
+    private Vector3 _previousInput = Vector3.forward;
+    private Vector3 _movementDirection = Vector3.forward;
     private bool _shouldMove = true;
 
     private PlayerInteractable _currentInteractable;
@@ -35,6 +34,8 @@ public class PlayerBehaviour : MonoBehaviour
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+
+        _camera = FindObjectOfType<PixelCamRaycast>().GetComponent<Camera>();
 
         _inputActions = new();
         _inputActions.Enable();
@@ -53,7 +54,7 @@ public class PlayerBehaviour : MonoBehaviour
         gameObject.SetActive(true);
 
         _previousPosition = transform.position;
-        _spawnPosition = transform.position;
+        ResetPosition();
     }
 
     public void ShouldEnableMovement(bool aValue)
@@ -63,12 +64,12 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void ResetPosition()
     {
-        gameObject.SetActive(false);
+        _controller.enabled = false;
         transform.SetPositionAndRotation(
             transform.position = -Vector3.forward,
             Quaternion.identity
         );
-        gameObject.SetActive(true);
+        _controller.enabled = true;
     }
 
     private void OnDestroy()
@@ -120,6 +121,12 @@ public class PlayerBehaviour : MonoBehaviour
         _animator.SetFloat("Speed", _speed);
         _previousPosition = transform.position;
 
+        float dot = Vector3.Dot(_previousInput, _movementDirection);
+        if (dot <= -0.9f)
+        {
+            _movementDirection += Vector3.Cross(_movementDirection, Vector3.up) * 10.0f;
+            _movementDirection.Normalize();
+        }
         _movementDirection = Vector3.MoveTowards(_movementDirection, _previousInput, _turnSpeed * Time.deltaTime);
         _model.forward = _movementDirection;
 
