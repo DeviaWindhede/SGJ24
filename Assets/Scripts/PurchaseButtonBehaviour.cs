@@ -33,6 +33,7 @@ public class PurchaseButtonBehaviour : MonoBehaviour
                 case PurchaseType.Outfit:
                     return PersistentShopData.Instance.shopResources.outfits[_index];
                 case PurchaseType.PotionIngredient:
+                    return PersistentShopData.Instance.shopResources.ingredients[_index];
                 default:
                     return null;
             }
@@ -58,7 +59,7 @@ public class PurchaseButtonBehaviour : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        if (CurrentData.isUnlocked) { return; }
+        if (CurrentData.isUnlocked && !CurrentData.unlimitedPurchases) { return; }
         if (!PersistentShopData.Instance.shopResources.CanAfford(CurrentData.unlockCost)) { return; }
 
         switch (_purchaseType)
@@ -70,6 +71,7 @@ public class PurchaseButtonBehaviour : MonoBehaviour
                 PersistentShopData.Instance.shopResources.UnlockOutfit(_index);
                 break;
             case PurchaseType.PotionIngredient:
+                PersistentShopData.Instance.shopResources.PurchaseIngredient(_index);
                 break;
             default:
                 break;
@@ -80,6 +82,7 @@ public class PurchaseButtonBehaviour : MonoBehaviour
     private void SetEnableButton(bool aIsEnabled)
     {
         _button.enabled = aIsEnabled;
+        if (_border == null) { return; }
         _border.SetActive(!aIsEnabled);
     }
 

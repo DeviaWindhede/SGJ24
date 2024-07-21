@@ -91,7 +91,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnInteract()
     {
-        print("Interact!!!");
+        print($"Interact!!! {_currentInteractable}");
         _currentInteractable?.OnInteract();
     }
 

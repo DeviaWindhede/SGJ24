@@ -17,15 +17,11 @@ public struct ShopperData
     public ShopperState state;
 }
 
-public struct PotionIngredients
-{
-    public int ingredient1;
-    public int ingredient2;
-}
 
 public class Unlockable
 {
     public bool isUnlocked = false;
+    public bool unlimitedPurchases = false;
     public int unlockCost = 0;
     public string name = "Goober Name";
 }
@@ -38,6 +34,27 @@ public class GooberData : Unlockable
     public List<GooberState> activeStates = new();
 
     public float HappinessPercentage => (petPercentage + cleanlinessPercentage) / 2.0f;
+}
+
+public enum PotionIngredientType
+{
+    Lavender,
+    Crystals,
+    Peppermint,
+    Worms,
+    Gnomecap,
+    Toadslime
+}
+
+public class PotionIngredient : Unlockable
+{
+    public int amount = 0;
+    public PotionIngredientType type;
+
+    public PotionIngredient()
+    {
+        unlimitedPurchases = true;
+    }
 }
 
 public enum PotionType
@@ -62,14 +79,22 @@ public class ShopResources
     public delegate void OnPotionChange(PotionType aType, int aAmount);
     public event OnPotionChange OnPotionChangeEvent;
 
-    private int _coins = 0;
-    private Potion[] potions = { 
+    private int _coins = 9990;
+    private Potion[] potions = {
         new() { type = PotionType.Sleep, sellPrice = 40 },
         new() { type = PotionType.Health, sellPrice = 50 },
         new() { type = PotionType.Love, sellPrice = 60 }
     };
 
-    public PotionIngredients ingredients;
+    public PotionIngredient[] ingredients = {
+        new() { unlockCost = 1, type = PotionIngredientType.Lavender, name = "Lavender" },
+        new() { unlockCost = 2, type = PotionIngredientType.Crystals, name = "Crystals" },
+        new() { unlockCost = 3, type = PotionIngredientType.Peppermint, name = "Peppermint" },
+        new() { unlockCost = 4, type = PotionIngredientType.Worms, name = "Worms" },
+        new() { unlockCost = 5, type = PotionIngredientType.Gnomecap, name = "Gnomecap" },
+        new() { unlockCost = 6, type = PotionIngredientType.Toadslime, name = "Toadslime" }
+    };
+
     public List<GooberData> goobers = new() {
         new() { name = "Bunny", unlockCost = 250 },
         new() { name = "Pants!!!", unlockCost = 5000 },
@@ -147,6 +172,13 @@ public class ShopResources
         if (!Purchase(outfits[aIndex].unlockCost)) { return; }
 
         outfits[aIndex].isUnlocked = true;
+    }
+
+    public void PurchaseIngredient(int aIndex)
+    {
+        if (!Purchase(ingredients[aIndex].unlockCost)) { return; }
+
+        ingredients[aIndex].amount++;
     }
 }
 
