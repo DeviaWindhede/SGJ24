@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public enum CardType
@@ -32,7 +31,7 @@ public enum CardType
 [RequireComponent(typeof(BoxCollider))]
 public class TarotCardBehaviour : MonoBehaviour
 {
-    [SerializeField] private AnimatorController _animatorController;
+    [SerializeField] private RuntimeAnimatorController _animatorController;
 
     private Animator _animator;
     private BoxCollider _boxCollider;

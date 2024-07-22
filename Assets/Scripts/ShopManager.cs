@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 [System.Serializable]
 public struct ShopInteractable
