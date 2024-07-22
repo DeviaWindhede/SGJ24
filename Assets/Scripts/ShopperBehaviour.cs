@@ -111,7 +111,11 @@ class QueueState : IState<ShopperBehaviour>
                 type = ShopperIconType.None;
                 aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
             }
-            else if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay) { type = ShopperIconType.Paying; }
+            else if (aShopper.state.currentQueueType == ShopperQueueType.PostActionPay)
+            {
+                type = ShopperIconType.Paying;
+                aShopper.ShopperWorldCanvas.SetSpeechBubbleIcon(type);
+            }
             else
             {
                 if (aShopper.state.currentShopDestination == ShopLocationType.Potions)
