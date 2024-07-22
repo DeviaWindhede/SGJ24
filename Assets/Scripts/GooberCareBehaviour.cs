@@ -248,6 +248,8 @@ public class GooberCareBehaviour : MonoBehaviour
         GetCurrentGoober().SetActive(false);
         _currentGooberIndex = _gooberIndices[aValue];
         GetCurrentGoober().SetActive(true);
+
+        AudioManager.Instance.PlaySound((ShopSoundByte)((int)ShopSoundByte.Bunny + _currentGooberIndex));
         InitializeGrid();
     }
 

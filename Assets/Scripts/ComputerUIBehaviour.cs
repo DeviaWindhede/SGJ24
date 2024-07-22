@@ -51,6 +51,7 @@ public class ComputerUIBehaviour : MonoBehaviour
         _currentType = aType;
         GetPageFromType(_currentType).SetActive(true);
 
+        AudioManager.Instance.PlaySound(ShopSoundByte.Click);
         onComputerPageChanged?.Invoke(_currentType);
     }
 

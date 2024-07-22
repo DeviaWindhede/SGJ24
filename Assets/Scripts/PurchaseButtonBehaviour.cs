@@ -66,7 +66,7 @@ public class PurchaseButtonBehaviour : MonoBehaviour
         {
             case PurchaseType.Goober:
                 PersistentShopData.Instance.shopResources.UnlockGoober(_index);
-                AudioManager.Instance.PlaySound(ShopSoundByte.Click);
+                AudioManager.Instance.PlaySound(ShopSoundByte.MajorPurchase);
                 break;
             case PurchaseType.Outfit:
                 PersistentShopData.Instance.shopResources.UnlockOutfit(_index);

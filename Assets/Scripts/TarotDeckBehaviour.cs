@@ -61,6 +61,7 @@ public class TarotDeckBehaviour : MonoBehaviour
     {
         if (!_inGame) { return; }
 
+        AudioManager.Instance.PlaySound(ShopSoundByte.Click);
         _inGame = false;
         StartCoroutine(SpawnCard(_tarotCardsSpawned));
         ++_tarotCardsSpawned;
@@ -159,6 +160,7 @@ public class TarotDeckBehaviour : MonoBehaviour
         if (_inGame) {  return; }
 
 
+        AudioManager.Instance.PlaySound(ShopSoundByte.Click);
         RandomizeIndicator();
         _inGame = true;
         _animator.SetTrigger("Enable");

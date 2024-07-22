@@ -54,7 +54,6 @@ public class PlayerBehaviour : MonoBehaviour
         gameObject.SetActive(true);
 
         _previousPosition = transform.position;
-        ResetPosition();
     }
 
     public void ShouldEnableMovement(bool aValue)
@@ -70,6 +69,11 @@ public class PlayerBehaviour : MonoBehaviour
             Quaternion.identity
         );
         _controller.enabled = true;
+        PersistentShopData.Instance.playerTransform = new TransformData
+        {
+            position = transform.position,
+            rotation = Quaternion.identity
+        };
     }
 
     private void OnDestroy()

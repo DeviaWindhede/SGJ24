@@ -81,15 +81,19 @@ public class AudioManager : MonoBehaviour
                 _sfxAudioSource.PlayOneShot(_clickAudioClip);
                 break;
             case ShopSoundByte.CharacterCreated:
-                _miniGameAudioSource.PlayOneShot(_characterCreatedAudioClip);
+                _sfxAudioSource.PlayOneShot(_characterCreatedAudioClip);
                 break;
             case ShopSoundByte.MajorPurchase:
-                _miniGameAudioSource.PlayOneShot(_majorPurchaseAudioClip);
+                _sfxAudioSource.PlayOneShot(_majorPurchaseAudioClip);
                 break;
             case ShopSoundByte.Bunny:
+                _miniGameAudioSource.PlayOneShot(_gooberAudioClip[0]);
+                break;
             case ShopSoundByte.Pant:
+                _miniGameAudioSource.PlayOneShot(_gooberAudioClip[1]);
+                break;
             case ShopSoundByte.Sheep:
-                _miniGameAudioSource.PlayOneShot(GetRandomAudio(_gooberAudioClip));
+                _miniGameAudioSource.PlayOneShot(_gooberAudioClip[2]);
                 break;
             default:
                 break;
