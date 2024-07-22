@@ -42,6 +42,7 @@ public class ShapeDrawer : MonoBehaviour
 
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         //for (int i = 0; i < drawnPoints.Count - 1; i++)
@@ -54,4 +55,5 @@ public class ShapeDrawer : MonoBehaviour
         string matchString = "" + matchPercentage.ToString() + "%";
         Handles.Label(transform.position, matchString);
     }
+#endif
 }

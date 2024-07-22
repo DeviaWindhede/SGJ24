@@ -35,7 +35,9 @@ public class CharacterCustomItem : ScriptableObject
                 break;
         }
         fileName += RemoveSpacesFromString(itemName);
+#if UNITY_EDITOR
         AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(this), fileName);
+#endif
     }
 
     private string RemoveSpacesFromString(string aString)
