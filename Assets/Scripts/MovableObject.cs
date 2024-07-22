@@ -12,6 +12,7 @@ public class MovableObject : MonoBehaviour
         Tool,
         Ingredient,
         Cuttable,
+        Mortar
     }
 
     public enum MovementType
@@ -30,7 +31,7 @@ public class MovableObject : MonoBehaviour
     private Vector3 targetPosition = Vector3.zero;
     public Vector3 positionOffset = new Vector3(0.0f, 0.5f, 0.0f);
     public Vector3 localOffset = new Vector3(0.0f, 0.0f, 0.0f);
-    private bool pickedUp = false;
+    public bool pickedUp = false;
 
     public LayerMask carriedLayerMaskExcludes;
     public LayerMask droppedLayerMaskExcludes;
@@ -42,7 +43,7 @@ public class MovableObject : MonoBehaviour
     private int originalLayer;
     private List<int> childLayers = new List<int>();
 
-    AlchemyInteractArea assignedArea = null;
+    public AlchemyInteractArea assignedArea = null;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +55,6 @@ public class MovableObject : MonoBehaviour
     {
         if (pickedUp)
         {
-
             if (moveType == MovementType.Kinematic)
             {
                 transform.position = Vector3.Lerp(transform.position, targetPosition + positionOffset + transform.TransformDirection(localOffset), Time.deltaTime * 2.0f);
@@ -171,6 +171,10 @@ public class MovableObject : MonoBehaviour
         {
             // Do cuttable stuff
         }
+        else if (type == ObjectType.Mortar)
+        {
+            GetComponent<PhysicalIngredient>().UseAnimationBegin();
+        }
     }
 
     public void EndUse()
@@ -186,6 +190,10 @@ public class MovableObject : MonoBehaviour
         else if (type == ObjectType.Cuttable)
         {
             // Do cuttable stuff
+        }
+        else if (type == ObjectType.Mortar)
+        {
+            GetComponent<PhysicalIngredient>().UseAnimationEnd();
         }
     }
 

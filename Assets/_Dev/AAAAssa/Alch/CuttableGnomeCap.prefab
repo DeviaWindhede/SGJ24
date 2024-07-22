@@ -582,6 +582,7 @@ MonoBehaviour:
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
   positionOffset: {x: 0, y: 0, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 2176
@@ -591,6 +592,7 @@ MonoBehaviour:
   kinematicOnStart: 1
   kinematicOnPickup: 1
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}
 --- !u!1 &4938578720162465310 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4067358083632425627, guid: 84c64deb88605b34ab9ee760d3330228,
@@ -682,11 +684,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   moveType: 1
-  assignedMoveType: 0
+  assignedMoveType: 1
   hasTargetOrientation: 0
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
   positionOffset: {x: 0, y: 0.5, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 0
@@ -696,6 +699,7 @@ MonoBehaviour:
   kinematicOnStart: 1
   kinematicOnPickup: 0
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}
 --- !u!1 &5930611139396529981 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3366072275191940026, guid: 84c64deb88605b34ab9ee760d3330228,
@@ -787,11 +791,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   moveType: 1
-  assignedMoveType: 0
+  assignedMoveType: 1
   hasTargetOrientation: 0
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
   positionOffset: {x: 0, y: 0.5, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 0
@@ -801,6 +806,7 @@ MonoBehaviour:
   kinematicOnStart: 1
   kinematicOnPickup: 0
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}
 --- !u!1 &7049734983048599510 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2102832562449595219, guid: 84c64deb88605b34ab9ee760d3330228,
@@ -892,11 +898,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   moveType: 1
-  assignedMoveType: 0
+  assignedMoveType: 1
   hasTargetOrientation: 0
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
   positionOffset: {x: 0, y: 0.5, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 0
@@ -906,6 +913,7 @@ MonoBehaviour:
   kinematicOnStart: 1
   kinematicOnPickup: 0
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}
 --- !u!1 &7599393184276485294 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7670469810932926421, guid: 84c64deb88605b34ab9ee760d3330228,
@@ -997,11 +1005,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   moveType: 1
-  assignedMoveType: 0
+  assignedMoveType: 1
   hasTargetOrientation: 0
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
   positionOffset: {x: 0, y: 0.5, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 0
@@ -1011,6 +1020,7 @@ MonoBehaviour:
   kinematicOnStart: 1
   kinematicOnPickup: 0
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}
 --- !u!1 &8682145692281693229 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8897320593577457494, guid: 84c64deb88605b34ab9ee760d3330228,
@@ -1102,11 +1112,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   moveType: 1
-  assignedMoveType: 0
+  assignedMoveType: 1
   hasTargetOrientation: 0
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
   positionOffset: {x: 0, y: 0.5, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 0
@@ -1116,6 +1127,7 @@ MonoBehaviour:
   kinematicOnStart: 1
   kinematicOnPickup: 0
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}
 --- !u!1 &9114056931469966714 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9042997209794407937, guid: 84c64deb88605b34ab9ee760d3330228,
@@ -1207,11 +1219,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   moveType: 1
-  assignedMoveType: 0
+  assignedMoveType: 1
   hasTargetOrientation: 0
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
   positionOffset: {x: 0, y: 0.5, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 0
@@ -1221,3 +1234,4 @@ MonoBehaviour:
   kinematicOnStart: 1
   kinematicOnPickup: 0
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}

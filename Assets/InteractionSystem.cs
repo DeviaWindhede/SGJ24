@@ -106,7 +106,7 @@ public class InteractionSystem : MonoBehaviour
         Ray ray = cameraObject.GetComponent<PixelCamRaycast>().GetRay(Input.mousePosition);
 
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000f, interactMask))
+        if (Physics.Raycast(ray, out hit, 1000f, interactMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider != null)
             {
@@ -132,7 +132,7 @@ public class InteractionSystem : MonoBehaviour
 
                 if (hit.collider.gameObject.TryGetComponent<AlchemyInteractArea>(out var interactArea))
                 {                   
-                    if (heldObject && interactArea.AcceptsType(heldObject.type)) 
+                    if (heldObject && interactArea.AcceptsObject(heldObject)) 
                     {
                         bool pourable = heldObject.type == MovableObject.ObjectType.Ingredient && heldObject.GetComponent<PhysicalIngredient>().interactType == AlchemySystem.IngredientInteractType.Pour;
 
@@ -155,23 +155,60 @@ public class InteractionSystem : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0))
             {
-                heldObject.Drop();
-                heldObject = null;
-            }
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (heldObject)
+                //special case for mortar:
+                if (heldObject.type == MovableObject.ObjectType.Mortar)
                 {
-                    heldObject.BeginUse();
+                    if (heldObject.assignedArea != null)
+                    {
+                        heldObject.GetComponent<CookingMortarPestle>().SwitchState(CookingMortarPestle.MortarState.Returning);
+                        heldObject.Drop();
+                        heldObject = null;
+                    }
+                }
+                else
+                {
+                    heldObject.Drop();
+                    heldObject = null;
                 }
             }
 
-            if (Input.GetMouseButtonUp(1))
+            
+
+            if (heldObject && heldObject.type == MovableObject.ObjectType.Mortar)
             {
-                if (heldObject)
+                if (heldObject.TryGetComponent<CookingMortarPestle>(out var mortarPestle))
                 {
-                    heldObject.EndUse();
+                    bool empty = mortarPestle.IsEmpty();
+
+                    if (!empty && Input.GetMouseButtonDown(1))
+                    {
+                        heldObject.BeginUse();
+                    }
+
+                    if (empty || Input.GetMouseButtonUp(1))
+                    {
+                        heldObject.EndUse();
+                    }
+
+                }
+
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(1))
+                {
+                    if (heldObject)
+                    {
+                        heldObject.BeginUse();
+                    }
+                }
+
+                if (Input.GetMouseButtonUp(1))
+                {
+                    if (heldObject)
+                    {
+                        heldObject.EndUse();
+                    }
                 }
             }
         }
@@ -272,6 +309,9 @@ public class InteractionSystem : MonoBehaviour
 
     private void TryCutConditions(MovableObject hitMovableObject, RaycastHit hit)
     {
+        if (!heldObject) { return; }
+        if (!hitMovableObject) { return; }
+
         if (heldObject.type == MovableObject.ObjectType.Tool)
         {
             CookingTool heldTool = heldObject.GetComponent<CookingTool>();

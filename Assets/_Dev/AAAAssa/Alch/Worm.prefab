@@ -386,7 +386,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -454,11 +454,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   moveType: 1
-  assignedMoveType: 0
+  assignedMoveType: 1
   hasTargetOrientation: 0
   targetOrientation: {x: 0, y: 0, z: 0, w: 1}
-  positionOffset: {x: 0, y: 0, z: 0}
+  positionOffset: {x: 0, y: 0.5, z: 0}
   localOffset: {x: 0, y: 0, z: 0}
+  pickedUp: 0
   carriedLayerMaskExcludes:
     serializedVersion: 2
     m_Bits: 0
@@ -468,6 +469,7 @@ MonoBehaviour:
   kinematicOnStart: 0
   kinematicOnPickup: 0
   kinematicOnDrop: 0
+  assignedArea: {fileID: 0}
 --- !u!1 &6654590740346425626 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8647876353981357089, guid: 889e958e47c8e1e478a18d6e93ad4587,

@@ -12,8 +12,8 @@ public class PourableIngredient : MonoBehaviour
 
     [SerializeField] private Quaternion pouringOrientation;
 
-    [SerializeField] private Gradient lifeTimeGradient = new Gradient();
-    [SerializeField] private Gradient speedGradient = new Gradient();
+    [SerializeField] public Gradient lifeTimeGradient = new Gradient();
+    [SerializeField] public Gradient speedGradient = new Gradient();
 
     private bool isPouring = false;
     private bool hadTargetOrientation = false;
@@ -54,8 +54,22 @@ public class PourableIngredient : MonoBehaviour
 
             if (OverCauldron(pourOrigin))
             {
-                PhysicalIngredient thisIngredient = GetComponent<PhysicalIngredient>();
-                cauldronObject.AddIngredient(thisIngredient.ingredientType, thisIngredient.IngredientAmount * Time.deltaTime);
+                if (TryGetComponent<CookingMortarPestle>(out var mortarPestle))
+                {
+                    Dictionary<AlchemySystem.Ingredient, float> provided = mortarPestle.GetPour(Time.deltaTime * 0.5f);
+                    float sum = 0.0f;
+                    foreach (var pair in provided)
+                    {
+                        sum += pair.Value;
+                        cauldronObject.AddIngredient(pair.Key, pair.Value);
+                    }
+             
+                }
+                else
+                {
+                    PhysicalIngredient thisIngredient = GetComponent<PhysicalIngredient>();
+                    cauldronObject.AddIngredient(thisIngredient.ingredientType, thisIngredient.IngredientAmount * Time.deltaTime);
+                }
             }
         }
     }
